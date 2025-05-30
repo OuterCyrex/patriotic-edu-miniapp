@@ -2,11 +2,11 @@ server:
   port: 8080
 spring:
   application:
-    name: photovoltaic_cloud_platform
+    name: edu-app
   servlet:
     multipart:
-      max-file-size: 500MB
-      max-request-size: 500MB
+      max-file-size: 50MB
+      max-request-size: 50MB
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -20,8 +20,8 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   data:
     redis:
-      host: 106.52.199.168
-      port: 16379
+      host: <PORT>
+      port: 6379
       # 链接超时时间
       timeout: 10s
       lettuce:
