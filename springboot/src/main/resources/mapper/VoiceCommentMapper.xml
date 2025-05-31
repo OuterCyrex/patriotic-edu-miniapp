@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.org.shelly.edu.mapper.VoiceCommentMapper">
+
+    <resultMap id="BaseResultMap" type="cn.org.shelly.edu.model.po.VoiceComment">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="voiceId" column="voice_id" jdbcType="BIGINT"/>
+            <result property="userId" column="user_id" jdbcType="BIGINT"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="parentId" column="parent_id" jdbcType="BIGINT"/>
+            <result property="likesCount" column="likes_count" jdbcType="INTEGER"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,voice_id,user_id,
+        content,parent_id,likes_count,
+        status,create_by
+    </sql>
+</mapper>
