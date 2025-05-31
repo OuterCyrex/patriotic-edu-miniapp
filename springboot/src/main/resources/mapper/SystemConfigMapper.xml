@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.org.shelly.edu.mapper.SystemConfigMapper">
+
+    <resultMap id="BaseResultMap" type="cn.org.shelly.edu.model.po.SystemConfig">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="dailyQuizCount" column="daily_quiz_count" jdbcType="INTEGER"/>
+            <result property="starsPerCorrect" column="stars_per_correct" jdbcType="INTEGER"/>
+            <result property="hotlinePhone" column="hotline_phone" jdbcType="VARCHAR"/>
+            <result property="voiceMaxLength" column="voice_max_length" jdbcType="INTEGER"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,daily_quiz_count,stars_per_correct,
+        hotline_phone,voice_max_length,update_by
+    </sql>
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.org.shelly.edu.mapper.DefenseVoiceMapper">
+
+    <resultMap id="BaseResultMap" type="cn.org.shelly.edu.model.po.DefenseVoice">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="region" column="region" jdbcType="VARCHAR"/>
+            <result property="identity" column="identity" jdbcType="VARCHAR"/>
+            <result property="authorName" column="author_name" jdbcType="VARCHAR"/>
+            <result property="theme" column="theme" jdbcType="VARCHAR"/>
+            <result property="likesCount" column="likes_count" jdbcType="INTEGER"/>
+            <result property="commentsCount" column="comments_count" jdbcType="INTEGER"/>
+            <result property="isFeatured" column="is_featured" jdbcType="TINYINT"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+            <result property="gmtCreate" column="gmt_create" jdbcType="TIMESTAMP"/>
+            <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,content,region,
+        identity,author_name,theme,
+        likes_count,comments_count,is_featured,
+        status,create_by,update_by,
+        gmt_create,gmt_modified,is_deleted
+    </sql>
+</mapper>

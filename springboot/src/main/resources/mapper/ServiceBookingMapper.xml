@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.org.shelly.edu.mapper.ServiceBookingMapper">
+
+    <resultMap id="BaseResultMap" type="cn.org.shelly.edu.model.po.ServiceBooking">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="organizationName" column="organization_name" jdbcType="VARCHAR"/>
+            <result property="contactPerson" column="contact_person" jdbcType="VARCHAR"/>
+            <result property="contactPhone" column="contact_phone" jdbcType="VARCHAR"/>
+            <result property="contactEmail" column="contact_email" jdbcType="VARCHAR"/>
+            <result property="serviceType" column="service_type" jdbcType="TINYINT"/>
+            <result property="preferredTime" column="preferred_time" jdbcType="VARCHAR"/>
+            <result property="participantCount" column="participant_count" jdbcType="INTEGER"/>
+            <result property="venueAddress" column="venue_address" jdbcType="VARCHAR"/>
+            <result property="specialRequirements" column="special_requirements" jdbcType="VARCHAR"/>
+            <result property="matchedHeroes" column="matched_heroes" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="adminNotes" column="admin_notes" jdbcType="VARCHAR"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,organization_name,contact_person,
+        contact_phone,contact_email,service_type,
+        preferred_time,participant_count,venue_address,
+        special_requirements,matched_heroes,status,
+        admin_notes,create_by,update_by
+    </sql>
+</mapper>

@@ -1,0 +1,24 @@
+package cn.org.shelly.edu.model.po;
+
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+
+import java.io.Serial;
+import java.io.Serializable;
+
+
+@TableName(value ="likes")
+@Data
+public class Likes implements Serializable {
+    private Long id;
+
+    private Long userId;
+    @Schema(description = "点赞对象类型（1心声 2评论）")
+    private Integer targetType;
+
+    private Long targetId;
+
+     @Serial
+    private static final long serialVersionUID = 1L;
+}
