@@ -1,7 +1,11 @@
 package cn.org.shelly.edu.service;
 
 import cn.org.shelly.edu.model.po.Word;
+import cn.org.shelly.edu.model.resp.WordFrequencyResp;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.Map;
 
 /**
 * @author Shelly6
@@ -10,4 +14,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface WordService extends IService<Word> {
 
+  IPage<WordFrequencyResp> wordList(Long pageNum, Long pageSize, String key);
+
+  void addKeyword(Map<String, Integer> keyword);
 }

@@ -13,11 +13,12 @@
             <result property="gmtCreate" column="gmt_create" jdbcType="TIMESTAMP"/>
             <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
             <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,word,count,
         create_by,update_by,gmt_create,
-        gmt_modified,is_deleted
+        gmt_modified,is_deleted,status
     </sql>
 </mapper>

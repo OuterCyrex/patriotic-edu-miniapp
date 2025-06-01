@@ -1,5 +1,6 @@
 package cn.org.shelly.edu.model.po;
 
+import cn.org.shelly.edu.model.resp.WordFrequencyResp;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -61,7 +62,17 @@ public class Word implements Serializable {
   @TableField(value = "is_deleted")
   private Integer isDeleted;
 
+  private Integer  status;
+
   @TableField(exist = false)
   @Serial
   private static final long serialVersionUID = 1L;
+
+  public static Word toEntity(WordFrequencyResp req) {
+    Word word = new Word();
+    word.setWord(req.getContent());
+    word.setCount(req.getFrequency());
+    word.setStatus(req.getStatus());
+    return word;
+  }
 }
