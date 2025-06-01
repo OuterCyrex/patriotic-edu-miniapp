@@ -17,12 +17,13 @@
             <result property="status" column="status" jdbcType="TINYINT"/>
             <result property="gmtCreate" column="gmt_create" jdbcType="TIMESTAMP"/>
             <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+             <result property="password" column="password" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,username,nickname,
         phone,email,avatar_url,
         region,type,total_stars,
-        status,gmt_create,gmt_modified
+        status,gmt_create,gmt_modified, password
     </sql>
 </mapper>

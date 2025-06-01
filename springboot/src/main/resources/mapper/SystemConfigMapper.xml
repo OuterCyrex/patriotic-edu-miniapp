@@ -11,10 +11,11 @@
             <result property="hotlinePhone" column="hotline_phone" jdbcType="VARCHAR"/>
             <result property="voiceMaxLength" column="voice_max_length" jdbcType="INTEGER"/>
             <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+            <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,daily_quiz_count,stars_per_correct,
-        hotline_phone,voice_max_length,update_by
+        hotline_phone,voice_max_length,update_by,avatar
     </sql>
 </mapper>

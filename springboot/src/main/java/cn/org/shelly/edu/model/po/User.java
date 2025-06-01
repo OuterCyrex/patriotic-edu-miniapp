@@ -36,6 +36,8 @@ public class User implements Serializable {
 
     private Date gmtModified;
 
+    private String password;
+
     @Serial
     private static final long serialVersionUID = 1L;
 }

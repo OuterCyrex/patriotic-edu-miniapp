@@ -22,6 +22,7 @@ public class SystemConfig implements Serializable {
   private Integer voiceMaxLength;
   @TableField(value = "update_by")
   private String updateBy;
+  private String avatar;
   @Serial
   private static final long serialVersionUID = 1L;
 }

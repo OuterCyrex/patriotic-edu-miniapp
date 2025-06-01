@@ -25,58 +25,58 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class HeroController {
 
-      private final HeroService heroService;
-      @GetMapping("/admin/{id}")
-      @Operation(summary = "后台获取英雄信息")
-      public Result<Hero> getHeroById(@PathVariable("id") Integer id){
-          Hero hero = heroService.getById(id);
-          if (hero == null || hero.getIsDeleted() == 1){
-             return Result.fail(CodeEnum.DATA_NOT_EXIST);
-          }
-          return Result.success(hero);
+    private final HeroService heroService;
+    @GetMapping("/admin/{id}")
+    @Operation(summary = "后台获取英雄信息")
+    public Result<Hero> getHeroById(@PathVariable("id") Integer id){
+      Hero hero = heroService.getById(id);
+      if (hero == null || hero.getIsDeleted() == 1){
+        return Result.fail(CodeEnum.DATA_NOT_EXIST);
       }
-  @GetMapping("/{id}")
-  @Operation(summary = "前台获取英雄信息")
-  public Result<HeroResp> getHero(@PathVariable("id") Integer id){
-    Hero hero = heroService.getById(id);
-    if (hero == null || hero.getIsDeleted() == 1 || hero.getStatus() == 0){
-      return Result.fail("英雄不存在");
+      return Result.success(hero);
     }
-    return Result.success(HeroResp.fromHero(hero));
-  }
-  @PostMapping
-  @Operation(summary = "添加英雄")
-  public Result<Hero> addHero(@RequestBody Hero hero){
-    heroService.save(hero);
-    return Result.success(hero);
-  }
-  @PutMapping
-  @Operation(summary = "修改英雄")
-  public Result<Hero> updateHero(@RequestBody Hero hero){
-    heroService.updateById(hero);
-    return Result.success(hero);
-  }
-  @DeleteMapping("/{id}")
-  @Operation(summary = "删除英雄")
-  public Result<Hero> deleteHero(@PathVariable("id") Integer id){
-    Hero hero = heroService.getById(id);
-    if (hero == null || hero.getIsDeleted() == 1){
-      return Result.fail("英雄不存在");
+    @GetMapping("/{id}")
+    @Operation(summary = "前台获取英雄信息")
+    public Result<HeroResp> getHero(@PathVariable("id") Integer id){
+      Hero hero = heroService.getById(id);
+      if (hero == null || hero.getIsDeleted() == 1 || hero.getStatus() == 0){
+        return Result.fail("英雄不存在");
+      }
+      return Result.success(HeroResp.fromHero(hero));
     }
-    hero.setIsDeleted(1);
-    heroService.updateById(hero);
-    return Result.success(hero);
-  }
+    @PostMapping
+    @Operation(summary = "添加英雄")
+    public Result<Hero> addHero(@RequestBody Hero hero){
+      heroService.save(hero);
+      return Result.success(hero);
+    }
+    @PutMapping
+    @Operation(summary = "修改英雄")
+    public Result<Hero> updateHero(@RequestBody Hero hero){
+      heroService.updateById(hero);
+      return Result.success(hero);
+    }
+    @DeleteMapping("/{id}")
+    @Operation(summary = "删除英雄")
+    public Result<Hero> deleteHero(@PathVariable("id") Integer id){
+      Hero hero = heroService.getById(id);
+      if (hero == null || hero.getIsDeleted() == 1){
+        return Result.fail("英雄不存在");
+      }
+      hero.setIsDeleted(1);
+      heroService.updateById(hero);
+      return Result.success(hero);
+    }
 
-  @GetMapping("/list")
-  @Operation(summary = "前台获取英雄列表")
-  public Result<PageInfo<HeroFrontPageResp>> getHeroList(
-     @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-     @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
-     @RequestParam(value = "period", defaultValue = "1") Integer period,
-     @RequestParam(required = false, defaultValue = "") String name
+    @GetMapping("/list")
+    @Operation(summary = "前台获取英雄列表")
+    public Result<PageInfo<HeroFrontPageResp>> getHeroList(
+      @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+      @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+      @RequestParam(value = "period", defaultValue = "1") Integer period,
+      @RequestParam(required = false, defaultValue = "") String name
 
-  ){
+    ){
       var page = heroService.lambdaQuery()
         .eq(Hero::getPeriod, period)
         .like(StringUtils.isNotBlank(name),  Hero::getName, name)
@@ -85,18 +85,18 @@ public class HeroController {
         .eq(Hero::getIsDeleted, 0)
         .page(new Page<>(pageNum, pageSize))
         .convert(HeroFrontPageResp::fromHero);
-    return Result.page(page);
-  }
-  @GetMapping("/admin/list")
-  @Operation(summary = "后台获取英雄列表")
-  public Result<PageInfo<HeroPageResp>> getList(
-     @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-     @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
-     @RequestParam(value = "period", defaultValue = "1") Integer period,
-     @RequestParam(required = false, defaultValue = "") String name,
-     @RequestParam(required = false, defaultValue = "-1") Integer status
+      return Result.page(page);
+    }
+    @GetMapping("/admin/list")
+    @Operation(summary = "后台获取英雄列表")
+    public Result<PageInfo<HeroPageResp>> getList(
+      @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+      @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+      @RequestParam(value = "period", defaultValue = "1") Integer period,
+      @RequestParam(required = false, defaultValue = "") String name,
+      @RequestParam(required = false, defaultValue = "-1") Integer status
 
-  ){
+    ){
       var page = heroService.lambdaQuery()
         .eq(Hero::getPeriod, period)
         .like(StringUtils.isNotBlank(name),  Hero::getName, name)
@@ -105,8 +105,8 @@ public class HeroController {
         .eq(status != -1, Hero::getStatus, status)
         .page(new Page<>(pageNum, pageSize))
         .convert(HeroPageResp::fromHero);
-    return Result.page(page);
-  }
+      return Result.page(page);
+    }
 
 
 }
