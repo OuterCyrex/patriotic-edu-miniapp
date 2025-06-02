@@ -102,7 +102,11 @@ public class VoiceController {
     @GetMapping("/{id}")
     @Operation(summary = "前台心声详情")
     public Result<VoiceDetailResp> getVoice(@PathVariable("id") Integer id){
-      return Result.success(VoiceDetailResp.fromDefenseVoice(defenseVoiceService.getById(id)));
+      var data = defenseVoiceService.getById(id);
+      if(data == null){
+        return Result.fail("心声不存在");
+      }
+      return Result.success(VoiceDetailResp.fromDefenseVoice(data));
     }
     @GetMapping("/comment")
     @Operation(summary = "前台心声评论列表")

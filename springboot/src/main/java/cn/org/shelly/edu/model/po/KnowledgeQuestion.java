@@ -3,6 +3,7 @@ package cn.org.shelly.edu.model.po;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import java.util.Date;
 
 @TableName(value ="knowledge_question")
 @Data
+@Accessors(chain = true)
 public class KnowledgeQuestion implements Serializable {
   @Schema(description = "主键ID")
   private Long id;

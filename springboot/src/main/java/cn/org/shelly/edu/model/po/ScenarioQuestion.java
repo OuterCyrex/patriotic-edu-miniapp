@@ -3,6 +3,7 @@ package cn.org.shelly.edu.model.po;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import java.util.Date;
 
 @TableName(value ="scenario_question")
 @Data
+@Accessors(chain = true)
 public class ScenarioQuestion implements Serializable {
   private Integer id;
 

@@ -1,7 +1,12 @@
 package cn.org.shelly.edu.service;
 
 import cn.org.shelly.edu.model.po.ScenarioQuestion;
+import cn.org.shelly.edu.model.req.ScenarioQuestionReq;
+import cn.org.shelly.edu.model.resp.ScenarioQuestionResp;
+import cn.org.shelly.edu.model.resp.ScenarioResultResp;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
 * @author Shelly6
@@ -10,4 +15,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface ScenarioQuestionService extends IService<ScenarioQuestion> {
 
+    List<ScenarioQuestionResp> getScenarioQuiz();
+
+    ScenarioResultResp submit(Long questionId, Integer answer);
+
+    void addScenarioQuiz(ScenarioQuestionReq scenarioQuestionReq);
+
+    void updateScenarioQuiz(ScenarioQuestionReq scenarioQuestionReq);
 }
