@@ -1,6 +1,8 @@
 package cn.org.shelly.edu.service;
 
 import cn.org.shelly.edu.model.po.VoiceComment;
+import cn.org.shelly.edu.model.resp.VoiceCommentResp;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -10,4 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface VoiceCommentService extends IService<VoiceComment> {
 
+    IPage<VoiceCommentResp> listComment(Long voiceId, Long pageNum, Long pageSize);
 }

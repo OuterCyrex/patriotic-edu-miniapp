@@ -17,33 +17,33 @@ public class UnifiedFieldFillHandel implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        Long id = getUserId();
+        String name = getUserName();
         this.setFieldValByName("gmtCreate", new Date(), metaObject);
         this.setFieldValByName("gmtModified", new Date(), metaObject);
         // 创建者
-        this.setFieldValByName("createBy", id, metaObject);
+        this.setFieldValByName("createBy", name, metaObject);
         // 更新者
-        this.setFieldValByName("updateBy", id, metaObject);
+        this.setFieldValByName("updateBy", name, metaObject);
         // 逻辑删除默认置0
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        Long id = getUserId();
+        String name = getUserName();
         this.setFieldValByName("gmtModified", new Date(), metaObject);
-        this.setFieldValByName("updateBy", id, metaObject);
+        this.setFieldValByName("updateBy", name, metaObject);
     }
 
-    private Long getUserId() {
+    private String getUserName() {
         // 如果是 Web 上下文中则获取实际登录用户的 ID，否则返回默认值
         try {
             if (SaHolder.getContext().getRequest() != null) {
-                return StpUtil.getLoginId(0L);
+                return "管理员";
             } else {
-                return 1L; // 默认值
+                return "佚名"; // 默认值
             }
         } catch (Exception e) {
-            return 1L; // 默认值
+            return "佚名"; // 默认值
         }
     }
 }

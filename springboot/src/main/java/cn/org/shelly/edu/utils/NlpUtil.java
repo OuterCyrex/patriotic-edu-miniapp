@@ -3,13 +3,16 @@ package cn.org.shelly.edu.utils;
 import cn.hutool.core.collection.CollUtil;
 import cn.org.shelly.edu.constants.RedisConstants;
 import cn.org.shelly.edu.model.dto.BinaryGroup;
+import cn.org.shelly.edu.service.StopWordService;
 import com.hankcs.hanlp.HanLP;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * nlp工具
@@ -23,6 +26,8 @@ public class NlpUtil {
      */
     final String LETTER_REGULAR = "[a-z]+";
     final String NON_CHINESE_CHARACTERS = "[^\\u4e00-\\u9fa5]";
+    @Autowired
+    private StopWordService stopWordService;
 
 
     private  RedisUtil redisUtil;
@@ -52,13 +57,21 @@ public class NlpUtil {
 
     private Map<String, Integer> counting(String input, int limit) {
         // 获取停词表
-        List<String> stopWords = redisUtil.getListOfKey(RedisConstants.STOP_WORD_CONTENT.getKey(), String.class);
+        Set<String> stopWords = redisUtil.members(RedisConstants.STOP_WORD_CONTENT.getKey())
+                 .stream()
+                .map(Object::toString)
+                .collect(Collectors.toSet());
+        if(stopWords.isEmpty()){
+            stopWords = stopWordService.getStopWords();
+            redisUtil.sSet(RedisConstants.STOP_WORD_CONTENT.getKey(), stopWords);
+        }
         Map<String, Integer> frequency = new HashMap<>(limit);
         var s = input.replaceAll(NON_CHINESE_CHARACTERS, " ");
         var keywords = HanLP.extractKeyword(s, limit);
+        Set<String> finalStopWords = stopWords;
         keywords.forEach(keyword -> {
             // 过滤掉停词表中的内容
-            if(!stopWords.contains(keyword)) {
+            if(!finalStopWords.contains(keyword)) {
                 frequency.put(keyword, frequency.getOrDefault(keyword, 0) + 1);
             }
         });

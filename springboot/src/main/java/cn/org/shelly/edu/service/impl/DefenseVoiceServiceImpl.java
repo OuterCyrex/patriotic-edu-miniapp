@@ -1,8 +1,13 @@
 package cn.org.shelly.edu.service.impl;
+import cn.org.shelly.edu.exception.CustomException;
 import cn.org.shelly.edu.mapper.DefenseVoiceMapper;
 import cn.org.shelly.edu.model.po.DefenseVoice;
+import cn.org.shelly.edu.model.po.VoiceComment;
+import cn.org.shelly.edu.model.req.CommentReq;
 import cn.org.shelly.edu.service.DefenseVoiceService;
+import cn.org.shelly.edu.service.VoiceCommentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,9 +16,32 @@ import org.springframework.stereotype.Service;
 * @createDate 2025-05-31 15:29:26
 */
 @Service
+@RequiredArgsConstructor
 public class DefenseVoiceServiceImpl extends ServiceImpl<DefenseVoiceMapper, DefenseVoice>
     implements DefenseVoiceService {
+    private  final VoiceCommentService voiceCommentService;
 
+    @Override
+    public void comment(CommentReq req) {
+        lambdaUpdate()
+                .eq(DefenseVoice::getId, req.getId())
+                .setSql("comments_count = comments_count + 1")
+                .update();
+        VoiceComment voiceComment = new VoiceComment()
+                .setVoiceId(req.getId())
+                .setUserId(1L)
+                .setParentId(0L)
+                .setContent(req.getContent());
+        if(req.getType() == 1){
+             voiceCommentService.save(voiceComment);
+        }
+        if(req.getType() == 2){
+             voiceComment.setParentId(req.getReplyId());
+            voiceCommentService.save(voiceComment);
+        }else{
+            throw  new CustomException("类型错误");
+        }
+    }
 }
 
 

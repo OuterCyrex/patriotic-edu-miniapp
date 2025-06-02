@@ -1,6 +1,7 @@
 package cn.org.shelly.edu.service;
 
 import cn.org.shelly.edu.model.po.DefenseVoice;
+import cn.org.shelly.edu.model.req.CommentReq;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -10,4 +11,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface DefenseVoiceService extends IService<DefenseVoice> {
 
+    void comment(CommentReq req);
 }

@@ -6,12 +6,15 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Date;
 
 @TableName(value ="voice_comment")
 @Data
+@Accessors(chain = true)
 public class VoiceComment implements Serializable {
 
   @TableId(value = "id", type = IdType.AUTO)
@@ -53,6 +56,8 @@ public class VoiceComment implements Serializable {
 
   @TableField(value = "create_by")
   private String createBy;
+  @TableField(value = "gmt_create")
+  private Date gmtCreate;
 
   @TableField(exist = false)
   @Serial
