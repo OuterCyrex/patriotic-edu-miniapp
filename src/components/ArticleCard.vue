@@ -1,5 +1,5 @@
 <template>
-  <view class="article-card">
+  <view class="article-card" :bindtap="emit('click')">
     <image :src="cover" class="cover-image" mode="aspectFill" />
 
     <view class="content">
@@ -19,6 +19,7 @@ const props = defineProps<{
   summary: string
   views: number | string
 }>()
+const emit = defineEmits(['click'])
 </script>
 
 <style lang="scss">

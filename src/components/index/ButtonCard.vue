@@ -1,5 +1,5 @@
 <template>
-  <view class="card">
+  <view class="card" :bindtap="emit('click')">
     <view class="card-left">
       <view class="card-title">{{ props.title }}</view>
       <view class="card-subtitle">{{ props.subtitle }}</view>
@@ -17,6 +17,7 @@ const props = defineProps<{
   subtitle: string
   icon: string
 }>()
+const emit = defineEmits(['click'])
 </script>
 
 <style lang="scss">
