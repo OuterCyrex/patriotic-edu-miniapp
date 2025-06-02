@@ -45,13 +45,13 @@ public class QuestionController {
     }
     @PostMapping("/knowledge")
     @Operation(summary = "添加知识题目")
-    public Result<Void> addKnowledgeQuiz(KnowledgeQuestionReq knowledgeQuestionReq) {
+    public Result<Void> addKnowledgeQuiz(@RequestBody KnowledgeQuestionReq knowledgeQuestionReq) {
         questionService.addKnowledgeQuiz(knowledgeQuestionReq);
         return Result.success();
     }
     @PutMapping("/knowledge")
     @Operation(summary = "修改知识性题目")
-    public Result<Void> updateQuiz(KnowledgeQuestionReq knowledgeQuestionReq) {
+    public Result<Void> updateQuiz(@RequestBody KnowledgeQuestionReq knowledgeQuestionReq) {
         questionService.updateScenarioQuiz(knowledgeQuestionReq);
         return Result.success();
     }
@@ -85,13 +85,13 @@ public class QuestionController {
     }
     @PostMapping("/scenario")
     @Operation(summary = "添加情景性题目")
-     public Result<Void> addScenarioQuiz(ScenarioQuestionReq scenarioQuestionReq) {
+     public Result<Void> addScenarioQuiz(@RequestBody ScenarioQuestionReq scenarioQuestionReq) {
         scenarioQuestionService.addScenarioQuiz(scenarioQuestionReq);
         return Result.success();
     }
     @PutMapping("/scenario")
     @Operation(summary = "修改情景性题目")
-    public Result<Void> updateScenarioQuiz(ScenarioQuestionReq scenarioQuestionReq) {
+    public Result<Void> updateScenarioQuiz(@RequestBody ScenarioQuestionReq scenarioQuestionReq) {
         scenarioQuestionService.updateScenarioQuiz(scenarioQuestionReq);
         return Result.success();
     }

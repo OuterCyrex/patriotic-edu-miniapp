@@ -1,6 +1,8 @@
 package cn.org.shelly.edu.model.po;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -11,6 +13,7 @@ import java.io.Serializable;
 @TableName(value ="system_config")
 @Data
 public class SystemConfig implements Serializable {
+  @TableId(value = "id", type = IdType.AUTO)
   private Integer id;
   @Schema (description = "每日答题数量")
   private Integer dailyQuizCount;

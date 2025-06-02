@@ -1,5 +1,7 @@
 package cn.org.shelly.edu.model.po;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -12,6 +14,7 @@ import java.util.Date;
 @Data
 public class Hero implements Serializable {
   @Schema(description = "主键ID")
+  @TableId(value = "id", type = IdType.AUTO)
   private Long id;
 
   @Schema(description = "英雄姓名")

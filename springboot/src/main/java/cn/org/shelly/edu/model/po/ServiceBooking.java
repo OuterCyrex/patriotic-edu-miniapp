@@ -1,17 +1,20 @@
 package cn.org.shelly.edu.model.po;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+
 
 @TableName(value ="service_booking")
 @Data
 public class ServiceBooking implements Serializable {
+  @TableId(value = "id", type = IdType.AUTO)
   private Integer id;
 
   @Schema(description = "组织名称")

@@ -31,15 +31,15 @@ public class ScenarioQuestionReq {
     public static ScenarioQuestion toEntity(ScenarioQuestionReq scenarioQuestionReq) {
         ScenarioQuestion scenarioQuestion = new ScenarioQuestion();
         scenarioQuestion.setScenario(scenarioQuestionReq.getScenario())
-                .setId(scenarioQuestion.getId())
+                .setId(Math.toIntExact(scenarioQuestionReq.getId()))
                 .setQuestion(scenarioQuestionReq.getQuestion())
                 .setOptionA(scenarioQuestionReq.getOptionA())
                 .setOptionB(scenarioQuestionReq.getOptionB())
                 .setOptionC(scenarioQuestionReq.getOptionC())
                 .setCorrectAnswer(scenarioQuestionReq.getCorrectAnswer())
-                .setLegalBasis(scenarioQuestion.getLegalBasis())
-                .setStatus(scenarioQuestion.getStatus())
-                .setSolution(scenarioQuestion.getSolution());
+                .setLegalBasis(scenarioQuestionReq.getLegalBasis())
+                .setStatus(scenarioQuestionReq.getStatus())
+                .setSolution(scenarioQuestionReq.getSolution());
         return scenarioQuestion;
     }
 }
