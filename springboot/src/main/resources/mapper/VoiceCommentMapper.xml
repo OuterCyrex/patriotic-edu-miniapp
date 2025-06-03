@@ -13,11 +13,12 @@
             <result property="likesCount" column="likes_count" jdbcType="INTEGER"/>
             <result property="status" column="status" jdbcType="TINYINT"/>
             <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <result property="gmtCreate" column="gmt_create" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,voice_id,user_id,
         content,parent_id,likes_count,
-        status,create_by
+        status,create_by,gmt_create
     </sql>
 </mapper>

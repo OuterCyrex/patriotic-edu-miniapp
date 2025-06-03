@@ -10,6 +10,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
+import static java.util.stream.Collectors.toSet;
+
 @Service
 public class StopWordServiceImpl extends ServiceImpl<StopWordMapper, StopWord>
     implements StopWordService {
@@ -23,6 +27,17 @@ public class StopWordServiceImpl extends ServiceImpl<StopWordMapper, StopWord>
       .page(new Page<>(pageNum, pageSize))
       .convert(StopWordResp::toResp);
   }
+
+     @Override
+     public Set<String> getStopWords() {
+        return lambdaQuery()
+                .select(StopWord::getContent)
+                .eq(StopWord::getState, 1)
+                .list()
+                .stream()
+                .map(StopWord::getContent)
+                .collect(toSet());
+    }
 }
 
 

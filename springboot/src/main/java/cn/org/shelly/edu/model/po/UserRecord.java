@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -13,6 +14,7 @@ import java.util.Date;
 
 @TableName(value ="user_record")
 @Data
+@Accessors(chain = true)
 public class UserRecord implements Serializable {
 
   @TableId(value = "id", type = IdType.AUTO)
