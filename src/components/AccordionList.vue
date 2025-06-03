@@ -77,8 +77,8 @@ const isSelected = (groupIndex: number, itemIndex: number) => {
     font-size: 28rpx;
   }
   .item.selected {
-    background-color: #d3b4b4;
-    color: #751313;
+    background-color: #ffecec;
+    color: #7a0d0d;
   }
 }
 </style>

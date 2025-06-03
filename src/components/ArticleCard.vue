@@ -1,12 +1,12 @@
 <template>
-  <view class="article-card" :bindtap="emit('click')">
+  <view class="article-card" @click="emit('click')">
     <image :src="cover" class="cover-image" mode="aspectFill" />
 
     <view class="content">
       <view class="title">{{ props.title }}</view>
       <view class="summary">{{ props.summary }}</view>
       <view class="meta">
-        <text class="views">👁 {{ props.views }}</text>
+        <text class="views" v-if="views">👁 {{ props.views }}</text>
       </view>
     </view>
   </view>
@@ -17,7 +17,7 @@ const props = defineProps<{
   cover: string
   title: string
   summary: string
-  views: number | string
+  views?: number | string
 }>()
 const emit = defineEmits(['click'])
 </script>

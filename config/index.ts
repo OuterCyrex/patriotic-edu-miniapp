@@ -1,5 +1,7 @@
 import { defineConfig, type UserConfigExport } from '@tarojs/cli'
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin'
+import ComponentsPlugin from 'unplugin-vue-components/webpack'
+import NutUIResolver from '@nutui/auto-import-resolver'
 import devConfig from './dev'
 import prodConfig from './prod'
 
@@ -8,7 +10,12 @@ export default defineConfig<'webpack5'>(async (merge, _) => {
   const baseConfig: UserConfigExport<'webpack5'> = {
     projectName: 'patriotic-edu-miniapp',
     date: '2025-5-31',
-    designWidth: 750,
+    designWidth (input: any) {
+      if (input?.file?.replace(/\\+/g, '/').indexOf('@nutui') > -1) {
+        return 375
+      }
+      return 750
+    },
     deviceRatio: {
       640: 2.34 / 2,
       750: 1,
@@ -17,7 +24,9 @@ export default defineConfig<'webpack5'>(async (merge, _) => {
     },
     sourceRoot: 'src',
     outputRoot: 'dist',
-    plugins: [],
+    plugins: [
+      '@tarojs/plugin-html',
+    ],
     defineConstants: {
     },
     copy: {
@@ -27,9 +36,21 @@ export default defineConfig<'webpack5'>(async (merge, _) => {
       }
     },
     framework: 'vue3',
-    compiler: 'webpack5',
+    compiler: {
+      type: 'webpack5',
+      prebundle: {
+        exclude: ['@nutui/nutui-taro', '@nutui/icons-vue-taro']
+      }
+    },
+    sass: {
+      // 默认京东 APP 10.0主题 > @import "@nutui/nutui-taro/dist/styles/variables.scss";
+      // 京东科技主题 > @import "@nutui/nutui-taro/dist/styles/variables-jdt.scss";
+      // 京东B商城主题 > @import "@nutui/nutui-taro/dist/styles/variables-jdb.scss";
+      // 京东企业业务主题 > @import "@nutui/nutui-taro/dist/styles/variables-jddkh.scss";
+      data: `@import "@nutui/nutui-taro/dist/styles/variables.scss";`
+    },
     cache: {
-      enable: false // Webpack 持久化缓存配置，建议开启。默认配置请参考：https://docs.taro.zone/docs/config-detail#cache
+      enable: false
     },
     mini: {
       postcss: {
@@ -49,6 +70,9 @@ export default defineConfig<'webpack5'>(async (merge, _) => {
       },
       webpackChain(chain) {
         chain.resolve.plugin('tsconfig-paths').use(TsconfigPathsPlugin)
+        chain.plugin('unplugin-vue-components').use(ComponentsPlugin({
+          resolvers: [NutUIResolver({taro: true})]
+        }))
       }
     },
     h5: {

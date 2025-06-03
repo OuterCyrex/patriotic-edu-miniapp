@@ -1,7 +1,9 @@
 import { createApp } from 'vue'
 
-const App = createApp({
-  onShow() { },
-})
+import "@nutui/nutui-taro/dist/style.css";
 
+
+const App = createApp({
+  onShow () {},
+})
 export default App

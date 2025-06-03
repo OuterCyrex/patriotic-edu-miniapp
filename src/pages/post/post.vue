@@ -1,5 +1,7 @@
 <template>
-  <view></view>
+  <view>
+    <NutButton @click="console.log(1111)">111</NutButton>
+  </view>
 </template>
 
 <script setup lang="ts">
@@ -9,3 +11,6 @@
 <style lang="scss">
 
 </style>
+
+
+

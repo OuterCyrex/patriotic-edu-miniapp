@@ -71,7 +71,7 @@ const buttonCards = ref<Array<Array<ButtonCardProps>>>([
     ),
     new ButtonCardData("红星服务站", "国防教育资源",
       "https://img.icons8.com/?size=100&id=WV326xpsBMyb&format=png&color=000000",
-      () => {Taro.navigateTo({url: '/pages/pal/pal'})}
+      () => {Taro.navigateTo({url: '/pages/service/service'})}
     )]
 ])
 

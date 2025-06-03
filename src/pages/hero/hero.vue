@@ -1,14 +1,42 @@
 <template>
   <view class="search-container">
-    <SearchBar @search="handleSearch" style="margin: 0"/>
-
+    <nut-searchbar v-model="searchKeywords" @search="search">
+      <template #rightout>
+        <nut-button @click="search(searchKeywords ? searchKeywords : '')">搜索</nut-button>
+      </template>
+    </nut-searchbar>
     <AccordionList :options="listData" @select="onSelect" />
+    <view class="article-cards" v-if="!!heroList">
+      <ArticleCard
+                   v-for="item of heroList.list"
+                   :key="item.id"
+                   :title="item.name" :cover="item.avatarUrl" :summary="item.summary"
+                   @click="Taro.navigateTo({url: `/pages/hero/detail?id=${item.id}`})"
+      ></ArticleCard>
+    </view>
+    <nut-pagination v-if="heroList && heroList?.list.length > 10"
+                    class="d-flex"
+                    v-model="page"
+                    :total-items="25"
+                    :items-per-page="10"
+                    mode="simple" @change="change" />
   </view>
 </template>
 
 <script setup lang="ts">
+import { onMounted, ref} from 'vue'
+import Taro from "@tarojs/taro";
+
 import AccordionList from '@/components/AccordionList.vue'
-import SearchBar from "@/components/SearchBar.vue";
+import {hero} from "@/API";
+import ArticleCard from "@/components/ArticleCard.vue";
+import {HeroList} from "@/API/forms/hero";
+
+const page = ref<number>(1)
+
+function change(value: number) {
+  page.value = value
+}
 
 const listData = [
   {
@@ -17,18 +45,42 @@ const listData = [
   },
 ]
 
-function onSelect({ groupIndex, itemIndex, item }) {
-  console.log(`选中第 ${groupIndex} 组，第 ${itemIndex} 个：`, item)
+const periodSelected = ref<number | null>(null)
+function onSelect({itemIndex}) {
+  periodSelected.value = itemIndex + 1
+  GetHeroList()
 }
 
-function handleSearch(keyword: string) {
-  console.log('搜索关键词：', keyword)
+const searchKeywords = ref<string | null>(null)
+const search = (text: string) => {
+  searchKeywords.value = text
+  GetHeroList()
 }
+
+let heroList = ref<HeroList | null>(null)
+
+const GetHeroList = () => {
+  hero.HeroList({
+    pageNum: page.value,
+    pageSize: 10,
+    ...(periodSelected.value !== null ? { period: periodSelected.value } : {}),
+    ...(searchKeywords.value !== null ? { name: searchKeywords.value } : {}),
+  }).then(resp => {
+    heroList.value = resp.data
+  })
+}
+
+onMounted(() => {
+  GetHeroList()
+})
 </script>
 
 <style lang="scss">
-@import "taro-ui-vue3/dist/style/components/search-bar.scss";
-
+@import "taro-ui-vue3/dist/style/components/pagination.scss";
+.d-flex {
+  display: flex;
+  justify-content: center;
+}
 </style>
 
 
