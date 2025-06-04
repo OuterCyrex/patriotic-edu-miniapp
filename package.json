@@ -40,6 +40,7 @@
     "@babel/preset-react": "^7.27.1",
     "@babel/preset-typescript": "^7.27.1",
     "@babel/runtime": "^7.24.4",
+    "@nutui/icons-vue-taro": "^0.0.9",
     "@nutui/nutui-taro": "^4.3.13",
     "@tarojs/components": "4.1.1",
     "@tarojs/helper": "4.1.1",

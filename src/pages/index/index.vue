@@ -22,7 +22,6 @@
               :title="item.title"
               :summary="item.summary"
               :cover="item.cover"
-              :views="item.views"
               @click="item.onclick"
             />
           </view>
@@ -76,8 +75,8 @@ const buttonCards = ref<Array<Array<ButtonCardProps>>>([
 ])
 
 const articleCards = ref<Array<ArticleCardProps>>([
-  new ArticleCardData("https://i.ibb.co/rRDkdT3h/974e14c00fd1c9ce653ec65adf41eff6.png", "新民主主义革命先驱恽代英生平事迹", "恽代英，原籍江苏武进，出生于湖北武昌。恽代英是中国无产阶级革命家，中国共产党早期青年运动领导人之一", 11),
-  new ArticleCardData("https://i.ibb.co/rRDkdT3h/974e14c00fd1c9ce653ec65adf41eff6.png", "建设年代守护者黄继光", "黄继光，男，汉族，原名黄积广，四川省中江县人，中国共产党党员", 9),
+  new ArticleCardData("https://i.ibb.co/rRDkdT3h/974e14c00fd1c9ce653ec65adf41eff6.png", "新民主主义革命先驱恽代英生平事迹", "恽代英，原籍江苏武进，出生于湖北武昌。恽代英是中国无产阶级革命家，中国共产党早期青年运动领导人之一"),
+  new ArticleCardData("https://i.ibb.co/rRDkdT3h/974e14c00fd1c9ce653ec65adf41eff6.png", "建设年代守护者黄继光", "黄继光，男，汉族，原名黄积广，四川省中江县人，中国共产党党员"),
 ])
 </script>
 

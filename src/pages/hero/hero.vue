@@ -51,7 +51,7 @@ function onSelect({itemIndex}) {
   GetHeroList()
 }
 
-const searchKeywords = ref<string | null>(null)
+const searchKeywords = ref<string>('')
 const search = (text: string) => {
   searchKeywords.value = text
   GetHeroList()
@@ -64,7 +64,7 @@ const GetHeroList = () => {
     pageNum: page.value,
     pageSize: 10,
     ...(periodSelected.value !== null ? { period: periodSelected.value } : {}),
-    ...(searchKeywords.value !== null ? { name: searchKeywords.value } : {}),
+    ...(searchKeywords.value !== '' ? { name: searchKeywords.value } : {}),
   }).then(resp => {
     heroList.value = resp.data
   })

@@ -1,5 +1,6 @@
 import {request} from "@/API/request";
 import {HeroListReq} from "@/API/forms/hero";
+import {CommentListReq, NewPostReq, PostListReq} from "@/API/forms/post";
 
 export const hero = {
   HeroList: (req: HeroListReq) => request('/hero/list', {
@@ -10,4 +11,30 @@ export const hero = {
     method: 'GET',
     pathParams: {id: req.id}
   }),
+}
+
+export const post = {
+  NewPost: (req: NewPostReq) => request('/voice/submit', {
+    method: 'POST',
+    data: req
+  }),
+  PostList: (req: PostListReq) => request('/voice/list', {
+    method: 'GET',
+    data: req
+  }),
+  PostDetail: (req: {id: number}) => request('/voice/:id', {
+    method: 'GET',
+    pathParams: {id: req.id}
+  }),
+  /**
+   * @deprecated 此方法尚未完成
+   */
+  PostLike:  (req: {id: number}) => request('/voice/like/:id', {
+    method: 'GET',
+    pathParams: {id: req.id}
+  }),
+  CommentList: (req: CommentListReq) => request('/voice/comment', {
+    method: 'GET',
+    data: req
+  })
 }
