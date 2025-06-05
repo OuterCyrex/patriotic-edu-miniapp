@@ -27,6 +27,7 @@
     <view class="comments" v-if="!!commentList">
       <Comment v-for="item of commentList.list" :key="item.id" :id="item.id" :content="item.content" />
     </view>
+    <CommentInput @submit="submitComment" />
   </view>
 </template>
 
@@ -37,6 +38,7 @@ import {CommentList, PostInfo} from "@/API/forms/post"
 import { post } from "@/API"
 import {My} from "@nutui/icons-vue-taro";
 import Comment from "@/components/post/Comment.vue";
+import CommentInput from "@/components/CommentInput.vue";
 
 const postId = ref<number>(0)
 const postDetail = ref<PostInfo | null>(null)
@@ -50,10 +52,10 @@ useLoad((options) => {
   })
   post.CommentList({
     voiceId: postId.value,
-    pageSize: 1000,
-    pageNum: 0,
+    pageSize: 100,
+    pageNum: 1,
   }).then(res => {
-    commentList.value = res.data
+    commentList.value = res.data as CommentList
   })
 })
 
@@ -61,12 +63,23 @@ function PostLiked() {
   liked.value = true
   postDetail.value!.likesCount = 1
 }
+
+function submitComment(text: string) {
+  commentList.value?.list.push({id: 0, content: text, voiceId: postId.value, likesCount: 0, parentId: 0, userId: 0})
+  postDetail.value!.commentsCount += 1
+  post.NewComment({
+    id: postId.value,
+    content: text,
+    type: 1,
+    replyId: 0
+  })
+}
 </script>
 
 <style lang="scss">
 .comments {
   margin: 30px 0;
-  padding: 0 30rpx;
+  padding: 0 30rpx 80px 30rpx;
 }
 .like-icon {
   height: 32px;
@@ -125,12 +138,6 @@ function PostLiked() {
   color: #666;
   margin-top: 24rpx;
   justify-content: space-around;
-}
-
-.time {
-  margin-left: auto;
-  font-size: 22rpx;
-  color: #999;
 }
 
 </style>

@@ -1,5 +1,13 @@
 import {HeroDetail, HeroList, HeroListReq} from "@/API/forms/hero";
-import {CommentList, CommentListReq, NewPostReq, PostInfo, PostList, PostListReq} from "@/API/forms/post";
+import {
+  CommentList,
+  CommentListReq,
+  NewCommentReq,
+  NewPostReq,
+  PostInfo,
+  PostList,
+  PostListReq
+} from "@/API/forms/post";
 
 export interface ApiMap {
   '/hero/list': {
@@ -27,8 +35,12 @@ export interface ApiMap {
     resp: {}
   }
   '/voice/comment': {
-    req: CommentListReq
-    resp: CommentList
+    req: CommentListReq | NewCommentReq
+    resp: CommentList | {}
+  }
+  '/word/top/:x': {
+    req: {x: number}
+    resp: Array<WordFrequency>
   }
 }
 

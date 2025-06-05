@@ -54,3 +54,17 @@ export interface CommentInfo {
   parentId: number
   likesCount: number
 }
+
+export interface NewCommentReq {
+  id: number
+  content: string
+  type: number
+  replyId: number
+}
+
+export interface WordFrequency {
+  id: number
+  content: string
+  frequency: number
+  status: number
+}

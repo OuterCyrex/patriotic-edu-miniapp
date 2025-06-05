@@ -12,12 +12,16 @@ declare module 'vue' {
     ArticleCard: typeof import('./src/components/ArticleCard.vue')['default']
     ButtonCard: typeof import('./src/components/index/ButtonCard.vue')['default']
     Comment: typeof import('./src/components/post/Comment.vue')['default']
+    CommentInput: typeof import('./src/components/CommentInput.vue')['default']
     FixedButton: typeof import('./src/components/FixedButton.vue')['default']
     NewPost: typeof import('./src/components/post/NewPost.vue')['default']
     NoticeBar: typeof import('./src/components/index/NoticeBar.vue')['default']
+    NutActionSheet: typeof import('@nutui/nutui-taro')['ActionSheet']
     NutAvatar: typeof import('@nutui/nutui-taro')['Avatar']
     NutButton: typeof import('@nutui/nutui-taro')['Button']
+    NutCell: typeof import('@nutui/nutui-taro')['Cell']
     NutCol: typeof import('@nutui/nutui-taro')['Col']
+    NutDivider: typeof import('@nutui/nutui-taro')['Divider']
     NutEllipsis: typeof import('@nutui/nutui-taro')['Ellipsis']
     NutForm: typeof import('@nutui/nutui-taro')['Form']
     NutFormItem: typeof import('@nutui/nutui-taro')['FormItem']
@@ -30,5 +34,6 @@ declare module 'vue' {
     NutToast: typeof import('@nutui/nutui-taro')['Toast']
     PostCard: typeof import('./src/components/post/PostCard.vue')['default']
     SwiperImage: typeof import('./src/components/index/SwiperImage.vue')['default']
+    WordCloud: typeof import('./src/components/post/WordCloud.vue')['default']
   }
 }

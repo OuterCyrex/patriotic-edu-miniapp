@@ -1688,6 +1688,16 @@
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
+"@qiun/ucharts@^2.5.0-20230101":
+  version "2.5.0-20230101"
+  resolved "https://registry.yarnpkg.com/@qiun/ucharts/-/ucharts-2.5.0-20230101.tgz#9ca5d646328ad4a002c745c28001f8916865c4f8"
+  integrity sha512-C7ccBgfPuGF6dxTRuMW0NPPMSCf1k/kh3I9zkRVBc5PaivudX/rPL+jd2Wty6gn5ya5L3Ob+YmYe09V5xw66Cw==
+
+"@qiun/wx-ucharts@^2.5.0-20230101":
+  version "2.5.0-20230101"
+  resolved "https://registry.yarnpkg.com/@qiun/wx-ucharts/-/wx-ucharts-2.5.0-20230101.tgz#ba7237cbf6bd92645e8322040c7449b8b7a1eea4"
+  integrity sha512-sAaNUf4U6r4/0JZMTlfNwrtfT0v8qFO02B/wYsj4yZGTDAQ/QctGgKI7hVUDUSrqZnjH6xWqE+ql0FOIs1fTuQ==
+
 "@rnx-kit/babel-preset-metro-react-native@^1.1.8":
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/@rnx-kit/babel-preset-metro-react-native/-/babel-preset-metro-react-native-1.1.8.tgz#0f0831fe76609524608cdaca20a0684a5dc02ecf"

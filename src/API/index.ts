@@ -1,6 +1,6 @@
 import {request} from "@/API/request";
 import {HeroListReq} from "@/API/forms/hero";
-import {CommentListReq, NewPostReq, PostListReq} from "@/API/forms/post";
+import {CommentListReq, NewCommentReq, NewPostReq, PostListReq} from "@/API/forms/post";
 
 export const hero = {
   HeroList: (req: HeroListReq) => request('/hero/list', {
@@ -36,5 +36,13 @@ export const post = {
   CommentList: (req: CommentListReq) => request('/voice/comment', {
     method: 'GET',
     data: req
+  }),
+  NewComment: (req: NewCommentReq) => request('/voice/comment', {
+    method: 'POST',
+    data: req
+  }),
+  GetWordFrequency: (req: {x: number}) => request('/word/top/:x', {
+    method: 'GET',
+    pathParams: {x: req.x}
   })
 }

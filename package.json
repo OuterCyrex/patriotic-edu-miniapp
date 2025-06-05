@@ -42,6 +42,8 @@
     "@babel/runtime": "^7.24.4",
     "@nutui/icons-vue-taro": "^0.0.9",
     "@nutui/nutui-taro": "^4.3.13",
+    "@qiun/ucharts": "^2.5.0-20230101",
+    "@qiun/wx-ucharts": "^2.5.0-20230101",
     "@tarojs/components": "4.1.1",
     "@tarojs/helper": "4.1.1",
     "@tarojs/plugin-framework-vue3": "4.1.1",

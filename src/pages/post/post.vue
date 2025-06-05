@@ -5,6 +5,9 @@
         <nut-button @click="search(searchKeywords ? searchKeywords : '')">搜索</nut-button>
       </template>
     </nut-searchbar>
+    <WordCloud v-if="!!wordCloudData" :data="wordCloudData"/>
+<!--    <nut-cell title="筛选主题" :desc="ActionSheetManager.val" @click="ActionSheetManager.show = true"></nut-cell>-->
+<!--    <nut-action-sheet v-model:visible="ActionSheetManager.show" :menu-items="ActionSheetManager.menuItems" @choose="(item) => {ActionSheetManager.val = item.name}" />-->
     <view class="post-cards" v-if="!!postList">
       <PostCard v-for="item of postList.list"
                 :key="item.id"
@@ -32,10 +35,17 @@ import Taro from '@tarojs/taro'
 import {onMounted, ref} from "vue";
 import FixedButton from "@/components/FixedButton.vue";
 import NewPost from "@/components/post/NewPost.vue";
-import {PostList} from "@/API/forms/post";
+import {PostList, WordFrequency} from "@/API/forms/post";
+import WordCloud from "@/components/post/WordCloud.vue";
 import {post} from "@/API";
 
 const showOverLayer = ref(false);
+
+// const ActionSheetManager = ref<{
+//   show: boolean
+//   val: string
+//   menuItems: any[]
+// }>({show: false, val: '任意主题', menuItems: [{name: '少年说国防'}, {name: '老兵回忆录'}, {name: '任意主题'}]},)
 
 const searchKeywords = ref<string> ('')
 
@@ -59,8 +69,20 @@ const GetPostList = () => {
   })
 }
 
+const wordCloudData = ref<Array<WordFrequency> | null>(null)
+
+const GetWordFrequency = () => {
+  post.GetWordFrequency({
+    x: 10
+  }).then(res => {
+    console.log(res.data)
+    wordCloudData.value = res.data
+  })
+}
+
 onMounted(() => {
   GetPostList()
+  GetWordFrequency()
 })
 </script>
 
@@ -68,7 +90,6 @@ onMounted(() => {
 .post-view-container {
   height: 100vh;
   background: #f4f4f4;
-  padding: 20px 0;
 }
 .post-cards-list {
   background-color: white;

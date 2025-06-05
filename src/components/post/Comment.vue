@@ -21,6 +21,7 @@ defineProps<{
   background-color: #fff5f5;
   border-left: solid 4px #8f2c2c;
   padding: 20px 40px;
+  margin: 20px 0;
 }
 .comment-title {
   font-size: 32rpx;
