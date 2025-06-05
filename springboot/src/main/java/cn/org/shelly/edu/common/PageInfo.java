@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 @ApiModel(description = "通用分页返回结果")
-public class  PageInfo<T> {
+public class PageInfo<T> {
     @Schema(name = "list", description = "分页详细数据")
     List<T> list;
     @Schema(name = "total", description = "分页数据总数")

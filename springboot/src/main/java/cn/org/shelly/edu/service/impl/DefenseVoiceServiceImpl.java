@@ -8,6 +8,7 @@ import cn.org.shelly.edu.service.DefenseVoiceService;
 import cn.org.shelly.edu.service.VoiceCommentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,12 +18,14 @@ import org.springframework.stereotype.Service;
 */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DefenseVoiceServiceImpl extends ServiceImpl<DefenseVoiceMapper, DefenseVoice>
     implements DefenseVoiceService {
     private  final VoiceCommentService voiceCommentService;
 
     @Override
     public void comment(CommentReq req) {
+        log.info("comment:{}", req);
         lambdaUpdate()
                 .eq(DefenseVoice::getId, req.getId())
                 .setSql("comments_count = comments_count + 1")
@@ -35,7 +38,7 @@ public class DefenseVoiceServiceImpl extends ServiceImpl<DefenseVoiceMapper, Def
         if(req.getType() == 1){
              voiceCommentService.save(voiceComment);
         }
-        if(req.getType() == 2){
+        else if(req.getType() == 2){
              voiceComment.setParentId(req.getReplyId());
             voiceCommentService.save(voiceComment);
         }else{

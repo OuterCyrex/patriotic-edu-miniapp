@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.validation.annotation.Validated;
@@ -34,6 +35,7 @@ import java.util.concurrent.CompletableFuture;
 @RequestMapping("/voice")
 @Tag(name = "心声管理")
 @RequiredArgsConstructor
+@Slf4j
 public class VoiceController {
   private final DefenseVoiceService defenseVoiceService;
   private final VoiceCommentService voiceCommentService;
@@ -43,8 +45,10 @@ public class VoiceController {
 
   @PostMapping("/submit")
   @Operation(summary = "提交心声")
-  public Result<Void> submit(@Validated VoiceReq req) {
-      DefenseVoice defenseVoice = req.toDefenseVoice(req);
+  public Result<Void> submit(@Validated @RequestBody VoiceReq req) {
+      log.info("提交心声req：{}", req);
+      DefenseVoice defenseVoice = VoiceReq.toDefenseVoice(req);
+      log.info("提交心声po：{}", defenseVoice);
       if(req.getContent().length() > 300){
         return Result.fail("内容不能超过300字");
       }

@@ -41,7 +41,7 @@ public class VoiceReq {
   @Schema(description = "主题分类")
   private String theme;
 
-  public DefenseVoice toDefenseVoice(VoiceReq req) {
+  public static DefenseVoice toDefenseVoice(VoiceReq req) {
     DefenseVoice defenseVoice = new DefenseVoice();
     defenseVoice.setContent(req.getContent());
     defenseVoice.setRegion(req.getRegion());
