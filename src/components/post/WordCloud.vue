@@ -19,7 +19,7 @@ const cHeight = ref(300)
 let uChartsInstance: Record<string, any> = {}
 
 const props = defineProps<{
-  data: {content: string, frequency: number},
+  data: Array<{content: string, frequency: number}>,
 }>()
 
 const drawCharts = (id: string, data: any) => {

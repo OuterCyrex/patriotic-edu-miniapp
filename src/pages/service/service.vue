@@ -1,271 +1,179 @@
 <template>
-  <view class="container">
+  <view class="red-service-container">
     <view class="header">
-      <text class="title">🛠️ 红星服务站</text>
-      <text class="subtitle">搭建供需对接桥梁，提供精准化国防教育资源服务。</text>
+      <view class="d-flex">
+        <text class="title">红星服务站</text>
+      </view>
+      <view class="d-flex">
+        <text class="subtitle">搭建供需对接桥梁，提供精准化国防教育资源服务</text>
+      </view>
     </view>
 
-    <!-- 预约系统 -->
-    <view class="section">
-      <text class="section-title">预约系统</text>
+    <!-- NutUI 表单 -->
+    <nut-form :model-value="form" @submit="submitForm">
+      <nut-form-item label="单位/学校" prop="name" required>
+        <nut-input v-model="form.name" placeholder="请输入单位或学校名称" />
+      </nut-form-item>
 
-      <view class="form-item">
-        <text class="label">单位/学校名称</text>
-        <input
-          class="input"
-          type="text"
-          placeholder="请输入单位或学校名称"
-          v-model="orgName"
-        />
-      </view>
+      <nut-form-item label="联系人" prop="contact" required>
+        <nut-input v-model="form.contact" placeholder="请输入联系人姓名" />
+      </nut-form-item>
 
-      <view class="form-item">
-        <text class="label">联系人</text>
-        <input
-          class="input"
-          type="text"
-          placeholder="请输入联系人姓名"
-          v-model="contactName"
-        />
-      </view>
+      <nut-form-item label="需求类型" prop="requirement" required>
+        <nut-input v-model="form.requirement" placeholder="如：军事体验活动" @blur="matchExperts" />
+      </nut-form-item>
 
-      <view class="form-item">
-        <text class="label">需求类型</text>
-        <picker mode="selector" :range="demandTypes" @change="onDemandTypeChange">
-          <view class="picker">{{ selectedDemandType || '请选择需求类型' }}</view>
+      <nut-form-item label="时间范围" prop="dateRange" required>
+        <nut-input v-model="form.dateRange" placeholder="如：2025年7月-8月" />
+      </nut-form-item>
+
+      <nut-form-item label="服务类型">
+        <picker :range="serviceOptions" @change="onServiceChange">
+          <view class="picker">
+            {{ selectedService || '请选择服务类型' }}
+          </view>
         </picker>
-      </view>
+      </nut-form-item>
 
-      <view class="form-item">
-        <text class="label">时间范围</text>
-        <picker mode="date" @change="onDateChange">
-          <view class="picker">{{ selectedDate || '请选择时间' }}</view>
-        </picker>
-      </view>
+      <nut-button block type="danger" native-type="submit">提交预约</nut-button>
+    </nut-form>
 
-      <button class="submit-btn" hover-class="btn-hover" bindtap="onSubmit">提交预约</button>
-    </view>
-
-    <!-- 智能匹配 -->
-    <view class="section">
-      <text class="section-title">智能匹配推荐</text>
-      <view class="recommendations">
-        <view
-          class="recommendation"
-          v-for="(person, index) in recommendedPeople"
-          :key="index"
-        >
-          {{ person }}
-        </view>
+    <!-- 推荐结果 -->
+    <view v-if="matched.length" class="matched">
+      <view class="matched-title">🔍 推荐专家 / 英雄人物：</view>
+      <view v-for="(person, index) in matched" :key="index" class="matched-card">
+        {{ person }}
       </view>
     </view>
 
-    <!-- 服务类型 -->
-    <view class="section">
-      <text class="section-title">服务类型</text>
-      <view class="service-list">
-        <view class="service-item">英雄事迹宣讲</view>
-        <view class="service-item">装备模型展览</view>
-        <view class="service-item">军事体验活动</view>
-      </view>
-    </view>
-
-    <!-- 联系通道 -->
-    <view class="section">
-      <text class="section-title">联系通道</text>
-      <view class="contact-list">
-        <view class="contact-item">📞 热线电话服务：400-123-4567</view>
-        <view class="contact-item">💬 在线客服支持</view>
-        <view class="contact-item">❓ 常见问题解答</view>
-        <view class="contact-item">📄 服务流程指引</view>
-      </view>
+    <!-- 联系方式 -->
+    <view class="contact-section">
+      <view class="contact-title">📞 联系通道</view>
+      <view class="contact-item">📱 热线电话服务：400-123-4567</view>
+      <view class="contact-item">💬 在线客服支持：请前往“我的”-“客服”</view>
+      <view class="contact-item">❓ 常见问题解答：请访问“帮助中心”</view>
+      <view class="contact-item">📌 服务流程指引：完成预约后将有专人对接</view>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import Taro from '@tarojs/taro'
 
-const orgName = ref('')
-const contactName = ref('')
-const demandTypes = ['英雄宣讲', '模型展览', '军事体验']
-const selectedDemandType = ref('')
-const selectedDate = ref('')
-const recommendedPeople = ref(['军事专家张三', '退役军人李四'])
+interface FormData {
+  name: string
+  contact: string
+  requirement: string
+  dateRange: string
+}
 
-const onDemandTypeChange = (e) => {
+const form = ref<FormData>({
+  name: '',
+  contact: '',
+  requirement: '',
+  dateRange: '',
+})
+
+const serviceOptions = ['英雄事迹宣讲', '装备模型展览', '军事体验活动']
+const selectedService = ref('')
+const matched = ref<string[]>([])
+
+const onServiceChange = (e: any) => {
   const index = e.detail.value
-  selectedDemandType.value = demandTypes[index]
+  selectedService.value = serviceOptions[index]
+  matchExperts()
+}
 
-  if (demandTypes[index] === '英雄宣讲') {
-    recommendedPeople.value = ['雷锋精神讲解员', '英雄事迹代言人']
-  } else if (demandTypes[index] === '模型展览') {
-    recommendedPeople.value = ['装备讲解员王五']
+const matchExperts = () => {
+  const keyword = selectedService.value
+  if (keyword.includes('英雄')) {
+    matched.value = ['雷锋同志', '黄继光烈士']
+  } else if (keyword.includes('装备')) {
+    matched.value = ['装甲模型专家李刚', '军事装备讲解员王军']
+  } else if (keyword.includes('体验')) {
+    matched.value = ['国防教育教官张伟']
   } else {
-    recommendedPeople.value = ['军事体验教官赵六']
+    matched.value = ['暂无匹配结果']
   }
 }
 
-const onDateChange = (e) => {
-  selectedDate.value = e.detail.value
-}
-
-const onSubmit = () => {
-  if (!orgName.value.trim()) {
-    alert('请填写单位/学校名称')
-    return
-  }
-  if (!contactName.value.trim()) {
-    alert('请填写联系人姓名')
-    return
-  }
-  if (!selectedDemandType.value) {
-    alert('请选择需求类型')
-    return
-  }
-  if (!selectedDate.value) {
-    alert('请选择时间')
+const submitForm = () => {
+  if (!form.value.name || !form.value.contact || !form.value.requirement || !form.value.dateRange) {
+    Taro.showToast({ title: '请填写完整信息', icon: 'none' })
     return
   }
 
-  alert(
-    `提交成功！\n单位：${orgName.value}\n联系人：${contactName.value}\n需求类型：${selectedDemandType.value}\n时间：${selectedDate.value}`
-  )
+  Taro.showToast({ title: '预约成功', icon: 'success' })
+  console.log('提交成功：', form.value, selectedService.value)
 }
 </script>
 
 <style lang="scss">
-.container {
-  padding: 40rpx 32rpx;
-  background-color: #f2f5f7;
+.red-service-container {
+  padding: 20px;
+  background-color: #fff7f7;
   min-height: 100vh;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  color: #222;
+}
+
+.d-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .header {
-  text-align: center;
-  margin-bottom: 40rpx;
-
-  .title {
-    font-size: 48rpx;
-    font-weight: 700;
-    color: #d32f2f;
-    margin-bottom: 12rpx;
-  }
-  .subtitle {
-    font-size: 28rpx;
-    color: #666;
-  }
+  margin-bottom: 24px;
 }
 
-.section {
-  background: #fff;
-  padding: 32rpx;
-  border-radius: 16rpx;
-  margin-bottom: 32rpx;
-  box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.05);
-
-  .section-title {
-    font-size: 36rpx;
-    font-weight: 600;
-    color: #d32f2f;
-    border-bottom: 2rpx solid #d32f2f;
-    padding-bottom: 12rpx;
-    margin-bottom: 24rpx;
-  }
+.title {
+  font-size: 38px;
+  font-weight: bold;
+  color: #c40000;
 }
 
-.form-item {
-  margin-bottom: 24rpx;
-
-  .label {
-    font-size: 28rpx;
-    margin-bottom: 10rpx;
-    display: block;
-    color: #555;
-  }
-
-  .input,
-  .picker {
-    width: 100%;
-    height: 64rpx;
-    line-height: 64rpx;
-    padding: 0 20rpx;
-    font-size: 28rpx;
-    color: #333;
-    border: 1rpx solid #ccc;
-    border-radius: 12rpx;
-    background: #fafafa;
-  }
-  .picker {
-    display: flex;
-    align-items: center;
-  }
+.subtitle {
+  font-size: 28px;
+  color: #a94442;
+  margin-top: 8px;
 }
 
-.submit-btn {
-  width: 100%;
-  height: 72rpx;
-  background-color: #d32f2f;
-  color: #fff;
-  font-size: 32rpx;
-  font-weight: 600;
-  border-radius: 14rpx;
-  text-align: center;
-  line-height: 72rpx;
-  margin-top: 16rpx;
+.matched {
+  margin-top: 24px;
 }
 
-.btn-hover {
-  background-color: #b02626 !important;
+.matched-title {
+  font-weight: bold;
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #d0021b;
 }
 
-.recommendations {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16rpx;
+.matched-card {
+  background-color: #ffe5e5;
+  padding: 10px;
+  margin-bottom: 8px;
+  border-left: 4px solid #fa2c19;
+  border-radius: 4px;
+  color: #900000;
 }
 
-.recommendation {
-  background-color: #ffebee;
-  color: #c62828;
-  padding: 12rpx 20rpx;
-  border-radius: 14rpx;
-  font-size: 28rpx;
-  font-weight: 500;
+.contact-section {
+  margin-top: 32px;
+  padding-top: 16px;
+  border-top: 1px solid #ffcccc;
 }
 
-.service-list {
-  display: flex;
-  gap: 24rpx;
-  justify-content: space-around;
-  flex-wrap: wrap;
-
-  .service-item {
-    background: #e3f2fd;
-    color: #1565c0;
-    padding: 18rpx 24rpx;
-    border-radius: 20rpx;
-    font-size: 28rpx;
-    font-weight: 600;
-    text-align: center;
-    flex: 1 1 30%;
-  }
+.contact-title {
+  font-size: 32px;
+  font-weight: bold;
+  color: #b22222;
+  margin-bottom: 8px;
 }
 
-.contact-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20rpx;
-
-  .contact-item {
-    font-size: 28rpx;
-    color: #444;
-    padding-left: 12rpx;
-    border-left: 6rpx solid #d32f2f;
-    line-height: 36rpx;
-  }
+.contact-item {
+  margin: 4px 0;
+  color: #800000;
+  font-size: 24px;
 }
 </style>
-

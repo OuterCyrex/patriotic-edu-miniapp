@@ -5,7 +5,7 @@
         <nut-button @click="search(searchKeywords ? searchKeywords : '')">搜索</nut-button>
       </template>
     </nut-searchbar>
-    <WordCloud v-if="!!wordCloudData" :data="wordCloudData"/>
+    <WordCloud v-if="!!wordCloudData" :data="wordCloudData.map(item => ({content: item.content, frequency: item.frequency}))"/>
 <!--    <nut-cell title="筛选主题" :desc="ActionSheetManager.val" @click="ActionSheetManager.show = true"></nut-cell>-->
 <!--    <nut-action-sheet v-model:visible="ActionSheetManager.show" :menu-items="ActionSheetManager.menuItems" @choose="(item) => {ActionSheetManager.val = item.name}" />-->
     <view class="post-cards" v-if="!!postList">
@@ -45,7 +45,7 @@ const showOverLayer = ref(false);
 //   show: boolean
 //   val: string
 //   menuItems: any[]
-// }>({show: false, val: '任意主题', menuItems: [{name: '少年说国防'}, {name: '老兵回忆录'}, {name: '任意主题'}]},)
+// }>({show: false, val: '任意主题', menuItems: [{name: '少年说国防'}, {name: '老兵回忆录'}, {name: '任意主题'}]})
 
 const searchKeywords = ref<string> ('')
 
@@ -75,7 +75,6 @@ const GetWordFrequency = () => {
   post.GetWordFrequency({
     x: 10
   }).then(res => {
-    console.log(res.data)
     wordCloudData.value = res.data
   })
 }
