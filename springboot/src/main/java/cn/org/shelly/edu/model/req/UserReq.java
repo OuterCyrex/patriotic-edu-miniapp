@@ -23,12 +23,10 @@ public class UserReq {
   private String avatarUrl;
   @Schema(description = "地区")
   private String region;
-  @Schema (description = "总星星数")
-  private Integer totalStars;
 
   private String password;
 
-  public static User toPo(UserReq req) {
+  public static User toAdminPo(UserReq req) {
     User po = new User();
     po.setId(req.getId());
     po.setUsername(req.getUsername());
@@ -37,8 +35,19 @@ public class UserReq {
     po.setEmail(req.getEmail());
     po.setAvatarUrl(req.getAvatarUrl());
     po.setRegion(req.getRegion());
-    po.setTotalStars(req.getTotalStars());
     po.setType(1);
+    po.setStatus(1);
+    return po;
+  }
+  public static User toUserPo(UserReq req) {
+    User po = new User();
+    po.setId(req.getId());
+    po.setUsername(req.getUsername());
+    po.setNickname(req.getNickname());
+    po.setPhone(req.getPhone());
+    po.setEmail(req.getEmail());
+    po.setAvatarUrl(req.getAvatarUrl());
+    po.setRegion(req.getRegion());
     po.setStatus(1);
     return po;
   }

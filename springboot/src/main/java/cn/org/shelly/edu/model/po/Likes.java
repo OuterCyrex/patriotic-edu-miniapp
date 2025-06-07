@@ -14,8 +14,9 @@ import java.io.Serializable;
 @Data
 public class Likes implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
+    @Schema(description = "id(前端不用传)")
     private Long id;
-
+    @Schema(description = "id(前端不用传)")
     private Long userId;
     @Schema(description = "点赞对象类型（1心声 2评论）")
     private Integer targetType;

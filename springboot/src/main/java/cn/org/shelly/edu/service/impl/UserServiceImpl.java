@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 */
 @Service
 @RequiredArgsConstructor
+@SuppressWarnings("all")
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     implements UserService {
   private final SystemConfigService systemConfigService;
@@ -62,7 +63,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
       if(count > 0){
          throw new CustomException("用户已存在");
       }
-      User po = UserReq.toPo(param);
+      User po = UserReq.toAdminPo(param);
       po.setPassword(PasswordUtils.encrypt(param.getPassword()));
       if(StringUtils.isBlank(po.getAvatarUrl())){
           String avatarUrl = systemConfigService.lambdaQuery()
@@ -92,10 +93,35 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
              throw new CustomException("用户名已存在");
           }
       }
-      User po = UserReq.toPo(param);
-      po.setPassword(old.getPassword());
+      User po = UserReq.toUserPo(param);
       updateById(po);
   }
+
+    @Override
+    public void register(UserReq param) {
+        if(StringUtils.isBlank(param.getPassword()) || StringUtils.isBlank(param.getUsername())){
+          throw new CustomException("用户名或密码不能为空");
+        }
+        Long count = lambdaQuery()
+            .eq(User::getUsername, param.getUsername())
+            .count();
+        if(count > 0){
+           throw new CustomException("用户已存在");
+        }
+        User po = UserReq.toUserPo(param);
+        po.setType(0);
+        po.setPassword(PasswordUtils.encrypt(param.getPassword()));
+        if(StringUtils.isBlank(po.getAvatarUrl())){
+            String avatarUrl = systemConfigService.lambdaQuery()
+              .eq(SystemConfig::getId,1)
+              .one()
+              .getAvatar();
+            if(StringUtils.isNotBlank(avatarUrl)){
+               po.setAvatarUrl(avatarUrl);
+            }
+        }
+        save(po);
+    }
 }
 
 

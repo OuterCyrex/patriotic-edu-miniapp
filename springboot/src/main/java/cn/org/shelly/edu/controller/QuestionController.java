@@ -1,5 +1,6 @@
 package cn.org.shelly.edu.controller;
 
+import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.org.shelly.edu.common.PageInfo;
 import cn.org.shelly.edu.common.Result;
 import cn.org.shelly.edu.model.po.KnowledgeQuestion;
@@ -40,6 +41,7 @@ public class QuestionController {
     }
     @PostMapping("/knowledgeAns")
     @Operation(summary = "提交知识问答题目答案")
+    @SaCheckLogin
     public Result<KnowledgeResultResp> submit(Long questionId, Integer answer) {
         return Result.success(questionService.submit(questionId, answer));
     }
@@ -80,6 +82,7 @@ public class QuestionController {
     }
     @PostMapping("/scenarioAns")
     @Operation(summary = "提交情景性题目答案")
+    @SaCheckLogin
     public Result<ScenarioResultResp> submitScenarioQuiz(Long questionId, Integer answer) {
         return Result.success(scenarioQuestionService.submit(questionId, answer));
     }
