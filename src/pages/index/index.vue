@@ -8,7 +8,7 @@
           <view class="buttonsCards-title"> {{buttonsTitle}} </view>
           <at-flex v-for="(subList, i) of buttonCards" :key="i" >
             <at-flex-item v-for="(item, subIndex) of subList" :key="subIndex" style="margin: 10px auto">
-              <ButtonCard :title="item.title" :subtitle="item.subtitle" :icon="item.icon" @tap="item.onClick" class="button-card"/>
+              <ButtonCard :type="1" :title="item.title" :subtitle="item.subtitle" :icon="item.icon" @click="item.onClick" class="button-card"/>
             </at-flex-item>
           </at-flex>
         </view>

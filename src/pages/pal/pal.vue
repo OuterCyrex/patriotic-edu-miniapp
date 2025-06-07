@@ -1,52 +1,45 @@
 <template>
   <view class="page">
-    <!-- 顶部红小星形象 -->
     <view class="header">
-      <image class="avatar" src="/assets/red-star.png" mode="aspectFit" />
+      <image class="avatar" src="https://i.ibb.co/NgPDVbry/e6bd4ccfdbc4b17d3af6b739a0c17a34-removebg-preview.png" mode="aspectFit" />
       <view class="title">欢迎来到红小星国防学习</view>
       <view class="subtitle">佩戴红领巾的虚拟伙伴，陪你趣味学国防！</view>
     </view>
 
-    <!-- 语音交互按钮 -->
     <view class="voice-btn" @click="onVoiceClick">
-      <image src="/assets/voice-icon.png" class="voice-icon" />
       <text>与红小星对话</text>
     </view>
 
-    <!-- 核心功能介绍 -->
     <view class="features">
-      <view class="feature-card" v-for="item in features" :key="item.title">
-        <image :src="item.icon" class="feature-icon" />
-        <view class="feature-title">{{ item.title }}</view>
-        <view class="feature-desc">{{ item.desc }}</view>
-      </view>
+      <ButtonCard v-for="(item, index) of features" :key="index" :title="item.title" :subtitle="item.desc" :icon="item.icon" :type="2"></ButtonCard>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import ButtonCard from "@/components/index/ButtonCard.vue";
 
 const features = ref([
   {
     title: '知识闯关',
-    desc: '每日10道国防常识题，答对解锁"星星勋章"',
-    icon: '/assets/icon-quiz.png',
+    desc: '每日10道国防题',
+    icon: 'https://img.icons8.com/?size=100&id=VJCVutzKX9zq&format=png&color=000000',
   },
   {
     title: '情景问答',
-    desc: '模拟国防场景，多选答题，即时解析法律依据',
-    icon: '/assets/icon-scenario.png',
+    desc: '模拟国防场景',
+    icon: 'https://img.icons8.com/?size=100&id=2juNVZZCBjKu&format=png&color=000000',
   },
   {
     title: '勋章系统',
-    desc: '激励用户持续学习，收集星星勋章',
-    icon: '/assets/icon-medal.png',
+    desc: '收集星星勋章',
+    icon: 'https://img.icons8.com/?size=100&id=KFssnxqXHKfA&format=png&color=000000',
   },
   {
     title: '进度追踪',
-    desc: '记录学习轨迹，见证成长历程',
-    icon: '/assets/icon-progress.png',
+    desc: '记录成长历程',
+    icon: 'https://img.icons8.com/?size=100&id=FpRBDCVNFXYv&format=png&color=000000',
   },
 ])
 
@@ -62,7 +55,6 @@ function onVoiceClick() {
   background: #fff0f0;
   color: #b22222;
   min-height: 100vh;
-  font-family: "Helvetica Neue", Arial, sans-serif;
 }
 
 .header {
@@ -71,20 +63,20 @@ function onVoiceClick() {
 }
 
 .avatar {
-  width: 120px;
-  height: 120px;
+  width: 240px;
+  height: 240px;
   margin: 0 auto 12px;
 }
 
 .title {
-  font-size: 24px;
+  font-size: 34px;
   font-weight: 700;
   margin-bottom: 6px;
   color: #d0021b;
 }
 
 .subtitle {
-  font-size: 14px;
+  font-size: 24px;
   color: #900000;
 }
 
@@ -92,8 +84,8 @@ function onVoiceClick() {
   background: #d0021b;
   color: white;
   padding: 12px 0;
+  width: 60%;
   border-radius: 25px;
-  width: 180px;
   margin: 0 auto 30px;
   display: flex;
   align-items: center;
@@ -112,33 +104,6 @@ function onVoiceClick() {
   flex-wrap: wrap;
   gap: 18px;
   justify-content: center;
-}
-
-.feature-card {
-  width: 160px;
-  background: white;
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 2px 6px rgba(210, 2, 27, 0.2);
-  text-align: center;
-}
-
-.feature-icon {
-  width: 48px;
-  height: 48px;
-  margin-bottom: 10px;
-}
-
-.feature-title {
-  font-weight: 600;
-  font-size: 16px;
-  margin-bottom: 6px;
-  color: #b22222;
-}
-
-.feature-desc {
-  font-size: 13px;
-  color: #900000;
 }
 </style>
 
