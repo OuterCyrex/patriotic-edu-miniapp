@@ -2,18 +2,23 @@ package cn.org.shelly.edu.utils;
 
 import cn.org.shelly.edu.constants.CodeEnum;
 import cn.org.shelly.edu.exception.CustomException;
+import jakarta.mail.internet.MimeMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.MailException;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.thymeleaf.context.Context;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Pattern;
 
 @Component
+@Slf4j
 public class EmailUtils {
 
     @Autowired
@@ -21,6 +26,9 @@ public class EmailUtils {
 
     @Value("${spring.mail.username}")
     private String sendMailer;
+
+    @Autowired
+    private org.thymeleaf.TemplateEngine templateEngine;
 
     /**
      * 判断邮箱是否合法
@@ -37,17 +45,35 @@ public class EmailUtils {
     @Async
     public void sendMailMessage(String email, String code) {
         try {
-            SimpleMailMessage message = new SimpleMailMessage();
-            // 发件人邮箱
-            message.setFrom(sendMailer);
-            // 收件人邮箱
-            message.setTo(email);
-            // 邮件标题
-            message.setSubject("欢迎使用红星国防平台！");
-            message.setText("这是您的注册验证码：\n" + "<font color='blue'>" + code + "</font>" + "\n验证码五分钟内有效。若非本人操作，请忽略此邮件！");
+            // 创建邮件消息
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            // 设置邮件基本信息
+            helper.setFrom("40505282@qq.com", "红星耀国防平台");
+            helper.setTo(email);
+            helper.setSubject("【红星耀国防平台】邮箱验证码");
+
+            // 准备Thymeleaf模板变量
+            Context context = new Context();
+            context.setVariable("verificationCode", code);
+            context.setVariable("userName", "用户");
+            context.setVariable("currentTime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+            // 处理HTML模板
+            String htmlContent = templateEngine.process("register.html", context);
+
+            // 设置邮件内容
+            helper.setText(htmlContent, true);
+
+            // 发送邮件
             mailSender.send(message);
-        } catch (MailException e) {
-            throw new CustomException(CodeEnum.EMAIL_SEND_ERROR);
+
+            log.info("验证码邮件发送成功: {} -> {}", email, code);
+
+        } catch (Exception e) {
+            log.error("发送验证码邮件失败: {}", e.getMessage());
+            throw new CustomException("邮件发送失败");
         }
     }
 }

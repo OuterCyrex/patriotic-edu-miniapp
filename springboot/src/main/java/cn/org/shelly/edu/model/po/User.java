@@ -20,10 +20,6 @@ public class User implements Serializable {
 
     private String nickname;
 
-    private String phone;
-
-    private String email;
-
     private String avatarUrl;
     @Schema (description = "地区")
     private String region;

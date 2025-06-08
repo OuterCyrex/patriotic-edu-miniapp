@@ -48,8 +48,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
               .setId(user.getId())
               .setUsername(user.getUsername())
               .setNickname(user.getNickname())
-              .setPhone(user.getPhone())
-              .setEmail(user.getEmail())
               .setAvatarUrl(user.getAvatarUrl())
               .setRegion(user.getRegion())
               .setType(user.getType())

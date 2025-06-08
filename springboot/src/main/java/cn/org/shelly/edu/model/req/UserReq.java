@@ -16,10 +16,6 @@ public class UserReq {
 
   private String nickname;
 
-  private String phone;
-
-  private String email;
-
   private String avatarUrl;
   @Schema(description = "地区")
   private String region;
@@ -32,8 +28,6 @@ public class UserReq {
     po.setId(req.getId());
     po.setUsername(req.getUsername());
     po.setNickname(req.getNickname());
-    po.setPhone(req.getPhone());
-    po.setEmail(req.getEmail());
     po.setAvatarUrl(req.getAvatarUrl());
     po.setRegion(req.getRegion());
     po.setType(1);
@@ -45,8 +39,6 @@ public class UserReq {
     po.setId(req.getId());
     po.setUsername(req.getUsername());
     po.setNickname(req.getNickname());
-    po.setPhone(req.getPhone());
-    po.setEmail(req.getEmail());
     po.setAvatarUrl(req.getAvatarUrl());
     po.setRegion(req.getRegion());
     po.setStatus(1);

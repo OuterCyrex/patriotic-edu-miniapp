@@ -13,10 +13,6 @@ public class UserInfoResp {
 
   private String nickname;
 
-  private String phone;
-
-  private String email;
-
   private String avatarUrl;
   @Schema(description = "地区")
   private String region;
