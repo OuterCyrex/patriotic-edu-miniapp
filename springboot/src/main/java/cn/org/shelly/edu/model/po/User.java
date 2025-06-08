@@ -15,7 +15,7 @@ import java.util.Date;
 public class User implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
-
+    @Schema(description = "邮箱")
     private String username;
 
     private String nickname;

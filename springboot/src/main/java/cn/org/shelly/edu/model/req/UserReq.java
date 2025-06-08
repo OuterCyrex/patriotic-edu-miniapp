@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class UserReq {
   private Long id;
-
+  @Schema(description = "邮箱")
   private String username;
 
   private String nickname;
@@ -25,7 +25,8 @@ public class UserReq {
   private String region;
 
   private String password;
-
+  @Schema(description = "验证码(只有注册时需要带上)")
+  private String code;
   public static User toAdminPo(UserReq req) {
     User po = new User();
     po.setId(req.getId());

@@ -38,6 +38,22 @@ spring:
     # 返回格式化日期
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  mail:
+    # 下面这个是QQ邮箱host ， 企业邮箱 : smtp.exmail.qq.com
+    host: smtp.qq.com
+    # tencent mail port  这个是固定的
+    port: 465
+    username: 40505282@qq.com
+    password: razoobdfnhtqcaeg
+    test-connection: true
+    properties:
+      mail:
+        smtp:
+          socketFactory:
+            port: 465
+            class: javax.net.ssl.SSLSocketFactory
+          ssl:
+            enable: true
 
 mybatis-plus:
   configuration:
