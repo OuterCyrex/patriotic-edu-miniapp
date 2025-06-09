@@ -85,21 +85,5 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss">
-.post-view-container {
-  height: 100vh;
-  background: #f4f4f4;
-}
-.post-cards-list {
-  background-color: white;
-  margin-top: 20rpx;
-}
-.overlay-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-</style>
-
 
 

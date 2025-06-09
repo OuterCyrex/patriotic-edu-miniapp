@@ -8,6 +8,9 @@ export default defineAppConfig({
     'pages/pal/pal',
     'pages/service/service',
     'pages/about/about',
+    'pages/about/login',
+    'pages/about/register',
+    'pages/about/profile',
   ],
   window: {
     backgroundTextStyle: 'light',
