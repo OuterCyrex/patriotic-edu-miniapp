@@ -1,6 +1,8 @@
 import {request} from "@/API/request";
 import {HeroListReq} from "@/API/forms/hero";
 import {CommentListReq, NewCommentReq, NewPostReq, PostListReq} from "@/API/forms/post";
+import {UserLoginReq, UserRegisterReq, UserInfo} from "@/API/forms/user";
+import Taro from "@tarojs/taro";
 
 export const hero = {
   HeroList: (req: HeroListReq) => request('/hero/list', {
@@ -44,5 +46,30 @@ export const post = {
   GetWordFrequency: (req: {x: number}) => request('/word/top/:x', {
     method: 'GET',
     pathParams: {x: req.x}
+  })
+}
+
+export const user = {
+  SendEmail: (req: {identifier: string}) => request('/user/sendCode', {
+    method: 'GET',
+    data: req
+  }),
+  Register: (req: UserRegisterReq) => request('/user/register', {
+    method: 'POST',
+    data: req
+  }),
+  Login: (req: UserLoginReq) => request('/user/login', {
+    method: 'POST',
+    data: req
+  }),
+  GetUserInfo: async () => {
+    const userInfo = await Taro.getStorage({ key: 'user' })
+      .then(res => res.data)
+      .catch(() => '') as UserInfo
+    return userInfo ? userInfo : null
+  },
+  UpdateUser: (req: {id: number, nickname: string, avatarUrl: string, region: string}) => request('/user/update', {
+    method: "PUT",
+    data: req
   })
 }

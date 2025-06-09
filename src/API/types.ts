@@ -8,6 +8,7 @@ import {
   PostList,
   PostListReq, WordFrequency
 } from "@/API/forms/post";
+import {UserLoginReq, UserRegisterReq, UserInfo} from "@/API/forms/user";
 
 export interface ApiMap {
   '/hero/list': {
@@ -41,6 +42,22 @@ export interface ApiMap {
   '/word/top/:x': {
     req: {x: number}
     resp: Array<WordFrequency>
+  }
+  '/user/sendCode': {
+    req: {identifier: string}
+    resp: {}
+  }
+  '/user/register': {
+    req: UserRegisterReq
+    resp: {}
+  }
+  '/user/login': {
+    req: UserLoginReq,
+    resp: UserInfo
+  }
+  '/user/update': {
+    req: {id: number, nickname: string, avatarUrl: string, region: string}
+    resp: {}
   }
 }
 
