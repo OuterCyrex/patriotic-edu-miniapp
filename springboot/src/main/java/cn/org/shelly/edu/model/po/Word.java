@@ -68,6 +68,10 @@ public class Word implements Serializable {
   @Serial
   private static final long serialVersionUID = 1L;
 
+  @TableField(value = "origin")
+  @Schema(description = "来源(-1表示后台添加)")
+  private Long origin;
+
   public static Word toEntity(WordFrequencyResp req) {
     Word word = new Word();
     word.setWord(req.getContent());

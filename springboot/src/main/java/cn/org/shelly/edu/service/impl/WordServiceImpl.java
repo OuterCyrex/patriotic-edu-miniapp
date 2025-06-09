@@ -35,7 +35,7 @@ public class WordServiceImpl extends ServiceImpl<WordMapper, Word>
   }
 
   @Override
-  public void addKeyword(Map<String, Integer> keyword) {
+  public void addKeyword(Map<String, Integer> keyword, Long id) {
     // 获取所有与给定类型匹配的 WordFrequency 列表
     List<Word> existingList = lambdaQuery()
       .in(Word::getWord, keyword.keySet())
@@ -61,6 +61,7 @@ public class WordServiceImpl extends ServiceImpl<WordMapper, Word>
         wordFrequency.setWord(content);
         wordFrequency.setCount(frequency);
         wordFrequency.setStatus(1);
+        wordFrequency.setOrigin(id);
         updateList.add(wordFrequency);
       }
     }

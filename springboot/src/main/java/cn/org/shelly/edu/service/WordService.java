@@ -16,5 +16,5 @@ public interface WordService extends IService<Word> {
 
   IPage<WordFrequencyResp> wordList(Long pageNum, Long pageSize, String key);
 
-  void addKeyword(Map<String, Integer> keyword);
+  void addKeyword(Map<String, Integer> keyword, Long id);
 }
