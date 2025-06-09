@@ -29,11 +29,14 @@ public class WordFrequencyResp {
     @Schema(description = "状态（0：停用 1：启用）")
     private Integer status;
 
+    @Schema(description = "来源(-1表示后台添加)")
+    private Long origin;
     public static WordFrequencyResp toResp(Word wordFrequency){
         return new WordFrequencyResp()
                 .setId(wordFrequency.getId())
                 .setContent(wordFrequency.getWord())
                 .setFrequency(wordFrequency.getCount())
-                .setStatus(wordFrequency.getStatus());
+                .setStatus(wordFrequency.getStatus())
+                .setOrigin(wordFrequency.getOrigin());
     }
 }

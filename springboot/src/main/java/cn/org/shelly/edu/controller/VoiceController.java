@@ -7,6 +7,7 @@ import cn.org.shelly.edu.common.Result;
 import cn.org.shelly.edu.model.po.DefenseVoice;
 import cn.org.shelly.edu.model.po.Likes;
 import cn.org.shelly.edu.model.po.VoiceComment;
+import cn.org.shelly.edu.model.po.Word;
 import cn.org.shelly.edu.model.req.CommentReq;
 import cn.org.shelly.edu.model.req.VoiceReq;
 import cn.org.shelly.edu.model.resp.VoiceCommentResp;
@@ -70,7 +71,7 @@ public class VoiceController {
             if(keyword.isEmpty()){
               return;
             }
-            wordService.addKeyword(keyword);
+            wordService.addKeyword(keyword, defenseVoice.getId());
           }, threadPoolTaskExecutor);
           return Result.success();
       }
@@ -181,6 +182,9 @@ public class VoiceController {
             if (defenseVoiceService.removeById(id)) {
                 voiceCommentService.lambdaUpdate()
                         .eq(VoiceComment::getVoiceId, id)
+                        .remove();
+                wordService.lambdaUpdate()
+                        .eq(Word::getOrigin, id)
                         .remove();
                 return Result.success();
             }

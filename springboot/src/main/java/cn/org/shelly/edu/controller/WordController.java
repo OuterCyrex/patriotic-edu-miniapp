@@ -90,16 +90,17 @@ public class WordController {
     @PostMapping
     @Operation(summary = "超管主动添加词汇")
     public Result<String> addWord(@RequestBody WordFrequencyResp req) {
-      Long count = wordFrequencyService.lambdaQuery()
-        .eq(Word::getWord, req.getContent())
-        .count();
-      if(count > 0){
-        return Result.fail("该词已存在");
-      }
-      Word w = Word.toEntity(req);
-      w.setStatus(1);
-      wordFrequencyService.save(w);
-      return Result.success("添加成功");
+          req.setOrigin(-1L);
+          Long count = wordFrequencyService.lambdaQuery()
+            .eq(Word::getWord, req.getContent())
+            .count();
+          if(count > 0){
+            return Result.fail("该词已存在");
+          }
+          Word w = Word.toEntity(req);
+          w.setStatus(1);
+          wordFrequencyService.save(w);
+          return Result.success("添加成功");
     }
     @PutMapping
     @Operation(summary = "修改词汇")
