@@ -18,4 +18,6 @@ public interface UserService extends IService<User> {
   void add(UserReq param);
 
   void updateInfo(UserReq param);
+
+  void register(UserReq param);
 }

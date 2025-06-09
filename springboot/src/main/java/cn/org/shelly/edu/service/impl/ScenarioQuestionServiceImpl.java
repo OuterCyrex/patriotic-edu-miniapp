@@ -1,4 +1,5 @@
 package cn.org.shelly.edu.service.impl;
+import cn.dev33.satoken.stp.StpUtil;
 import cn.org.shelly.edu.exception.CustomException;
 import cn.org.shelly.edu.mapper.ScenarioQuestionMapper;
 import cn.org.shelly.edu.model.po.ScenarioQuestion;
@@ -56,7 +57,7 @@ public class ScenarioQuestionServiceImpl extends ServiceImpl<ScenarioQuestionMap
         }
         boolean isCorrect = answer.equals(scenarioQuestion.getCorrectAnswer());
         UserRecord userRecord = new UserRecord()
-                .setUserId(1L)
+                .setUserId(StpUtil.getLoginIdAsLong())
                 .setQuestionId(questionId)
                 .setQuestionType(2)
                 .setUserAnswer(answer)

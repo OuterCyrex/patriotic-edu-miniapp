@@ -1,4 +1,5 @@
 package cn.org.shelly.edu.service.impl;
+import cn.dev33.satoken.stp.StpUtil;
 import cn.org.shelly.edu.exception.CustomException;
 import cn.org.shelly.edu.mapper.KnowledgeQuestionMapper;
 import cn.org.shelly.edu.model.po.KnowledgeQuestion;
@@ -48,7 +49,7 @@ public class KnowledgeQuestionServiceImpl extends ServiceImpl<KnowledgeQuestionM
         }
         boolean isCorrect = answer.equals(knowledgeQuestion.getCorrectAnswer());
         UserRecord userRecord = new UserRecord()
-                .setUserId(1L)
+                .setUserId(StpUtil.getLoginIdAsLong())
                 .setQuestionId(questionId)
                 .setQuestionType(1)
                 .setUserAnswer(answer)

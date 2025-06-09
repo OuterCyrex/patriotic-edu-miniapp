@@ -5,6 +5,8 @@ import cn.org.shelly.edu.service.LikesService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
 * @author Shelly6
 * @description 针对表【likes(点赞记录表)】的数据库操作Service实现

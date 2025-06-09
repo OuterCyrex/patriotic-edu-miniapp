@@ -4,6 +4,8 @@ import cn.org.shelly.edu.model.po.DefenseVoice;
 import cn.org.shelly.edu.model.req.CommentReq;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
 * @author Shelly6
 * @description 针对表【defense_voice(国防心声表)】的数据库操作Service
@@ -12,4 +14,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface DefenseVoiceService extends IService<DefenseVoice> {
 
     void comment(CommentReq req);
+
+    List<Long> getLikes(Long voiceId);
 }

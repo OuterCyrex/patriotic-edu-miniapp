@@ -8,14 +8,10 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class UserInfoResp {
   private Long id;
-
+  @Schema(description = "邮箱")
   private String username;
 
   private String nickname;
-
-  private String phone;
-
-  private String email;
 
   private String avatarUrl;
   @Schema(description = "地区")

@@ -11,34 +11,36 @@ import lombok.Data;
 @Data
 public class UserReq {
   private Long id;
-
+  @Schema(description = "邮箱")
   private String username;
 
   private String nickname;
 
-  private String phone;
-
-  private String email;
-
   private String avatarUrl;
   @Schema(description = "地区")
   private String region;
-  @Schema (description = "总星星数")
-  private Integer totalStars;
 
   private String password;
-
-  public static User toPo(UserReq req) {
+  @Schema(description = "验证码(只有注册时需要带上)")
+  private String code;
+  public static User toAdminPo(UserReq req) {
     User po = new User();
     po.setId(req.getId());
     po.setUsername(req.getUsername());
     po.setNickname(req.getNickname());
-    po.setPhone(req.getPhone());
-    po.setEmail(req.getEmail());
     po.setAvatarUrl(req.getAvatarUrl());
     po.setRegion(req.getRegion());
-    po.setTotalStars(req.getTotalStars());
     po.setType(1);
+    po.setStatus(1);
+    return po;
+  }
+  public static User toUserPo(UserReq req) {
+    User po = new User();
+    po.setId(req.getId());
+    po.setUsername(req.getUsername());
+    po.setNickname(req.getNickname());
+    po.setAvatarUrl(req.getAvatarUrl());
+    po.setRegion(req.getRegion());
     po.setStatus(1);
     return po;
   }

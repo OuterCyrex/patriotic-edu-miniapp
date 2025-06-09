@@ -8,8 +8,6 @@
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="username" column="username" jdbcType="VARCHAR"/>
             <result property="nickname" column="nickname" jdbcType="VARCHAR"/>
-            <result property="phone" column="phone" jdbcType="VARCHAR"/>
-            <result property="email" column="email" jdbcType="VARCHAR"/>
             <result property="avatarUrl" column="avatar_url" jdbcType="VARCHAR"/>
             <result property="region" column="region" jdbcType="VARCHAR"/>
             <result property="type" column="type" jdbcType="TINYINT"/>
@@ -21,8 +19,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,username,nickname,
-        phone,email,avatar_url,
+        id,username,nickname,avatar_url,
         region,type,total_stars,
         status,gmt_create,gmt_modified, password
     </sql>
