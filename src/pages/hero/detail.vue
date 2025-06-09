@@ -14,6 +14,10 @@
 </template>
 
 <script setup lang="ts">
+definePageConfig({
+  navigationBarTitleText: '英雄介绍',
+})
+
 import { ref } from 'vue'
 import {HeroDetail} from "@/API/forms/hero";
 import { hero } from "@/API";
@@ -29,7 +33,6 @@ useLoad((options) => {
 </script>
 
 <style lang="scss">
-
 
 .container {
   display: flex;

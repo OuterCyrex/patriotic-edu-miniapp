@@ -6,7 +6,7 @@ import {
   NewPostReq,
   PostInfo,
   PostList,
-  PostListReq
+  PostListReq, WordFrequency
 } from "@/API/forms/post";
 
 export interface ApiMap {

@@ -40,6 +40,10 @@ import {My} from "@nutui/icons-vue-taro";
 import Comment from "@/components/post/Comment.vue";
 import CommentInput from "@/components/CommentInput.vue";
 
+definePageConfig({
+  navigationBarTitleText: '帖子详情',
+})
+
 const postId = ref<number>(0)
 const postDetail = ref<PostInfo | null>(null)
 const liked = ref<boolean>(false)

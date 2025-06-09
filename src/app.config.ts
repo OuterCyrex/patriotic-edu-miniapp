@@ -7,11 +7,21 @@ export default defineAppConfig({
     'pages/post/detail',
     'pages/pal/pal',
     'pages/service/service',
+    'pages/about/about',
   ],
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#8c2525',
     navigationBarTitleText: '红星耀国防平台',
     navigationBarTextStyle: 'white'
+  },
+  tabBar: {
+    backgroundColor: '#a33838',
+    selectedColor: '#000000',
+    color: '#000000',
+    list: [
+      {pagePath: 'pages/index/index', text: "首页", iconPath: "assets/image/home.png", selectedIconPath: "assets/image/home-selected.png"},
+      {pagePath: 'pages/about/about', text: "我的", iconPath: "assets/image/user.png", selectedIconPath: "assets/image/user-selected.png"},
+    ]
   }
 })
