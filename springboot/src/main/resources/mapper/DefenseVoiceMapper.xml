@@ -20,6 +20,7 @@
             <result property="gmtCreate" column="gmt_create" jdbcType="TIMESTAMP"/>
             <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
             <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+            <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -27,6 +28,6 @@
         identity,author_name,theme,
         likes_count,comments_count,is_featured,
         status,create_by,update_by,
-        gmt_create,gmt_modified,is_deleted
+        gmt_create,gmt_modified,is_deleted, avatar
     </sql>
 </mapper>

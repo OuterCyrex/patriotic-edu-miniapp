@@ -62,6 +62,8 @@ public class VoiceDetailResp {
      */
     private Date gmtCreate;
 
+    private String  avatar;
+
     public static VoiceDetailResp fromDefenseVoice(DefenseVoice byId) {
         VoiceDetailResp resp = new VoiceDetailResp();
         resp.setId(byId.getId());
@@ -74,6 +76,7 @@ public class VoiceDetailResp {
         resp.setCommentsCount(byId.getCommentsCount());
         resp.setIsFeatured(byId.getIsFeatured());
         resp.setGmtCreate(byId.getGmtCreate());
+        resp.setAvatar(byId.getAvatar());
         return resp;
     }
 }

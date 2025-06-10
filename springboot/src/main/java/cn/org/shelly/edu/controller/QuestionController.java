@@ -45,7 +45,7 @@ public class QuestionController {
     public Result<List<KnowledgeQuestionResp>> getQuiz() {
         return Result.success(questionService.getQuiz());
     }
-    @PostMapping("/knowledgeAns")
+    @GetMapping("/knowledgeAns")
     @Operation(summary = "提交知识问答题目答案")
     @SaCheckLogin
     public Result<KnowledgeResultResp> submit(Long questionId, Integer answer) {
@@ -86,7 +86,7 @@ public class QuestionController {
     public Result<List<ScenarioQuestionResp>> getScenarioQuiz() {
         return Result.success(scenarioQuestionService.getScenarioQuiz());
     }
-    @PostMapping("/scenarioAns")
+    @GetMapping("/scenarioAns")
     @Operation(summary = "提交情景性题目答案")
     @SaCheckLogin
     public Result<ScenarioResultResp> submitScenarioQuiz(Long questionId, Integer answer) {

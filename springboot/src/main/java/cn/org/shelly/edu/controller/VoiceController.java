@@ -4,20 +4,14 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.org.shelly.edu.common.PageInfo;
 import cn.org.shelly.edu.common.Result;
-import cn.org.shelly.edu.model.po.DefenseVoice;
-import cn.org.shelly.edu.model.po.Likes;
-import cn.org.shelly.edu.model.po.VoiceComment;
-import cn.org.shelly.edu.model.po.Word;
+import cn.org.shelly.edu.model.po.*;
 import cn.org.shelly.edu.model.req.CommentReq;
 import cn.org.shelly.edu.model.req.VoiceReq;
 import cn.org.shelly.edu.model.resp.VoiceCommentResp;
 import cn.org.shelly.edu.model.resp.VoiceDetailResp;
 import cn.org.shelly.edu.model.resp.VoiceFrontPageResp;
 import cn.org.shelly.edu.model.resp.VoicePageResp;
-import cn.org.shelly.edu.service.DefenseVoiceService;
-import cn.org.shelly.edu.service.LikesService;
-import cn.org.shelly.edu.service.VoiceCommentService;
-import cn.org.shelly.edu.service.WordService;
+import cn.org.shelly.edu.service.*;
 import cn.org.shelly.edu.utils.NlpUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -50,7 +44,7 @@ public class VoiceController {
   private final ThreadPoolTaskExecutor threadPoolTaskExecutor;
   private final WordService wordService;
   private final LikesService likesService;
-
+  private final UserService userService;
   @PostMapping("/submit")
   @Operation(summary = "提交心声")
   @SaCheckLogin
@@ -60,6 +54,8 @@ public class VoiceController {
       String userId = StpUtil.getLoginIdAsString();
       defenseVoice.setCreateBy(userId);
       defenseVoice.setUpdateBy(userId);
+      User user = userService.getById(userId);
+      defenseVoice.setAvatar(user.getAvatarUrl());
       log.info("提交心声po：{}", defenseVoice);
       if(req.getContent().length() > 300){
         return Result.fail("内容不能超过300字");
@@ -84,7 +80,8 @@ public class VoiceController {
             @RequestParam(value = "pageNum", defaultValue = "1") Long pageNum,
             @RequestParam(value = "pageSize", defaultValue = "10") Long pageSize,
             @RequestParam(value = "key", required = false, defaultValue = "") String key,
-            @RequestParam(value = "type", required = false, defaultValue = "-1") @Schema(description = "类型：-1全部，1我的心声") Integer type
+            @RequestParam(value = "type", required = false, defaultValue = "-1")
+            @Schema(description = "类型：-1全部，1我的心声") Integer type
     ) {
             String id = null;
             if(type == 1){
@@ -148,13 +145,26 @@ public class VoiceController {
     public Result<Void> like(@RequestBody Likes req) {
         req.setUserId(StpUtil.getLoginIdAsLong());
         Likes count = likesService.lambdaQuery()
-                .select(Likes::getId)
+                .select(Likes::getId, Likes::getTargetId, Likes::getTargetType,
+                        Likes::getUserId)
                 .eq(Likes::getUserId, req.getUserId())
                 .eq(Likes::getTargetId, req.getTargetId())
                 .eq(Likes::getTargetType, req.getTargetType())
                 .one();
         if(count != null){
             likesService.removeById(count.getId());
+            if(req.getTargetType() == 1){
+                defenseVoiceService.lambdaUpdate()
+                        .setSql("likes_count = likes_count - 1")
+                        .eq(DefenseVoice::getId, req.getTargetId())
+                        .update();
+            }
+            if(req.getTargetType() == 2){
+                voiceCommentService.lambdaUpdate()
+                        .setSql("likes_count = likes_count - 1")
+                        .eq(VoiceComment::getId, req.getTargetId())
+                        .update();
+            }
             return Result.success();
         }
         if(likesService.save(req)){

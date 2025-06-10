@@ -66,6 +66,7 @@ public class VoicePageResp {
      * 创建时间
      */
     private Date gmtCreate;
+    private String avatar;
 
     public static VoicePageResp fromDefenseVoice(DefenseVoice defenseVoice) {
         VoicePageResp resp = new VoicePageResp();
@@ -80,6 +81,7 @@ public class VoicePageResp {
         resp.setIsFeatured(defenseVoice.getIsFeatured());
         resp.setStatus(defenseVoice.getStatus());
         resp.setGmtCreate(defenseVoice.getGmtCreate());
+        resp.setAvatar(defenseVoice.getAvatar());
         return resp;
     }
 }

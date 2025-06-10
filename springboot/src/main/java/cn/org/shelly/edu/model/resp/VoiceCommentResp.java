@@ -1,7 +1,6 @@
 package cn.org.shelly.edu.model.resp;
 
 import cn.org.shelly.edu.model.po.VoiceComment;
-import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -12,10 +11,10 @@ import java.util.List;
 public class VoiceCommentResp {
     private Long id;
 
-    @TableField(value = "voice_id")
+
     private Long voiceId;
 
-    @TableField(value = "user_id")
+
     private Long userId;
 
     /**
@@ -35,6 +34,9 @@ public class VoiceCommentResp {
      */
     @Schema(description = "点赞数")
     private Integer likesCount;
+
+    private String  nickName;
+    private String  avatar;
 
     private List<VoiceCommentResp> children;
 

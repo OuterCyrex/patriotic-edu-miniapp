@@ -1,7 +1,6 @@
 package cn.org.shelly.edu.model.resp;
 
 import cn.org.shelly.edu.model.po.DefenseVoice;
-import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -62,8 +61,11 @@ public class VoiceFrontPageResp {
     /**
      * 创建时间
      */
-    @TableField(value = "gmt_create")
     private Date gmtCreate;
+
+    private String avatar;
+
+
 
     public static VoiceFrontPageResp fromDefenseVoice(DefenseVoice defenseVoice) {
         VoiceFrontPageResp resp = new VoiceFrontPageResp();
@@ -77,6 +79,7 @@ public class VoiceFrontPageResp {
         resp.setCommentsCount(defenseVoice.getCommentsCount());
         resp.setIsFeatured(defenseVoice.getIsFeatured());
         resp.setGmtCreate(defenseVoice.getGmtCreate());
+        resp.setAvatar(defenseVoice.getAvatar());
         return resp;
     }
 }

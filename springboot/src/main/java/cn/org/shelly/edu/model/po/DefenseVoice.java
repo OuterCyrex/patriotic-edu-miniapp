@@ -103,4 +103,7 @@ public class DefenseVoice implements Serializable {
    */
   @TableField(value = "is_deleted")
   private Integer isDeleted;
+
+  @TableField(value = "avatar")
+  private String avatar;
 }
