@@ -20,7 +20,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   data:
     redis:
-      host: <PORT>
+      host: <URL>
       port: 6379
       # 链接超时时间
       timeout: 10s

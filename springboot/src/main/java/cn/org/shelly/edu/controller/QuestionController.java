@@ -133,7 +133,7 @@ public class QuestionController {
          }
         return Result.success();
     }
-    @GetMapping("/result")
+    @PostMapping("/result")
     @Operation(summary = "查看答题结果")
     public Result<QuestionResp> getResult(@RequestBody List<Long> recordIds) {
         if(recordIds.size() != 10){
@@ -174,8 +174,6 @@ public class QuestionController {
                 .stars(stars)
                 .time(diffSeconds)
                 .build());
-
-
     }
 
 
