@@ -34,7 +34,7 @@ export async function request<K extends keyof ApiMap>(
       .then(res => res.data.token)
       .catch(() => '')
     if (token) {
-      headers['Authorization'] = `Bearer ${token}`
+      headers['Authorization'] = token
     }
   }
 

@@ -14,18 +14,19 @@
                    @click="Taro.navigateTo({url: `/pages/hero/detail?id=${item.id}`})"
       ></ArticleCard>
     </view>
-    <nut-pagination v-if="heroList && heroList?.list.length > 10"
+    <nut-pagination v-if="heroList && heroList.list.length !== 0"
                     class="d-flex"
                     v-model="page"
-                    :total-items="25"
+                    :total-items="heroList.total"
                     :items-per-page="10"
                     mode="simple" @change="change" />
+    <nut-empty v-if="!heroList || heroList.list.length === 0" description="什么都没有哦"></nut-empty>
   </view>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref} from 'vue'
-import Taro from "@tarojs/taro";
+import Taro, {useDidShow} from "@tarojs/taro";
 
 import AccordionList from '@/components/AccordionList.vue'
 import {hero} from "@/API";
@@ -36,6 +37,7 @@ const page = ref<number>(1)
 
 function change(value: number) {
   page.value = value
+  GetHeroList()
 }
 
 const listData = [
@@ -70,7 +72,7 @@ const GetHeroList = () => {
   })
 }
 
-onMounted(() => {
+useDidShow(() => {
   GetHeroList()
 })
 </script>

@@ -1,7 +1,7 @@
 <template>
   <view
     class="option-button"
-    :class="{ active }"
+    :class="{ active, correct }"
     @click="emits('selected')"
   >
     <text class="label">{{ label }}.</text>
@@ -12,6 +12,7 @@
 <script setup lang="ts">
 defineProps<{
   active?: boolean
+  correct?: boolean
   label: string
   content: string
 }>()
@@ -53,6 +54,17 @@ const emits = defineEmits(['selected'])
     .label,
     .content {
       color: #d7000f;
+      font-weight: bold;
+    }
+  }
+
+  &.correct {
+    border-color: #00aa00;
+    background-color: #eaffea;
+
+    .label,
+    .content {
+      color: #00aa00;
       font-weight: bold;
     }
   }

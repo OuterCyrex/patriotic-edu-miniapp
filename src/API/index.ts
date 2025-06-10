@@ -18,7 +18,8 @@ export const hero = {
 export const post = {
   NewPost: (req: NewPostReq) => request('/voice/submit', {
     method: 'POST',
-    data: req
+    data: req,
+    withToken: true
   }),
   PostList: (req: PostListReq) => request('/voice/list', {
     method: 'GET',
@@ -28,12 +29,10 @@ export const post = {
     method: 'GET',
     pathParams: {id: req.id}
   }),
-  /**
-   * @deprecated 此方法尚未完成
-   */
-  PostLike:  (req: {id: number}) => request('/voice/like/:id', {
-    method: 'GET',
-    pathParams: {id: req.id}
+  PostLike:  (req: {targetType: number, targetId: number}) => request('/voice/like', {
+    method: 'POST',
+    data: req,
+    withToken: true
   }),
   CommentList: (req: CommentListReq) => request('/voice/comment', {
     method: 'GET',
@@ -41,11 +40,17 @@ export const post = {
   }),
   NewComment: (req: NewCommentReq) => request('/voice/comment', {
     method: 'POST',
-    data: req
+    data: req,
+    withToken: true
   }),
   GetWordFrequency: (req: {x: number}) => request('/word/top/:x', {
     method: 'GET',
     pathParams: {x: req.x}
+  }),
+  GetLikeList: () => request('/voice/likes', {
+    method: "GET",
+    data: {voiceId: -1},
+    withToken: true
   })
 }
 
@@ -76,6 +81,12 @@ export const user = {
 
 export const question = {
   GetKnowledge: () => request('/question/knowledge', {
-    method: "GET"
+    method: "GET",
+    withToken: true
+  }),
+  SubmitKnowledge: (req: {questionId: number, answer: number}) => request('/question/knowledgeAns', {
+    method: 'GET',
+    data: req,
+    withToken: true
   })
 }

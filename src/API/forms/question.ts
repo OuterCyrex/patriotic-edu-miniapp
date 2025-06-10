@@ -6,4 +6,10 @@ export interface KnowledgeItem {
   optionC: string
   optionD: string
   difficulty: number
+  done: number
+  correct: boolean
+  choice: number
+  answer: number
+  explanation: string
+  recordId: number
 }
