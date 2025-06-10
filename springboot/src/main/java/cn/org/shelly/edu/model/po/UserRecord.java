@@ -48,7 +48,7 @@ public class UserRecord implements Serializable {
   private Integer isCorrect;
 
   /**
-   * 获得星星数
+   * 是否核算
    */
   @TableField(value = "used")
   @Schema(description = "是否核算（0：未 1：已）")

@@ -30,6 +30,25 @@ public class KnowledgeQuestionResp {
     @Schema(description = "题目难度（1-简单，2-中等，3-困难）")
     private Integer difficulty;
 
+    @Schema(description = "已做?")
+    private Integer done;
+
+    @Schema(description = "是否正确(当done字段为1时不为null)")
+    private Boolean correct;
+
+    @Schema(description = "你的选择(当done字段为1时不为null)")
+    private Integer choice;
+
+    @Schema(description = "正确答案(当done字段为1时不为null)")
+    private Integer answer;
+
+    @Schema(description = "答案解释(当done字段为1时不为null)")
+    private String explanation;
+
+    @Schema(description = "答题记录id(当done字段为1时不为null)")
+    private Long recordId;
+
+
     public static KnowledgeQuestionResp toResp(KnowledgeQuestion knowledgeQuestion) {
         return new KnowledgeQuestionResp()
                 .setId(knowledgeQuestion.getId())
@@ -38,6 +57,9 @@ public class KnowledgeQuestionResp {
                 .setOptionB(knowledgeQuestion.getOptionB())
                 .setOptionC(knowledgeQuestion.getOptionC())
                 .setOptionD(knowledgeQuestion.getOptionD())
+                .setAnswer(knowledgeQuestion.getCorrectAnswer())
+                .setExplanation(knowledgeQuestion.getExplanation())
+                .setDone(0)
                 .setDifficulty(knowledgeQuestion.getDifficulty());
     }
 }
