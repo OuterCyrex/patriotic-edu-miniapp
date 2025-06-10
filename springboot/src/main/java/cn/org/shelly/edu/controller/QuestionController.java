@@ -1,18 +1,20 @@
 package cn.org.shelly.edu.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.stp.StpUtil;
 import cn.org.shelly.edu.common.PageInfo;
 import cn.org.shelly.edu.common.Result;
 import cn.org.shelly.edu.model.po.KnowledgeQuestion;
 import cn.org.shelly.edu.model.po.ScenarioQuestion;
+import cn.org.shelly.edu.model.po.User;
+import cn.org.shelly.edu.model.po.UserRecord;
 import cn.org.shelly.edu.model.req.KnowledgeQuestionReq;
 import cn.org.shelly.edu.model.req.ScenarioQuestionReq;
-import cn.org.shelly.edu.model.resp.KnowledgeQuestionResp;
-import cn.org.shelly.edu.model.resp.KnowledgeResultResp;
-import cn.org.shelly.edu.model.resp.ScenarioQuestionResp;
-import cn.org.shelly.edu.model.resp.ScenarioResultResp;
+import cn.org.shelly.edu.model.resp.*;
 import cn.org.shelly.edu.service.KnowledgeQuestionService;
 import cn.org.shelly.edu.service.ScenarioQuestionService;
+import cn.org.shelly.edu.service.UserRecordService;
+import cn.org.shelly.edu.service.UserService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,7 +22,9 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 问题控制器
@@ -33,6 +37,8 @@ import java.util.List;
 public class QuestionController {
     private final KnowledgeQuestionService questionService;
     private final ScenarioQuestionService  scenarioQuestionService;
+    private final UserRecordService userRecordService;
+    private final UserService userService;
     //-----------------------------------------知识---------------------------------------------------------------------------
     @GetMapping("/knowledge")
     @Operation(summary = "获取随机10道知识性问题")
@@ -126,6 +132,50 @@ public class QuestionController {
              scenarioQuestionService.removeById(id);
          }
         return Result.success();
+    }
+    @GetMapping("/result")
+    @Operation(summary = "查看答题结果")
+    public Result<QuestionResp> getResult(@RequestBody List<Long> recordIds) {
+        if(recordIds.size() != 10){
+            return Result.fail("请答完10题再查看结果吧！");
+        }
+        List<UserRecord> records = userRecordService.lambdaQuery()
+                .in(UserRecord::getId, recordIds)
+                .eq(UserRecord::getUserId, StpUtil.getLoginIdAsLong())
+                .eq(UserRecord::getUsed ,0)
+                .orderByDesc(UserRecord::getGmtCreate)
+                .list();
+        if(records.size() != 10){
+            return Result.fail("请答完10题再查看结果吧！");
+        }
+        Integer type = records.get(0).getQuestionType();
+        for (UserRecord record : records){
+            if(!Objects.equals(record.getQuestionType(), type)){
+                return Result.fail("答题类型不统一！");
+            }
+        }
+        int ac = Math.toIntExact(records.stream()
+                .filter(record -> record.getIsCorrect() == 1)
+                .count());
+        Integer wa = 10 - ac;
+        Date end = records.get(0).getGmtCreate();
+        Date begin = records.get(9).getGmtCreate();
+        long diffMillis = end.getTime() - begin.getTime();
+        long diffSeconds = diffMillis / 1000;
+        Integer stars = QuestionResp.calculateStars(ac);
+        userService.lambdaUpdate()
+                .setSql("total_stars = total_stars + " + stars)
+                .eq(User::getId, StpUtil.getLoginIdAsLong())
+                .update();
+        return Result.success(QuestionResp.builder()
+                .ac(ac)
+                .wa(wa)
+                .comment(QuestionResp.getCommentByAcs(ac))
+                .stars(stars)
+                .time(diffSeconds)
+                .build());
+
+
     }
 
 

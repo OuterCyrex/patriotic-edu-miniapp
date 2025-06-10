@@ -86,12 +86,16 @@ public class VoiceController {
             @RequestParam(value = "key", required = false, defaultValue = "") String key,
             @RequestParam(value = "type", required = false, defaultValue = "-1") @Schema(description = "类型：-1全部，1我的心声") Integer type
     ) {
+            String id = null;
+            if(type == 1){
+                id = StpUtil.getLoginIdAsString();
+            }
           var page = defenseVoiceService.lambdaQuery()
             .like(StringUtils.isNotBlank(key),  DefenseVoice::getAuthorName, key)
             .or().like(StringUtils.isNotBlank(key),  DefenseVoice::getIdentity, key)
             .eq(DefenseVoice::getStatus, 1)
             .eq(DefenseVoice::getIsDeleted, 0)
-            .eq(type != -1, DefenseVoice::getCreateBy, StpUtil.getLoginIdAsString())
+            .eq(type != -1, DefenseVoice::getCreateBy, id)
             .orderByDesc(DefenseVoice::getIsFeatured)
             .orderByDesc(DefenseVoice::getLikesCount)
             .orderByDesc(DefenseVoice::getGmtCreate)

@@ -50,9 +50,9 @@ public class UserRecord implements Serializable {
   /**
    * 获得星星数
    */
-  @TableField(value = "stars_earned")
-  @Schema(description = "获得星星数")
-  private Integer starsEarned;
+  @TableField(value = "used")
+  @Schema(description = "是否核算（0：未 1：已）")
+  private Integer used;
 
   /**
    * 创建时间

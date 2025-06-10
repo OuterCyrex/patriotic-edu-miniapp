@@ -11,13 +11,13 @@
             <result property="questionType" column="question_type" jdbcType="TINYINT"/>
             <result property="userAnswer" column="user_answer" jdbcType="TINYINT"/>
             <result property="isCorrect" column="is_correct" jdbcType="TINYINT"/>
-            <result property="starsEarned" column="stars_earned" jdbcType="INTEGER"/>
+            <result property="used" column="used" jdbcType="TINYINT"/>
             <result property="gmtCreate" column="gmt_create" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,user_id,question_id,
         question_type,user_answer,is_correct,
-        stars_earned,gmt_create
+        used,gmt_create
     </sql>
 </mapper>
