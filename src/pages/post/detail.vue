@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue"
-import { useLoad } from "@tarojs/taro"
+import {showToast, useLoad} from "@tarojs/taro"
 import {CommentList, PostInfo} from "@/API/forms/post"
 import { post } from "@/API"
 import {My} from "@nutui/icons-vue-taro";
@@ -61,11 +61,20 @@ useLoad((options) => {
   }).then(res => {
     commentList.value = res.data as CommentList
   })
+  post.GetLikeList().then(resp => {
+    liked.value = resp.data.indexOf(postId.value) !== -1
+  })
 })
 
 function PostLiked() {
-  liked.value = true
-  postDetail.value!.likesCount = 1
+  if (liked.value) postDetail.value!.likesCount--
+  else postDetail.value!.likesCount++
+
+  liked.value = !liked.value
+
+  post.PostLike({targetType: 1, targetId: postId.value}).then(resp => {
+    if (resp.code !== 200) showToast({title: resp.message, icon: "error"})
+  })
 }
 
 function submitComment(text: string) {

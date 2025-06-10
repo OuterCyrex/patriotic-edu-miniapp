@@ -64,6 +64,18 @@ export interface ApiMap {
     req: {}
     resp: Array<KnowledgeItem>
   }
+  '/question/knowledgeAns': {
+    req: {questionId: number, answer: number}
+    resp: {result: boolean, explanation: string, recordId: number}
+  }
+  '/voice/like': {
+    req: { targetType: number, targetId: number}
+    resp: {}
+  }
+  '/voice/likes': {
+    req: {voiceId: number}
+    resp: Array<number>
+  }
 }
 
 export type ApiReq<K extends keyof ApiMap> = ApiMap[K]['req']

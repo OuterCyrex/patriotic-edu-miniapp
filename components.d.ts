@@ -9,6 +9,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AccordionList: typeof import('./src/components/AccordionList.vue')['default']
+    AnswerBox: typeof import('./src/components/pal/AnswerBox.vue')['default']
     ArticleCard: typeof import('./src/components/ArticleCard.vue')['default']
     ButtonCard: typeof import('./src/components/index/ButtonCard.vue')['default']
     Comment: typeof import('./src/components/post/Comment.vue')['default']
@@ -22,11 +23,13 @@ declare module 'vue' {
     NutCellGroup: typeof import('@nutui/nutui-taro')['CellGroup']
     NutCol: typeof import('@nutui/nutui-taro')['Col']
     NutEllipsis: typeof import('@nutui/nutui-taro')['Ellipsis']
+    NutEmpty: typeof import('@nutui/nutui-taro')['Empty']
     NutForm: typeof import('@nutui/nutui-taro')['Form']
     NutFormItem: typeof import('@nutui/nutui-taro')['FormItem']
     NutInput: typeof import('@nutui/nutui-taro')['Input']
     NutOverlay: typeof import('@nutui/nutui-taro')['Overlay']
     NutPagination: typeof import('@nutui/nutui-taro')['Pagination']
+    NutPicker: typeof import('@nutui/nutui-taro')['Picker']
     NutRow: typeof import('@nutui/nutui-taro')['Row']
     NutSearchbar: typeof import('@nutui/nutui-taro')['Searchbar']
     NutTextarea: typeof import('@nutui/nutui-taro')['Textarea']

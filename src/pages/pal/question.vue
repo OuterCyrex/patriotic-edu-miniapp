@@ -7,22 +7,34 @@
         {{questionArray[questionIndex].question}}
       </view>
       <view class="option-block">
-        <OptionButton label="A" :content="questionArray[questionIndex].optionA" @selected="selectedArray[questionIndex] = 'A'" :active="selectedArray[questionIndex] === 'A'"></OptionButton>
-        <OptionButton label="B" :content="questionArray[questionIndex].optionB" @selected="selectedArray[questionIndex] = 'B'" :active="selectedArray[questionIndex] === 'B'"></OptionButton>
-        <OptionButton label="C" :content="questionArray[questionIndex].optionC" @selected="selectedArray[questionIndex] = 'C'" :active="selectedArray[questionIndex] === 'C'"></OptionButton>
-        <OptionButton label="D" :content="questionArray[questionIndex].optionD" @selected="selectedArray[questionIndex] = 'D'" :active="selectedArray[questionIndex] === 'D'"></OptionButton>
+        <OptionButton v-for="option in code2Option"
+                      :key="option"
+                      :label="option"
+                      :content="questionArray[questionIndex]['option'+option]"
+                      :correct="questionArray[questionIndex].answer === code2Option.indexOf(option) + 1"
+                      @selected="selectedArray[questionIndex] = option"
+                      :active="questionArray[questionIndex].done === 1 ? code2Option[questionArray[questionIndex].choice - 1] === option : selectedArray[questionIndex] === option"
+        ></OptionButton>
       </view>
+      <AnswerBox v-if="questionArray[questionIndex].done === 1"
+                 :correct="questionArray[questionIndex].answer === questionArray[questionIndex].choice"
+                 :answer="code2Option[questionArray[questionIndex].answer - 1]"
+                 :explanation="questionArray[questionIndex].explanation"
+                 class="answer-box"
+      ></AnswerBox>
     </view>
-    <ProgressBar @previous="questionIndex --" @next="questionIndex ++"/>
+    <ProgressBar @previous="questionIndex --" @next="questionIndex ++" @submit="SubmitAnswer"/>
   </view>
 </template>
 
 <script setup lang="ts">
 import ProgressBar from "@/components/pal/ProgressBar.vue";
 import OptionButton from "@/components/pal/OptionButton.vue";
-import {onMounted, ref} from "vue";
+import {ref} from "vue";
 import {KnowledgeItem} from "@/API/forms/question";
 import {question} from "@/API";
+import {showToast, useDidShow} from "@tarojs/taro";
+import AnswerBox from "@/components/pal/AnswerBox.vue";
 
 definePageConfig({
   navigationBarTitleText: "知识竞赛"
@@ -34,7 +46,31 @@ const selectedArray = ref<Array<string>>(['','','','','','','','','',''])
 
 const questionArray = ref<Array<KnowledgeItem> | null>(null)
 
-onMounted(() => {
+const code2Option = ['A','B','C','D']
+
+const SubmitAnswer = async () => {
+  if (!questionArray.value) return
+
+  if (questionArray.value[0].done === 1) {
+    await showToast({title: '今日已提交', icon: 'error'})
+    return
+  }
+
+  for (let i = 0; i< 10; i ++ ) {
+    const resp = await question.SubmitKnowledge({
+      questionId: questionArray.value[i].id,
+      answer: code2Option.indexOf(selectedArray.value[i]) + 1,
+    })
+    console.log(resp)
+  }
+
+  await showToast({title: '提交成功', icon: 'success'})
+  question.GetKnowledge().then(resp => {
+    questionArray.value = resp.data
+  })
+}
+
+useDidShow(() => {
   question.GetKnowledge().then(resp => {
     questionArray.value = resp.data
   })
@@ -54,5 +90,8 @@ onMounted(() => {
 }
 .option-block {
   margin: 30px 10px;
+}
+.answer-box {
+  margin: 20px 0;
 }
 </style>

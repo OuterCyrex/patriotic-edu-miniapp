@@ -5,9 +5,8 @@
         <nut-button @click="search(searchKeywords ? searchKeywords : '')">搜索</nut-button>
       </template>
     </nut-searchbar>
-    <WordCloud v-if="!!wordCloudData" :data="wordCloudData.map(item => ({content: item.content, frequency: item.frequency}))"/>
-<!--    <nut-cell title="筛选主题" :desc="ActionSheetManager.val" @click="ActionSheetManager.show = true"></nut-cell>-->
-<!--    <nut-action-sheet v-model:visible="ActionSheetManager.show" :menu-items="ActionSheetManager.menuItems" @choose="(item) => {ActionSheetManager.val = item.name}" />-->
+    <WordCloud class="word-cloud" v-if="!!wordCloudData" :data="wordCloudData.map(item => ({content: item.content, frequency: item.frequency}))"/>
+
     <view class="post-cards" v-if="!!postList">
       <PostCard v-for="item of postList.list"
                 :key="item.id"
@@ -22,10 +21,11 @@
                 @click="Taro.navigateTo({url: `/pages/post/detail?id=${item.id}`})"
       />
     </view>
+    <nut-empty v-if="!postList || postList.list.length === 0" description="什么都没有哦"></nut-empty>
     <FixedButton icon="https://img.icons8.com/?size=100&id=Z0BQsNX1Xhfb&format=png&color=000000" @click="showOverLayer = true"/>
   </view>
   <nut-overlay class="overlay-container" v-model:visible="showOverLayer" :close-on-click-overlay="false">
-    <NewPost class="new-post-container" @close="showOverLayer = false"/>
+    <NewPost class="new-post-container" @close="showOverLayer = false" @submit="GetPostList"/>
   </nut-overlay>
 </template>
 
@@ -40,12 +40,6 @@ import WordCloud from "@/components/post/WordCloud.vue";
 import {post} from "@/API";
 
 const showOverLayer = ref(false);
-
-// const ActionSheetManager = ref<{
-//   show: boolean
-//   val: string
-//   menuItems: any[]
-// }>({show: false, val: '任意主题', menuItems: [{name: '少年说国防'}, {name: '老兵回忆录'}, {name: '任意主题'}]})
 
 const searchKeywords = ref<string> ('')
 
@@ -85,5 +79,23 @@ onMounted(() => {
 })
 </script>
 
+<style lang="scss">
+.post-view-container {
+  height: 100vh;
+  background: #f4f4f4;
+}
+.post-cards-list {
+  background-color: white;
+  margin-top: 20rpx;
+}
+.overlay-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.word-cloud {
+  margin: 30px 0;
+}
+</style>
 
 

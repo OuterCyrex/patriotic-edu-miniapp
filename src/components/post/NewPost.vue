@@ -9,15 +9,17 @@
       </view>
 
       <nut-form-item label="主题" prop="theme" :rules="[{ required: true }]">
-        <nut-input v-model="form.theme" placeholder="请输入主题" />
+        <picker :range="themesList" @change="confirmTheme">
+          <view class="picker-content">{{form.theme || '请选择主题'}}</view>
+        </picker>
       </nut-form-item>
 
-      <nut-form-item label="作者" prop="authorName" :rules="[{ required: true }]">
-        <nut-input v-model="form.authorName" placeholder="请输入作者名称" />
+      <nut-form-item label="作者" prop="authorName">
+        <nut-input disabled v-model="form.authorName" />
       </nut-form-item>
 
-      <nut-form-item label="城市" prop="region" :rules="[{ required: true }]">
-        <nut-input v-model="form.region" placeholder="请输入城市" />
+      <nut-form-item label="城市" prop="region">
+        <nut-input disabled v-model="form.region" />
       </nut-form-item>
 
       <nut-form-item label="学校" prop="identity" :rules="[{ required: true }]">
@@ -35,10 +37,10 @@
 </template>
 
 <script setup lang="ts">
-import {reactive, ref} from 'vue'
-import {post} from "@/API";
+import {onMounted, reactive, ref} from 'vue'
+import {post, user} from "@/API";
 
-const emits = defineEmits(['close'])
+const emits = defineEmits(['close', 'submit'])
 
 const form = reactive({
   content: '',
@@ -47,6 +49,12 @@ const form = reactive({
   authorName: '',
   theme: ''
 })
+
+const themesList = ['少年说国防','老兵回忆录','任意主题']
+
+const confirmTheme = (event: any) => {
+  form.theme = themesList[event.detail.value]
+}
 
 const showToast = ref(false);
 const toastText = ref('')
@@ -75,7 +83,20 @@ async function submitPost() {
     if (res.code !== 200) openToast("服务器内部错误：" + res.message)
     emits('close')
   })
+
+  emits('submit')
 }
+
+onMounted(() => {
+  user.GetUserInfo().then(resp => {
+    if (!resp) {
+      openToast('请先登录')
+      return
+    }
+    form.region = resp!.region
+    form.authorName = resp!.nickname
+  })
+})
 </script>
 
 <style lang="scss">
@@ -103,6 +124,9 @@ async function submitPost() {
 .close-button {
   height: 40px;
   width: 40px;
+}
+.picker-content {
+  color: #4e4e4e;
 }
 </style>
 
