@@ -84,6 +84,7 @@ public class ScenarioQuestionServiceImpl extends ServiceImpl<ScenarioQuestionMap
                 .select(UserRecord::getIsCorrect, UserRecord::getUserAnswer,
                         UserRecord::getQuestionId, UserRecord::getId)
                 .eq(UserRecord::getQuestionType, 2)
+                .eq(UserRecord::getUserId, StpUtil.getLoginIdAsLong())
                 .in(UserRecord::getQuestionId, qs)
                 .ge(UserRecord::getGmtCreate, LocalDate.now().atStartOfDay())
                 .list()

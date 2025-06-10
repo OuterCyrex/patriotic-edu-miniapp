@@ -86,6 +86,7 @@ public class KnowledgeQuestionServiceImpl extends ServiceImpl<KnowledgeQuestionM
                         UserRecord::getQuestionId, UserRecord::getId)
                 .eq(UserRecord::getQuestionType, 1)
                 .in(UserRecord::getQuestionId, qs)
+                .eq(UserRecord::getUserId, StpUtil.getLoginIdAsLong())
                 .ge(UserRecord::getGmtCreate, LocalDate.now().atStartOfDay())
                 .list()
                 .stream()
