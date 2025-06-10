@@ -31,7 +31,9 @@ declare module 'vue' {
     NutSearchbar: typeof import('@nutui/nutui-taro')['Searchbar']
     NutTextarea: typeof import('@nutui/nutui-taro')['Textarea']
     NutToast: typeof import('@nutui/nutui-taro')['Toast']
+    OptionButton: typeof import('./src/components/pal/OptionButton.vue')['default']
     PostCard: typeof import('./src/components/post/PostCard.vue')['default']
+    ProgressBar: typeof import('./src/components/pal/ProgressBar.vue')['default']
     SwiperImage: typeof import('./src/components/index/SwiperImage.vue')['default']
     WordCloud: typeof import('./src/components/post/WordCloud.vue')['default']
   }

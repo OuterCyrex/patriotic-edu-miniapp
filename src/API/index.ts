@@ -73,3 +73,9 @@ export const user = {
     data: req
   })
 }
+
+export const question = {
+  GetKnowledge: () => request('/question/knowledge', {
+    method: "GET"
+  })
+}

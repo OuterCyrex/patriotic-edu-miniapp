@@ -9,6 +9,7 @@ import {
   PostListReq, WordFrequency
 } from "@/API/forms/post";
 import {UserLoginReq, UserRegisterReq, UserInfo} from "@/API/forms/user";
+import {KnowledgeItem} from "@/API/forms/question";
 
 export interface ApiMap {
   '/hero/list': {
@@ -58,6 +59,10 @@ export interface ApiMap {
   '/user/update': {
     req: {id: number, nickname: string, avatarUrl: string, region: string}
     resp: {}
+  }
+  '/question/knowledge': {
+    req: {}
+    resp: Array<KnowledgeItem>
   }
 }
 

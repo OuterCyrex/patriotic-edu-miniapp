@@ -6,6 +6,7 @@ export default defineAppConfig({
     'pages/post/post',
     'pages/post/detail',
     'pages/pal/pal',
+    'pages/pal/question',
     'pages/service/service',
     'pages/about/about',
     'pages/about/login',

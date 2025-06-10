@@ -11,7 +11,14 @@
     </view>
 
     <view class="features">
-      <ButtonCard v-for="(item, index) of features" :key="index" :title="item.title" :subtitle="item.desc" :icon="item.icon" :type="2"></ButtonCard>
+      <ButtonCard v-for="(item, index) of features"
+                  :key="index"
+                  :title="item.title"
+                  :subtitle="item.desc"
+                  :icon="item.icon"
+                  :type="2"
+                  @click="item.onClick"
+      ></ButtonCard>
     </view>
   </view>
 </template>
@@ -19,27 +26,32 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import ButtonCard from "@/components/index/ButtonCard.vue";
+import Taro from '@tarojs/taro'
 
 const features = ref([
   {
     title: '知识闯关',
     desc: '每日10道国防题',
     icon: 'https://img.icons8.com/?size=100&id=VJCVutzKX9zq&format=png&color=000000',
+    onClick: () => {Taro.navigateTo({url: '/pages/pal/question'})}
   },
   {
     title: '情景问答',
     desc: '模拟国防场景',
     icon: 'https://img.icons8.com/?size=100&id=2juNVZZCBjKu&format=png&color=000000',
+    onClick: () => {}
   },
   {
     title: '勋章系统',
     desc: '收集星星勋章',
     icon: 'https://img.icons8.com/?size=100&id=KFssnxqXHKfA&format=png&color=000000',
+    onClick: () => {}
   },
   {
     title: '进度追踪',
     desc: '记录成长历程',
     icon: 'https://img.icons8.com/?size=100&id=FpRBDCVNFXYv&format=png&color=000000',
+    onClick: () => {}
   },
 ])
 
