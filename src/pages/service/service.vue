@@ -61,6 +61,10 @@
 import { ref } from 'vue'
 import Taro from '@tarojs/taro'
 
+definePageConfig({
+  navigationBarTitleText: '红星服务站'
+})
+
 interface FormData {
   name: string
   contact: string

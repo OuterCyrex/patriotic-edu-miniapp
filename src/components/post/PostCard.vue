@@ -5,7 +5,7 @@
     <nut-row type="flex" justify="start" align="center" class="user-info">
       <nut-col :span="4">
         <nut-avatar>
-          <My />
+          <image :src="avatar" />
         </nut-avatar>
       </nut-col>
       <nut-col :span="20">
@@ -29,7 +29,6 @@
 
 
 <script setup lang="ts">
-import {My} from '@nutui/icons-vue-taro'
 
 withDefaults(defineProps<{
   author: string;
@@ -40,6 +39,7 @@ withDefaults(defineProps<{
   likes: number
   comments: number
   featured?: boolean
+  avatar: string
 }>(), {
   featured: false
 })

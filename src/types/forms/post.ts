@@ -30,6 +30,7 @@ export interface PostInfo {
   likesCount: number
   commentsCount: number
   isFeatured: number
+  avatar: string
 }
 
 export interface CommentListReq {
@@ -51,8 +52,7 @@ export interface CommentInfo {
   voiceId: number
   userId: number
   content: string
-  parentId: number
-  likesCount: number
+  nickName: string
 }
 
 export interface NewCommentReq {

@@ -24,7 +24,7 @@
             type="primary"
             size="small"
             :disabled="countdown > 0"
-            @click="sendCode"
+            @click="handleSendCode"
           >
             {{ countdown > 0 ? `${countdown}s后重试` : '获取验证码' }}
           </nut-button>
@@ -60,14 +60,18 @@
 </template>
 
 <script setup lang="ts">
+// === import ===
 import { ref } from 'vue'
 import Taro, { showToast } from '@tarojs/taro'
 import {user} from "@/API";
+import {useApi} from "@/API/handler";
 
+// === define ===
 definePageConfig({
   navigationBarTitleText: "注册页"
 })
 
+// === constants ===
 const form = ref({
   id: 0,
   username: '',
@@ -75,31 +79,19 @@ const form = ref({
   rePassword: '',
   code: ''
 })
-
 const countdown = ref(0)
 let timer: ReturnType<typeof setInterval> | null = null
 
-const sendCode = async  () => {
+// === methods ===
+const handleSendCode = async  () => {
   if (!/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(form.value.username)) {
     await showToast({ title: '无效邮箱', icon: "none" })
     return
   }
-
-  await user.SendEmail({identifier: form.value.username})
-
-  await showToast({ title: '验证码已发送', icon: "none" })
-  countdown.value = 60
-  timer = setInterval(() => {
-    countdown.value--
-    if (countdown.value <= 0 && timer) {
-      clearInterval(timer)
-      timer = null
-    }
-  }, 1000)
+  doSendEmail()
 }
 
 const handleRegister = () => {
-
   const { username, password, code, rePassword } = form.value
   if (password !== rePassword) {
     showToast({ title: '两次密码不一致', icon: "none" })
@@ -116,21 +108,47 @@ const handleRegister = () => {
     return
   }
 
-  user.Register({
-    username: form.value.username,
-    password: form.value.password,
-    nickname: form.value.username,
-    avatarUrl: 'https://img.icons8.com/?size=100&id=4IZ8RiC9K8go&format=png&color=000000',
-    region: '成都',
-    code: form.value.code,
-  }).then(resp => {
-    if (resp.code === 200) {
-      showToast({ title: '注册成功', icon: 'success' })
-      setTimeout(() => {
-        Taro.navigateBack()
-      }, 2000)
-    } else {
-      showToast({ title: resp.message, icon: 'error' })
+  doRegister()
+}
+
+
+// === api ===
+const doRegister = () => {
+  useApi({
+    api: user.Register({
+      username: form.value.username,
+      password: form.value.password,
+      nickname: form.value.username,
+      avatarUrl: 'https://img.icons8.com/?size=100&id=4IZ8RiC9K8go&format=png&color=000000',
+      region: '成都',
+      code: form.value.code,
+    }),
+    onSuccess: resp => {
+      if (resp.code === 200) {
+        showToast({ title: '注册成功', icon: 'success' })
+        setTimeout(() => {
+          Taro.navigateBack()
+        }, 2000)
+      } else {
+        showToast({ title: resp.message, icon: 'error' })
+      }
+    }
+  })
+}
+
+const doSendEmail = () => {
+  useApi({
+    api: user.SendEmail({identifier: form.value.username}),
+    onSuccess: () => {
+      showToast({ title: '验证码已发送', icon: "none" })
+      countdown.value = 60
+      timer = setInterval(() => {
+        countdown.value--
+        if (countdown.value <= 0 && timer) {
+          clearInterval(timer)
+          timer = null
+        }
+      }, 1000)
     }
   })
 }

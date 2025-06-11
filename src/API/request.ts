@@ -1,5 +1,5 @@
 // utils/request.ts
-import Taro from '@tarojs/taro'
+import Taro, {showToast} from '@tarojs/taro'
 import type { ApiMap, ApiReq, ApiResp } from './types'
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
@@ -32,7 +32,10 @@ export async function request<K extends keyof ApiMap>(
   if (options.withToken) {
     const token = await Taro.getStorage({ key: 'user' })
       .then(res => res.data.token)
-      .catch(() => '')
+      .catch(() => {
+        showToast({title: "请先登录", icon: "error"})
+        setTimeout(() => Taro.navigateBack(), 1000)
+      })
     if (token) {
       headers['Authorization'] = token
     }

@@ -14,22 +14,33 @@
 </template>
 
 <script setup lang="ts">
+// === import ===
+import {useApi} from "@/API/handler";
+import { ref } from 'vue'
+import {HeroDetail} from "@/types/forms/hero";
+import { hero } from "@/API";
+import {useLoad} from "@tarojs/taro";
+
+// === define ===
 definePageConfig({
   navigationBarTitleText: '英雄介绍',
 })
 
-import { ref } from 'vue'
-import {HeroDetail} from "@/API/forms/hero";
-import { hero } from "@/API";
-import {useLoad} from "@tarojs/taro";
-
+// === constants ===
 const heroDetail = ref<HeroDetail | null>(null)
 
+// === hooks ===
 useLoad((options) => {
-  hero.HeroDetail({id: options.id}).then(resp => {
-    heroDetail.value = resp.data
-  })
+  doGetHeroList(options)
 })
+
+// === api ===
+const doGetHeroList = (options: Record<string, any>) => {
+  useApi({
+    api: hero.HeroDetail({id: options.id}),
+    onSuccess: resp => {heroDetail.value = resp.data}
+  })
+}
 </script>
 
 <style lang="scss">

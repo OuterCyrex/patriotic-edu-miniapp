@@ -37,15 +37,19 @@
 </template>
 
 <script setup lang="ts">
+// === import ===
 import {ref, onMounted, reactive} from 'vue'
 import Taro, {showToast} from '@tarojs/taro'
 import {user} from "@/API";
-import {UserInfo} from "@/API/forms/user";
+import {UserInfo} from "@/types/forms/user";
+import {useApi} from "@/API/handler";
 
+// === define ===
 definePageConfig({
   navigationBarTitleText: '个人信息'
 })
 
+// === constants ===
 const form = ref({
   username: '',
   nickname: '',
@@ -53,9 +57,14 @@ const form = ref({
   region: '',
   totalStars: 0
 })
-
 const userInfo = reactive<UserInfo>(Taro.getStorageSync('user'))
 
+// === methods ===
+function onCityChange(e: any) {
+  form.value.region = cities[e.detail.value]
+}
+
+// === hooks ===
 onMounted(() => {
   if (userInfo) {
     form.value = {
@@ -68,14 +77,16 @@ onMounted(() => {
   }
 })
 
+// === api ===
 function updateProfile() {
-  user.UpdateUser({
-    id: userInfo.id,
-    nickname: form.value.nickname,
-    avatarUrl: form.value.avatarUrl,
-    region: form.value.region,
-  }).then(resp => {
-    if (resp.code === 200) {
+  useApi({
+    api: user.UpdateUser({
+      id: userInfo.id,
+      nickname: form.value.nickname,
+      avatarUrl: form.value.avatarUrl,
+      region: form.value.region,
+    }),
+    onSuccess: () => {
       userInfo.nickname = form.value.nickname
       userInfo.avatarUrl = form.value.avatarUrl
       userInfo.region = form.value.region
@@ -84,15 +95,10 @@ function updateProfile() {
         data: userInfo
       })
       showToast({ title: '更改成功', icon: 'success' })
-    } else {
-      showToast({ title: resp.message, icon: 'none' })
     }
   })
 }
 
-function onCityChange(e: any) {
-  form.value.region = cities[e.detail.value]
-}
 
 const cities = [
   '成都',

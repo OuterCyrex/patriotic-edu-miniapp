@@ -1,7 +1,7 @@
 <template>
   <view class="comment-container">
     <view class="comment-title">
-      <text>评论 {{id}}</text>
+      <text>{{nickname}}：</text>
     </view>
     <view class="comment-content">
       <text>{{content}}</text>
@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 defineProps<{
-  id: number
+  nickname: string
   content: string
 }>()
 </script>

@@ -37,24 +37,29 @@
 </template>
 
 <script setup lang="ts">
+// === import ===
 import { ref } from 'vue'
 import Taro, { showToast } from '@tarojs/taro'
 import {user} from "@/API";
+import {useApi} from "@/API/handler";
 
+// === define ===
 definePageConfig({
   navigationBarTitleText: '登陆页'
 })
 
+// === constants ===
+const username = ref('')
+const password = ref('')
+
+// === methods ===
 function toRegister() {
   Taro.navigateTo({
     url: '/pages/about/register',
   })
 }
 
-const username = ref('')
-const password = ref('')
-
-const handleLogin = () => {
+function handleLogin(): void {
   if (!username.value || !password.value) {
     showToast({ title: '邮箱或密码为空', icon: 'none' })
     return
@@ -64,24 +69,27 @@ const handleLogin = () => {
     showToast({ title: '密码长度应在 6-20', icon: "none" })
   }
 
-  user.Login({
-    username: username.value,
-    password: password.value
-  }).then(resp => {
-    if (resp.code === 200) {
+  doLogin()
+}
+
+// === api ===
+const doLogin = () => {
+  useApi({
+    api: user.Login({
+      username: username.value,
+      password: password.value
+    }),
+    onSuccess: resp => {
       Taro.setStorage({
         key: "user",
         data: resp.data
       })
-      showToast({ title: '登录成功', icon: 'success' })
+      showToast({title: '登录成功', icon: 'success'})
       setTimeout(() => {
         Taro.navigateBack()
       }, 2000)
-    } else {
-      showToast({ title: resp.message, icon: 'none' })
     }
   })
-
 }
 </script>
 

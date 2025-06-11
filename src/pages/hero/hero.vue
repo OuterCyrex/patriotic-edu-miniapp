@@ -1,11 +1,11 @@
 <template>
   <view class="search-container">
-    <nut-searchbar v-model="searchKeywords" @search="search">
+    <nut-searchbar v-model="searchKeywords" @search="handleSearch">
       <template #rightout>
-        <nut-button @click="search(searchKeywords ? searchKeywords : '')">搜索</nut-button>
+        <nut-button @click="handleSearch(searchKeywords ? searchKeywords : '')">搜索</nut-button>
       </template>
     </nut-searchbar>
-    <AccordionList :options="listData" @select="onSelect" />
+    <AccordionList :options="listData" @select="handleSelect" />
     <view class="article-cards" v-if="!!heroList">
       <ArticleCard
                    v-for="item of heroList.list"
@@ -19,62 +19,78 @@
                     v-model="page"
                     :total-items="heroList.total"
                     :items-per-page="10"
-                    mode="simple" @change="change" />
+                    mode="simple" @change="handleChange" />
     <nut-empty v-if="!heroList || heroList.list.length === 0" description="什么都没有哦"></nut-empty>
   </view>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref} from 'vue'
+// === import ===
+import {ref} from 'vue'
 import Taro, {useDidShow} from "@tarojs/taro";
 
 import AccordionList from '@/components/AccordionList.vue'
 import {hero} from "@/API";
 import ArticleCard from "@/components/ArticleCard.vue";
-import {HeroList} from "@/API/forms/hero";
+import {HeroList} from "@/types/forms/hero";
+import {useApi} from "@/API/handler";
 
+// === define ===
+definePageConfig({
+  navigationBarTitleText: '红星英雄谱'
+})
+
+// === constants ===
+const periodSelected = ref<number | null>(null)
+const searchKeywords = ref<string>('')
+let heroList = ref<HeroList | null>(null)
 const page = ref<number>(1)
-
-function change(value: number) {
-  page.value = value
-  GetHeroList()
-}
-
 const listData = [
   {
     title: '时间轴',
-    items: ['新民主主义革命先驱（1921-1949）', '建设年代守护者（1950-1978）', '改革浪潮弄潮儿（1979-2012）', '强国先锋时代篇（2012-至今）'],
+    items: [
+      '新民主主义革命时期（1921年—1949年）',
+      '社会主义革命和建设时期（1949年—1978年）',
+      '改革开放和社会主义现代化建设新时期（1978年—2012年）',
+      '中国特色社会主义新时代（2012年至今）'
+    ],
   },
 ]
 
-const periodSelected = ref<number | null>(null)
-function onSelect({itemIndex}) {
-  periodSelected.value = itemIndex + 1
-  GetHeroList()
-}
-
-const searchKeywords = ref<string>('')
-const search = (text: string) => {
+// === methods ===
+const handleSearch = (text: string) => {
   searchKeywords.value = text
-  GetHeroList()
+  doGetHeroList()
 }
 
-let heroList = ref<HeroList | null>(null)
+function handleSelect({itemIndex}) {
+  periodSelected.value = itemIndex + 1
+  doGetHeroList()
+}
 
-const GetHeroList = () => {
-  hero.HeroList({
-    pageNum: page.value,
-    pageSize: 10,
-    ...(periodSelected.value !== null ? { period: periodSelected.value } : {}),
-    ...(searchKeywords.value !== '' ? { name: searchKeywords.value } : {}),
-  }).then(resp => {
-    heroList.value = resp.data
+function handleChange(value: number) {
+  page.value = value
+  doGetHeroList()
+}
+
+
+// === hooks ===
+useDidShow(() => {
+  doGetHeroList()
+})
+
+// === api ===
+const doGetHeroList = () => {
+  useApi({
+    api: hero.HeroList({
+      pageNum: page.value,
+      pageSize: 10,
+      ...(periodSelected.value !== null ? { period: periodSelected.value } : {}),
+      ...(searchKeywords.value !== '' ? { name: searchKeywords.value } : {}),
+    }),
+    onSuccess: resp => {heroList.value = resp.data}
   })
 }
-
-useDidShow(() => {
-  GetHeroList()
-})
 </script>
 
 <style lang="scss">

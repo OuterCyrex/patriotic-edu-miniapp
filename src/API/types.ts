@@ -1,4 +1,4 @@
-import {HeroDetail, HeroList, HeroListReq} from "@/API/forms/hero";
+import {HeroDetail, HeroList, HeroListReq} from "@/types/forms/hero";
 import {
   CommentList,
   CommentListReq,
@@ -7,9 +7,9 @@ import {
   PostInfo,
   PostList,
   PostListReq, WordFrequency
-} from "@/API/forms/post";
-import {UserLoginReq, UserRegisterReq, UserInfo} from "@/API/forms/user";
-import {KnowledgeItem} from "@/API/forms/question";
+} from "@/types/forms/post";
+import {UserLoginReq, UserRegisterReq, UserInfo} from "@/types/forms/user";
+import {KnowledgeItem, SubmitKnowledgeList} from "@/types/forms/question";
 
 export interface ApiMap {
   '/hero/list': {
@@ -65,8 +65,8 @@ export interface ApiMap {
     resp: Array<KnowledgeItem>
   }
   '/question/knowledgeAns': {
-    req: {questionId: number, answer: number}
-    resp: {result: boolean, explanation: string, recordId: number}
+    req: Array<{questionId: number, answer: number}>
+    resp: SubmitKnowledgeList
   }
   '/voice/like': {
     req: { targetType: number, targetId: number}

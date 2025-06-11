@@ -1,8 +1,8 @@
 import {request} from "@/API/request";
-import {HeroListReq} from "@/API/forms/hero";
-import {CommentListReq, NewCommentReq, NewPostReq, PostListReq} from "@/API/forms/post";
-import {UserLoginReq, UserRegisterReq, UserInfo} from "@/API/forms/user";
-import Taro from "@tarojs/taro";
+import {HeroListReq} from "@/types/forms/hero";
+import {CommentListReq, NewCommentReq, NewPostReq, PostListReq} from "@/types/forms/post";
+import {UserLoginReq, UserRegisterReq} from "@/types/forms/user";
+import {getUserInfoFromStorage} from "@/utils/storage";
 
 export const hero = {
   HeroList: (req: HeroListReq) => request('/hero/list', {
@@ -25,7 +25,7 @@ export const post = {
     method: 'GET',
     data: req
   }),
-  PostDetail: (req: {id: number}) => request('/voice/:id', {
+  GetPostDetail: (req: {id: number}) => request('/voice/:id', {
     method: 'GET',
     pathParams: {id: req.id}
   }),
@@ -55,6 +55,7 @@ export const post = {
 }
 
 export const user = {
+  GetUserInfo: () => getUserInfoFromStorage(),
   SendEmail: (req: {identifier: string}) => request('/user/sendCode', {
     method: 'GET',
     data: req
@@ -67,12 +68,6 @@ export const user = {
     method: 'POST',
     data: req
   }),
-  GetUserInfo: async () => {
-    const userInfo = await Taro.getStorage({ key: 'user' })
-      .then(res => res.data)
-      .catch(() => '') as UserInfo
-    return userInfo ? userInfo : null
-  },
   UpdateUser: (req: {id: number, nickname: string, avatarUrl: string, region: string}) => request('/user/update', {
     method: "PUT",
     data: req
@@ -84,7 +79,7 @@ export const question = {
     method: "GET",
     withToken: true
   }),
-  SubmitKnowledge: (req: {questionId: number, answer: number}) => request('/question/knowledgeAns', {
+  SubmitKnowledge: (req: Array<{questionId: number, answer: number}>) => request('/question/knowledgeAns', {
     method: 'GET',
     data: req,
     withToken: true

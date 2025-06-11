@@ -1,8 +1,8 @@
 <template>
   <view class="post-view-container">
-    <nut-searchbar  v-model="searchKeywords" @search="search">
+    <nut-searchbar  v-model="searchKeywords" @search="handleSearch">
       <template #rightout>
-        <nut-button @click="search(searchKeywords ? searchKeywords : '')">搜索</nut-button>
+        <nut-button @click="handleSearch(searchKeywords ? searchKeywords : '')">搜索</nut-button>
       </template>
     </nut-searchbar>
     <WordCloud class="word-cloud" v-if="!!wordCloudData" :data="wordCloudData.map(item => ({content: item.content, frequency: item.frequency}))"/>
@@ -18,6 +18,7 @@
                 :comments="item.commentsCount"
                 :author="item.authorName"
                 :featured="item.isFeatured === 1"
+                :avatar="item.avatar"
                 @click="Taro.navigateTo({url: `/pages/post/detail?id=${item.id}`})"
       />
     </view>
@@ -25,58 +26,65 @@
     <FixedButton icon="https://img.icons8.com/?size=100&id=Z0BQsNX1Xhfb&format=png&color=000000" @click="showOverLayer = true"/>
   </view>
   <nut-overlay class="overlay-container" v-model:visible="showOverLayer" :close-on-click-overlay="false">
-    <NewPost class="new-post-container" @close="showOverLayer = false" @submit="GetPostList"/>
+    <NewPost class="new-post-container" @close="showOverLayer = false" @submit="doGetPostList"/>
   </nut-overlay>
 </template>
 
 <script setup lang="ts">
+// === import ===
 import PostCard from "@/components/post/PostCard.vue";
-import Taro from '@tarojs/taro'
-import {onMounted, ref} from "vue";
+import Taro, {useDidShow} from '@tarojs/taro'
+import {ref} from "vue";
 import FixedButton from "@/components/FixedButton.vue";
 import NewPost from "@/components/post/NewPost.vue";
-import {PostList, WordFrequency} from "@/API/forms/post";
+import {PostList, WordFrequency} from "@/types/forms/post";
 import WordCloud from "@/components/post/WordCloud.vue";
 import {post} from "@/API";
+import {useApi} from "@/API/handler";
 
+// === define ===
+definePageConfig({
+  navigationBarTitleText: '红星心声汇'
+})
+
+// === constants ===
 const showOverLayer = ref(false);
-
 const searchKeywords = ref<string> ('')
-
-function search(text: string): void{
-  keyword.value = text;
-  GetPostList()
-}
-
 const pageNum = ref<number>(0)
 const keyword = ref<string> ("")
-
 const postList = ref<PostList | null>(null)
-
-const GetPostList = () => {
-  post.PostList({
-    pageNum: pageNum.value,
-    pageSize: 10,
-    ...(keyword.value !== "" ? {key: keyword.value} : {}),
-  }).then(res => {
-    postList.value = res.data
-  })
-}
-
 const wordCloudData = ref<Array<WordFrequency> | null>(null)
 
-const GetWordFrequency = () => {
-  post.GetWordFrequency({
-    x: 10
-  }).then(res => {
-    wordCloudData.value = res.data
+// === methods ===
+function handleSearch(text: string): void{
+  keyword.value = text;
+  doGetPostList()
+}
+
+// === hooks ===
+useDidShow(() => {
+  doGetPostList()
+  doGetWordFrequency()
+})
+
+// === api ===
+const doGetPostList = () => {
+  useApi({
+    api: post.PostList({
+      pageNum: pageNum.value,
+      pageSize: 10,
+      ...(keyword.value !== "" ? {key: keyword.value} : {}),
+    }),
+    onSuccess: res => {postList.value = res.data}
   })
 }
 
-onMounted(() => {
-  GetPostList()
-  GetWordFrequency()
-})
+const doGetWordFrequency = () => {
+  useApi({
+    api: post.GetWordFrequency({x: 10}),
+    onSuccess: res => {wordCloudData.value = res.data}
+  })
+}
 </script>
 
 <style lang="scss">

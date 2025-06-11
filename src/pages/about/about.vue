@@ -40,20 +40,26 @@
     </nut-cell-group>
 
     <view class="button-group" v-if="userInfo.token !== ''">
-      <nut-button block type="primary" @click="Logout">退出登录</nut-button>
+      <nut-button block type="primary" @click="handleLogout">退出登录</nut-button>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
+// === import ===
 import { reactive } from 'vue'
 import Taro, {useDidShow} from '@tarojs/taro'
 import {My, Setting, Ask , Message} from '@nutui/icons-vue-taro'
 import {user} from "@/API";
-import {UserInfo} from "@/API/forms/user";
+import {UserInfo} from "@/types/forms/user";
 
+// === define ===
+definePageConfig({
+  navigationBarTitleText: '我的'
+})
+
+// === constants ===
 const defaultAvatar = 'https://img.icons8.com/?size=100&id=4IZ8RiC9K8go&format=png&color=000000'
-
 const userInfo = reactive<UserInfo>({
   id: 0,
   username: '',
@@ -65,15 +71,14 @@ const userInfo = reactive<UserInfo>({
   token: ''
 })
 
+// === methods ===
 function toLogin() {
   Taro.navigateTo({ url: '/pages/about/login' })
 }
-
 function toProfile() {
   Taro.navigateTo({ url: '/pages/about/profile' })
 }
-
-function Logout() {
+function handleLogout() {
   Taro.removeStorageSync('user')
   userInfo.avatarUrl = ''
   userInfo.username = ''
@@ -81,7 +86,13 @@ function Logout() {
   userInfo.token = ''
 }
 
+// === hooks ===
 useDidShow(() => {
+  doGetUserInfo()
+})
+
+// === api ===
+const doGetUserInfo = () => {
   user.GetUserInfo().then(resp => {
     if (resp) {
       userInfo.avatarUrl = resp.avatarUrl
@@ -90,7 +101,7 @@ useDidShow(() => {
       userInfo.token = resp.token
     }
   })
-})
+}
 </script>
 
 <style lang="scss">

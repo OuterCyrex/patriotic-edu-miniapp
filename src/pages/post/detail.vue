@@ -3,7 +3,7 @@
     <view class="post-card">
       <view class="post-header">
         <nut-avatar class="user-avatar">
-          <My />
+          <image :src="postDetail.avatar" />
         </nut-avatar>
         <view class="author-info">
           <view class="author">{{ postDetail.authorName }}</view>
@@ -17,7 +17,7 @@
         <view class="theme">#{{ postDetail.theme }}</view>
       </view>
       <view class="post-footer">
-        <view class="like-button" @click="PostLiked">
+        <view class="like-button" @click="handlePostLike">
           <image class="like-icon" :src="liked ? 'https://img.icons8.com/?size=100&id=83166&format=png&color=000000': 'https://img.icons8.com/?size=100&id=82788&format=png&color=000000'"/>
           <text>{{ postDetail.likesCount }}</text>
         </view>
@@ -25,67 +25,105 @@
       </view>
     </view>
     <view class="comments" v-if="!!commentList">
-      <Comment v-for="item of commentList.list" :key="item.id" :id="item.id" :content="item.content" />
+      <Comment v-for="item of commentList.list" :key="item.id" :nickname="item.nickName" :content="item.content" />
     </view>
-    <CommentInput @submit="submitComment" />
+    <CommentInput @submit="handleCommentSubmit" />
   </view>
 </template>
 
 <script setup lang="ts">
+// === import ===
 import { ref } from "vue"
-import {showToast, useLoad} from "@tarojs/taro"
-import {CommentList, PostInfo} from "@/API/forms/post"
-import { post } from "@/API"
-import {My} from "@nutui/icons-vue-taro";
+import {useLoad} from "@tarojs/taro"
+import {CommentList, PostInfo} from "@/types/forms/post"
+import {post, user} from "@/API"
 import Comment from "@/components/post/Comment.vue";
 import CommentInput from "@/components/CommentInput.vue";
+import {UserInfo} from "@/types/forms/user";
+import {useApi} from "@/API/handler";
 
+// === define ===
 definePageConfig({
   navigationBarTitleText: '帖子详情',
 })
 
+// === constants ===
 const postId = ref<number>(0)
 const postDetail = ref<PostInfo | null>(null)
 const liked = ref<boolean>(false)
 const commentList = ref<CommentList | null>(null)
+const userInfo = ref<UserInfo | null>(null)
 
-useLoad((options) => {
-  postId.value = Number(options.id)
-  post.PostDetail({ id: postId.value }).then(res => {
-    postDetail.value = res.data
-  })
-  post.CommentList({
-    voiceId: postId.value,
-    pageSize: 100,
-    pageNum: 1,
-  }).then(res => {
-    commentList.value = res.data as CommentList
-  })
-  post.GetLikeList().then(resp => {
-    liked.value = resp.data.indexOf(postId.value) !== -1
-  })
-})
-
-function PostLiked() {
+// === methods ===
+function handlePostLike() {
   if (liked.value) postDetail.value!.likesCount--
   else postDetail.value!.likesCount++
 
   liked.value = !liked.value
+  doPostLike()
+}
 
-  post.PostLike({targetType: 1, targetId: postId.value}).then(resp => {
-    if (resp.code !== 200) showToast({title: resp.message, icon: "error"})
+function handleCommentSubmit(text: string) {
+  commentList.value?.list.push({
+    id: 0,
+    content: text,
+    voiceId: postId.value,
+    userId: userInfo.value!.id,
+    nickName: userInfo.value!.nickname
+  })
+  postDetail.value!.commentsCount += 1
+
+  doNewComment(text)
+}
+
+// === hooks ===
+useLoad((options) => {
+  postId.value = Number(options.id)
+  doGetPostDetail()
+  doGetCommentList()
+  doGetLikeList()
+  doGetUserInfo()
+})
+
+// === api ===
+const doGetCommentList = () => {
+  useApi({
+    api: post.CommentList({
+      voiceId: postId.value,
+      pageSize: 100,
+      pageNum: 1,
+    }),
+    onSuccess: res => {commentList.value = res.data as CommentList}
   })
 }
 
-function submitComment(text: string) {
-  commentList.value?.list.push({id: 0, content: text, voiceId: postId.value, likesCount: 0, parentId: 0, userId: 0})
-  postDetail.value!.commentsCount += 1
-  post.NewComment({
+const doGetLikeList = () => useApi({
+    api: post.GetLikeList(),
+    onSuccess: resp => {liked.value = resp.data.indexOf(postId.value) !== -1}
+  })
+
+const doGetPostDetail = () => useApi({
+  api: post.GetPostDetail({id: postId.value}),
+  onSuccess: res => {postDetail.value = res.data}
+})
+
+const doPostLike = () => useApi({
+  api: post.PostLike({targetType: 1, targetId: postId.value}),
+})
+
+const doNewComment = (text: string) => useApi({
+  api: post.NewComment({
     id: postId.value,
     content: text,
     type: 1,
     replyId: 0
   })
+})
+
+const doGetUserInfo = () => {
+   user.GetUserInfo().then(resp => {
+     userInfo.value = resp
+   })
 }
 </script>
 

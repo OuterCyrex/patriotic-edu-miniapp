@@ -29,7 +29,6 @@ declare module 'vue' {
     NutInput: typeof import('@nutui/nutui-taro')['Input']
     NutOverlay: typeof import('@nutui/nutui-taro')['Overlay']
     NutPagination: typeof import('@nutui/nutui-taro')['Pagination']
-    NutPicker: typeof import('@nutui/nutui-taro')['Picker']
     NutRow: typeof import('@nutui/nutui-taro')['Row']
     NutSearchbar: typeof import('@nutui/nutui-taro')['Searchbar']
     NutTextarea: typeof import('@nutui/nutui-taro')['Textarea']

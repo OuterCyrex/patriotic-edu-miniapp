@@ -23,23 +23,27 @@
                  class="answer-box"
       ></AnswerBox>
     </view>
-    <ProgressBar @previous="questionIndex --" @next="questionIndex ++" @submit="SubmitAnswer"/>
+    <ProgressBar @previous="questionIndex --" @next="questionIndex ++" @submit="handleAnswerSubmit"/>
   </view>
 </template>
 
 <script setup lang="ts">
+// === import ===
 import ProgressBar from "@/components/pal/ProgressBar.vue";
 import OptionButton from "@/components/pal/OptionButton.vue";
 import {ref} from "vue";
-import {KnowledgeItem} from "@/API/forms/question";
+import {KnowledgeItem} from "@/types/forms/question";
 import {question} from "@/API";
 import {showToast, useDidShow} from "@tarojs/taro";
 import AnswerBox from "@/components/pal/AnswerBox.vue";
+import {useApi} from "@/API/handler";
 
+// === define ===
 definePageConfig({
   navigationBarTitleText: "知识竞赛"
 })
 
+// === constants ===
 const questionIndex = ref<number>(0);
 
 const selectedArray = ref<Array<string>>(['','','','','','','','','',''])
@@ -48,7 +52,8 @@ const questionArray = ref<Array<KnowledgeItem> | null>(null)
 
 const code2Option = ['A','B','C','D']
 
-const SubmitAnswer = async () => {
+// === methods ===
+const handleAnswerSubmit = async () => {
   if (!questionArray.value) return
 
   if (questionArray.value[0].done === 1) {
@@ -56,25 +61,32 @@ const SubmitAnswer = async () => {
     return
   }
 
-  for (let i = 0; i< 10; i ++ ) {
-    const resp = await question.SubmitKnowledge({
-      questionId: questionArray.value[i].id,
-      answer: code2Option.indexOf(selectedArray.value[i]) + 1,
-    })
-    console.log(resp)
-  }
+  doSubmitKnowledge()
+  doGetKnowledge()
+}
 
-  await showToast({title: '提交成功', icon: 'success'})
-  question.GetKnowledge().then(resp => {
-    questionArray.value = resp.data
+// === hooks ===
+useDidShow(() => {
+  doGetKnowledge()
+})
+
+// === api ===
+const doSubmitKnowledge = () => {
+  useApi({
+    api: question.SubmitKnowledge(questionArray.value!.map((value, index) => ({
+        questionId: value.id, answer: code2Option.indexOf(selectedArray.value[index]) + 1
+      }),
+    )),
+    onSuccess: () => {showToast({title: '提交成功', icon: 'success'})}
   })
 }
 
-useDidShow(() => {
-  question.GetKnowledge().then(resp => {
-    questionArray.value = resp.data
+const doGetKnowledge = () => {
+  useApi({
+    api: question.GetKnowledge(),
+    onSuccess: resp => {questionArray.value = resp.data}
   })
-})
+}
 </script>
 
 <style lang="scss">

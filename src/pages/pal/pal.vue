@@ -24,10 +24,17 @@
 </template>
 
 <script setup lang="ts">
+// === import ===
 import { ref } from 'vue'
 import ButtonCard from "@/components/index/ButtonCard.vue";
 import Taro from '@tarojs/taro'
 
+// === define ===
+definePageConfig({
+  navigationBarTitleText: '红星青年派'
+})
+
+// === constants ===
 const features = ref([
   {
     title: '知识闯关',
@@ -55,8 +62,9 @@ const features = ref([
   },
 ])
 
+// === methods ===
 function onVoiceClick() {
-  alert('语音交互功能开发中，敬请期待！')
+  // TODO
 }
 </script>
 

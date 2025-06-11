@@ -32,6 +32,7 @@
 </template>
 
 <script setup lang="ts">
+// === import ===
 import SwiperImage from "@/components/index/SwiperImage.vue";
 import NoticeBar from "@/components/index/NoticeBar.vue";
 import ButtonCard from "@/components/index/ButtonCard.vue";
@@ -43,15 +44,18 @@ import ArticleCard from "@/components/ArticleCard.vue";
 import {ArticleCardData, ArticleCardProps} from "@/types/articleCard";
 import Taro from "@tarojs/taro";
 
+// === define ===
+definePageConfig({
+  navigationBarTitleText: '首页'
+})
+
+// === constants ===
 const urls = ref<Array<string>>([
   'https://i.ibb.co/rRDkdT3h/974e14c00fd1c9ce653ec65adf41eff6.png',
   'https://i.ibb.co/rRDkdT3h/974e14c00fd1c9ce653ec65adf41eff6.png',
 ])
-
 const noticeBarContent = ref<string>('⭐ 红星耀国防平台通过数字化手段传承红色精神，普及国防知识，强化全民国防意识。平台以党史为脉络，融合互动体验、知识学习、情感交流和服务对接功能，打造具有时代特色的国防教育新模式。')
-
 const buttonsTitle = "—— 导航 ——"
-
 const buttonCards = ref<Array<Array<ButtonCardProps>>>([
   [
     new ButtonCardData("红星英雄谱", "国防英雄典范",
@@ -73,7 +77,6 @@ const buttonCards = ref<Array<Array<ButtonCardProps>>>([
       () => {Taro.navigateTo({url: '/pages/service/service'})}
     )]
 ])
-
 const articleCards = ref<Array<ArticleCardProps>>([
   new ArticleCardData("https://i.ibb.co/rRDkdT3h/974e14c00fd1c9ce653ec65adf41eff6.png", "新民主主义革命先驱恽代英生平事迹", "恽代英，原籍江苏武进，出生于湖北武昌。恽代英是中国无产阶级革命家，中国共产党早期青年运动领导人之一"),
   new ArticleCardData("https://i.ibb.co/rRDkdT3h/974e14c00fd1c9ce653ec65adf41eff6.png", "建设年代守护者黄继光", "黄继光，男，汉族，原名黄积广，四川省中江县人，中国共产党党员"),
