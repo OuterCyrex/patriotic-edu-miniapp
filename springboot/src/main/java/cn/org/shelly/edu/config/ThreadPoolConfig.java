@@ -26,8 +26,7 @@ public class ThreadPoolConfig {
      * 创建线程池
      * @return 线程池
      */
-    @Bean
-    @Primary
+    @Bean(name = "threadPoolTaskExecutor")
     public ThreadPoolTaskExecutor threadPoolTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         // 核心线程池大小

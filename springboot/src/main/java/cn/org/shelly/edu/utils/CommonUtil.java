@@ -1,18 +1,7 @@
-package cn.org.shelly.edu.model.resp;
+package cn.org.shelly.edu.utils;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Data;
-
-@Data
-@Builder
-public class QuestionResp {
-    private Integer ac;
-    private Integer wa;
-    private String comment;
-    private Integer stars;
-    @Schema(description = "总时间（单位/s）")
-    private Long time;
+public class CommonUtil {
+    private CommonUtil(){}
     public static int calculateStars(int ac) {
         if (ac >= 10) return 3;
         if (ac >= 8) return 2;
@@ -27,6 +16,4 @@ public class QuestionResp {
             default -> "📚 知识需要补给啦！别灰心，重整旗鼓，为热爱祖国再出发！";
         };
     }
-
-
 }

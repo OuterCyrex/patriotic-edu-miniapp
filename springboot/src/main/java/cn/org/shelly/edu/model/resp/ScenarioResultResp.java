@@ -4,17 +4,20 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 
 @Data
 @Accessors(chain = true)
 public class ScenarioResultResp {
-    @Schema(description = "法律依据")
-    private String legalBasis;
-    @Schema(description = "解决方案")
-    private String solution;
-    @Schema(description = "是否正确")
-    private Boolean result;
-    @Schema(description = "记录ID")
-    private Long recordId;
-
+    @Schema(description = "结果列表")
+    List<ScenarioSingleResultResp> list;
+    @Schema(description = "总通过数")
+    private Integer ac;
+    @Schema(description = "总未通过数")
+    private Integer wa;
+    @Schema(description = "总评")
+    private String comment;
+    @Schema(description = "总星数")
+    private Integer stars;
 }

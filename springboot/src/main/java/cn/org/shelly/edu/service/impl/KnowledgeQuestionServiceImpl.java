@@ -1,28 +1,35 @@
 package cn.org.shelly.edu.service.impl;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.org.shelly.edu.exception.CustomException;
 import cn.org.shelly.edu.mapper.KnowledgeQuestionMapper;
 import cn.org.shelly.edu.model.dto.QuestionResultDTO;
 import cn.org.shelly.edu.model.po.KnowledgeQuestion;
+import cn.org.shelly.edu.model.po.User;
 import cn.org.shelly.edu.model.po.UserRecord;
 import cn.org.shelly.edu.model.req.KnowledgeQuestionReq;
+import cn.org.shelly.edu.model.req.SubmitReq;
 import cn.org.shelly.edu.model.resp.KnowledgeQuestionResp;
 import cn.org.shelly.edu.model.resp.KnowledgeResultResp;
+import cn.org.shelly.edu.model.resp.KnowledgeSingleResultResp;
 import cn.org.shelly.edu.service.KnowledgeQuestionService;
 import cn.org.shelly.edu.service.UserRecordService;
+import cn.org.shelly.edu.service.UserService;
+import cn.org.shelly.edu.utils.CommonUtil;
 import cn.org.shelly.edu.utils.RedisUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
@@ -37,6 +44,9 @@ public class KnowledgeQuestionServiceImpl extends ServiceImpl<KnowledgeQuestionM
     implements KnowledgeQuestionService {
     private final UserRecordService userRecordService;
     private final RedisUtil redisUtil;
+    private final UserService userService;
+    @Resource(name = "threadPoolTaskExecutor")
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     @Override
     public List<KnowledgeQuestionResp> getQuiz() {
@@ -115,29 +125,6 @@ public class KnowledgeQuestionServiceImpl extends ServiceImpl<KnowledgeQuestionM
     }
 
     @Override
-    public KnowledgeResultResp submit(Long questionId, Integer answer) {
-        KnowledgeQuestion  knowledgeQuestion = baseMapper.selectById(questionId);
-        if (knowledgeQuestion == null) {
-            throw new CustomException("题目不存在");
-        }
-        boolean isCorrect = answer.equals(knowledgeQuestion.getCorrectAnswer());
-        UserRecord userRecord = new UserRecord()
-                .setUserId(StpUtil.getLoginIdAsLong())
-                .setQuestionId(questionId)
-                .setQuestionType(1)
-                .setUserAnswer(answer)
-                .setIsCorrect(isCorrect ? 1 : 0)
-                .setUsed(0)
-                .setGmtCreate(new Date());
-        userRecordService.save(userRecord);
-        return KnowledgeResultResp.builder()
-                .result(isCorrect)
-                .explanation(knowledgeQuestion.getExplanation())
-                .recordId(userRecord.getId())
-                .build();
-    }
-
-    @Override
     public void addKnowledgeQuiz(KnowledgeQuestionReq knowledgeQuestionReq) {
         KnowledgeQuestion knowledgeQuestion = KnowledgeQuestionReq.toEntity(knowledgeQuestionReq);
         save(knowledgeQuestion);
@@ -148,10 +135,62 @@ public class KnowledgeQuestionServiceImpl extends ServiceImpl<KnowledgeQuestionM
          KnowledgeQuestion knowledgeQuestion = KnowledgeQuestionReq.toEntity(knowledgeQuestionReq);
          updateById(knowledgeQuestion);
     }
+
+    @Override
+    public KnowledgeResultResp submit(List<SubmitReq> req) {
+        List<Long> qs = req.stream().map(SubmitReq::getQuestionId).toList();
+        Map<Long, KnowledgeQuestion> questionMap = lambdaQuery()
+                .select(KnowledgeQuestion::getId, KnowledgeQuestion::getExplanation,
+                        KnowledgeQuestion::getCorrectAnswer)
+                .in(KnowledgeQuestion::getId, qs)
+                .list()
+                .stream()
+                .collect(Collectors.toMap(KnowledgeQuestion::getId, question -> question));
+        Long userId = StpUtil.getLoginIdAsLong();
+        AtomicReference<Integer> ac = new AtomicReference<>(0);
+        List<UserRecord> userRecords = req.stream()
+                .map(r -> {
+                    UserRecord userRecord = new UserRecord()
+                            .setUserId(userId)
+                            .setQuestionId(r.getQuestionId())
+                            .setQuestionType(1)
+                            .setUserAnswer(r.getAnswer());
+                    int isCorrect = questionMap.get(r.getQuestionId()).getCorrectAnswer().equals(r.getAnswer()) ? 1 : 0;
+                    if(isCorrect == 1){
+                        ac.getAndSet(ac.get() + 1);
+                    }
+                    userRecord.setIsCorrect(isCorrect);
+                    userRecord.setUsed(1);
+                    return userRecord;
+                })
+                .toList();
+        userRecordService.saveBatch(userRecords);
+        var data = userRecords.stream()
+                .map(record -> new KnowledgeSingleResultResp()
+                        .setResult(record.getIsCorrect() == 1)
+                        .setExplanation(questionMap.get(record.getQuestionId()).getExplanation())
+                        .setQuestionId(record.getQuestionId())
+                        .setRecordId(record.getId()))
+                .toList();
+        String comment = CommonUtil.getCommentByAcs(ac.get());
+        int stars = CommonUtil.calculateStars(ac.get());
+        CompletableFuture.runAsync(() -> userService.lambdaUpdate()
+                .setSql("total_stars = total_stars + " + stars)
+                .eq(User::getId, userId)
+                .update(), threadPoolTaskExecutor);
+        return new KnowledgeResultResp()
+                .setList(data)
+                .setAc(ac.get())
+                .setWa(10 - ac.get())
+                .setComment(comment)
+                .setStars(stars);
+    }
+
     private String buildKey(Long userId) {
-        String date = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE); // yyyyMMdd
+        String date = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
         return String.format("quiz:daily:knowledge:%d:%s", userId, date);
     }
+
 }
 
 
