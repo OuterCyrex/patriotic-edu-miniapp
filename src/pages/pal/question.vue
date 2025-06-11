@@ -1,5 +1,5 @@
 <template>
-  <view class="question-page-container">
+  <view v-if="!!questionArray" class="question-page-container">
     <text class="question-title">单选题</text>
     <view class="question-block" v-if="!!questionArray">
       <view class="question-content">
@@ -25,6 +25,7 @@
     </view>
     <ProgressBar @previous="questionIndex --" @next="questionIndex ++" @submit="handleAnswerSubmit"/>
   </view>
+  <nut-empty v-if="!questionArray" description="什么都没有哦" />
 </template>
 
 <script setup lang="ts">
@@ -34,7 +35,7 @@ import OptionButton from "@/components/pal/OptionButton.vue";
 import {ref} from "vue";
 import {KnowledgeItem} from "@/types/forms/question";
 import {question} from "@/API";
-import {showToast, useDidShow} from "@tarojs/taro";
+import Taro, {showToast, useDidShow} from "@tarojs/taro";
 import AnswerBox from "@/components/pal/AnswerBox.vue";
 import {useApi} from "@/API/handler";
 
@@ -45,24 +46,18 @@ definePageConfig({
 
 // === constants ===
 const questionIndex = ref<number>(0);
-
 const selectedArray = ref<Array<string>>(['','','','','','','','','',''])
-
 const questionArray = ref<Array<KnowledgeItem> | null>(null)
-
 const code2Option = ['A','B','C','D']
 
 // === methods ===
 const handleAnswerSubmit = async () => {
   if (!questionArray.value) return
-
   if (questionArray.value[0].done === 1) {
     await showToast({title: '今日已提交', icon: 'error'})
     return
   }
-
   doSubmitKnowledge()
-  doGetKnowledge()
 }
 
 // === hooks ===
@@ -77,7 +72,12 @@ const doSubmitKnowledge = () => {
         questionId: value.id, answer: code2Option.indexOf(selectedArray.value[index]) + 1
       }),
     )),
-    onSuccess: () => {showToast({title: '提交成功', icon: 'success'})}
+    onSuccess: resp => {
+      showToast({title: '提交成功', icon: 'success'})
+      Taro.navigateTo({
+        url: `/pages/pal/result?ac=${resp.data.ac}&comment=${resp.data.comment}&stars=${resp.data.stars}`,
+      })
+    }
   })
 }
 

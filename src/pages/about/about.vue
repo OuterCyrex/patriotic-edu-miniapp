@@ -48,7 +48,7 @@
 <script setup lang="ts">
 // === import ===
 import { reactive } from 'vue'
-import Taro, {useDidShow} from '@tarojs/taro'
+import Taro, {showToast, useDidShow} from '@tarojs/taro'
 import {My, Setting, Ask , Message} from '@nutui/icons-vue-taro'
 import {user} from "@/API";
 import {UserInfo} from "@/types/forms/user";
@@ -84,6 +84,8 @@ function handleLogout() {
   userInfo.username = ''
   userInfo.nickname = ''
   userInfo.token = ''
+
+  showToast(({title: '退出登陆成功', icon: 'success'}))
 }
 
 // === hooks ===

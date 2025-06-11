@@ -23,6 +23,12 @@
       />
     </view>
     <nut-empty v-if="!postList || postList.list.length === 0" description="什么都没有哦"></nut-empty>
+    <nut-pagination v-if="!!postList && postList.list.length !== 0"
+                    class="d-flex"
+                    v-model="page"
+                    :total-items="postList.total"
+                    :items-per-page="10"
+                    mode="simple" @change="handleChange" />
     <FixedButton icon="https://img.icons8.com/?size=100&id=Z0BQsNX1Xhfb&format=png&color=000000" @click="showOverLayer = true"/>
   </view>
   <nut-overlay class="overlay-container" v-model:visible="showOverLayer" :close-on-click-overlay="false">
@@ -54,10 +60,16 @@ const pageNum = ref<number>(0)
 const keyword = ref<string> ("")
 const postList = ref<PostList | null>(null)
 const wordCloudData = ref<Array<WordFrequency> | null>(null)
+const page = ref<number>(1)
 
 // === methods ===
 function handleSearch(text: string): void{
   keyword.value = text;
+  doGetPostList()
+}
+
+function handleChange(value: number) {
+  page.value = value
   doGetPostList()
 }
 

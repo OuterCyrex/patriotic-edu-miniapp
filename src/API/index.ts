@@ -80,7 +80,7 @@ export const question = {
     withToken: true
   }),
   SubmitKnowledge: (req: Array<{questionId: number, answer: number}>) => request('/question/knowledgeAns', {
-    method: 'GET',
+    method: 'POST',
     data: req,
     withToken: true
   })
