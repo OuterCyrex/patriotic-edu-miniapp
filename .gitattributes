@@ -8,3 +8,4 @@ springboot/src/main/java/cn/org/shelly/edu/mapper/** linguist-detectable=false
 springboot/src/main/java/cn/org/shelly/edu/utils/** linguist-detectable=false
 springboot/src/main/java/cn/org/shelly/edu/constants/** linguist-detectable=false
 springboot/src/main/java/cn/org/shelly/edu/model/** linguist-detectable=false
+springboot/src/main/java/cn/org/shelly/edu/controller/** linguist-detectable=false
