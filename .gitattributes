@@ -1,0 +1,7 @@
+# Ignore specific Java subpackages from language stats
+springboot/src/main/java/cn/org/shelly/edu/annotation/** linguist-detectable=false
+springboot/src/main/java/cn/org/shelly/edu/common/** linguist-detectable=false
+springboot/src/main/java/cn/org/shelly/edu/config/** linguist-detectable=false
+springboot/src/main/java/cn/org/shelly/edu/exception/** linguist-detectable=false
+springboot/src/main/java/cn/org/shelly/edu/interceptor/** linguist-detectable=false
+springboot/src/main/java/cn/org/shelly/edu/mapper/** linguist-detectable=false
