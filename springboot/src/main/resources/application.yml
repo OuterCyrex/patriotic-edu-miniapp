@@ -21,7 +21,7 @@ spring:
   ai:
     openai:
       base-url: https://api.deepseek.com
-      api-key: <URL>
+      api-key: <api-key>
       embedding:
         enabled: false
       chat:
@@ -30,7 +30,7 @@ spring:
           temperature: 0.8
   data:
     redis:
-      host: <ip>
+      host: <redis-host>
       port: 6379
       # 链接超时时间
       timeout: 10s
