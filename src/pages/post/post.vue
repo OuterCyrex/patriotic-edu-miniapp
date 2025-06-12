@@ -116,6 +116,11 @@ const doGetWordFrequency = () => {
 .word-cloud {
   margin: 30px 0;
 }
+.d-flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>
 
 
