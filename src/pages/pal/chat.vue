@@ -26,6 +26,7 @@
 import { ref } from 'vue'
 import Taro from '@tarojs/taro'
 import {BaseURL} from "@/API/request";
+import {ArrayBuffer2Utf8} from "@/utils/decoder";
 
 // === define ===
 definePageConfig({
@@ -37,7 +38,6 @@ const inputValue = ref('')
 const messages = ref([
   { role: 'ai', content: '你好，我是智能红小星，有什么可以帮您？' }
 ])
-const decoder = new TextDecoder('utf-8');
 
 // === methods ===
 function handleSubmit() {
@@ -51,7 +51,7 @@ function handleSubmit() {
 
   const requestTask = GetStreamResponse(text)
   requestTask.onChunkReceived(res => {
-    const chunkStr = decoder.decode(res.data, { stream: true })
+    const chunkStr = ArrayBuffer2Utf8(res.data)
     messages.value[currentAIMessageIndex].content += chunkStr
   })
   requestTask.then(() => {
