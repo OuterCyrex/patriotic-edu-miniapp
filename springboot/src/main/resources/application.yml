@@ -15,12 +15,22 @@ spring:
       date: yyyy-MM-dd HH:mm:ss
   datasource:
     url: jdbc:mysql://localhost:3306/edu?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8
-    username: <USERNAME>
-    password: <PASSWORD>
+    username: <username>
+    password: <password>
     driver-class-name: com.mysql.cj.jdbc.Driver
+  ai:
+    openai:
+      base-url: https://api.deepseek.com
+      api-key: <api-key>
+      embedding:
+        enabled: false
+      chat:
+        options:
+          model: deepseek-chat
+          temperature: 0.8
   data:
     redis:
-      host: <URL>
+      host: <redis-host>
       port: 6379
       # 链接超时时间
       timeout: 10s
