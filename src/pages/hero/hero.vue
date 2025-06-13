@@ -94,7 +94,6 @@ const doGetHeroList = () => {
 </script>
 
 <style lang="scss">
-@import "taro-ui-vue3/dist/style/components/pagination.scss";
 .d-flex {
   display: flex;
   justify-content: center;

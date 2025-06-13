@@ -83,5 +83,14 @@ export const question = {
     method: 'POST',
     data: req,
     withToken: true
+  }),
+  GetScenario: () => request('/question/scenario', {
+    method: 'GET',
+    withToken: true,
+  }),
+  SubmitScenario: (req: {questionId: number, answer: number}) => request('/question/scenarioAns', {
+    method: 'POST',
+    data: req,
+    withToken: true,
   })
 }

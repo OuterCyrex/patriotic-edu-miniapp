@@ -28,3 +28,18 @@ export interface SubmitKnowledgeItem {
   recordId: number
   questionId: number
 }
+
+export interface ScenarioItem {
+  id: number
+  scenario: string
+  question: string
+  optionA: string
+  optionB: string
+  optionC: string
+  done: number
+  correct: boolean
+  choice: number
+  answer: number
+  legalBasis: string
+  solution: string
+}

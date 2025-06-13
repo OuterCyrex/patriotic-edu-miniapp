@@ -29,11 +29,8 @@
                     :total-items="postList.total"
                     :items-per-page="10"
                     mode="simple" @change="handleChange" />
-    <FixedButton icon="https://img.icons8.com/?size=100&id=Z0BQsNX1Xhfb&format=png&color=000000" @click="showOverLayer = true"/>
+    <FixedButton icon="https://img.icons8.com/?size=100&id=Z0BQsNX1Xhfb&format=png&color=000000" @click="toNewPost"/>
   </view>
-  <nut-overlay class="overlay-container" v-model:visible="showOverLayer" :close-on-click-overlay="false">
-    <NewPost class="new-post-container" @close="showOverLayer = false" @submit="doGetPostList"/>
-  </nut-overlay>
 </template>
 
 <script setup lang="ts">
@@ -42,7 +39,6 @@ import PostCard from "@/components/post/PostCard.vue";
 import Taro, {useDidShow} from '@tarojs/taro'
 import {ref} from "vue";
 import FixedButton from "@/components/FixedButton.vue";
-import NewPost from "@/components/post/NewPost.vue";
 import {PostList, WordFrequency} from "@/types/forms/post";
 import WordCloud from "@/components/post/WordCloud.vue";
 import {post} from "@/API";
@@ -54,7 +50,6 @@ definePageConfig({
 })
 
 // === constants ===
-const showOverLayer = ref(false);
 const searchKeywords = ref<string> ('')
 const pageNum = ref<number>(0)
 const keyword = ref<string> ("")
@@ -71,6 +66,10 @@ function handleSearch(text: string): void{
 function handleChange(value: number) {
   page.value = value
   doGetPostList()
+}
+
+function toNewPost(): void {
+  Taro.navigateTo({url: '/pages/post/new'})
 }
 
 // === hooks ===

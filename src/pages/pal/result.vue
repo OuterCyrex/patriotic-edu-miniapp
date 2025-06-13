@@ -30,8 +30,10 @@
 
 <script setup lang="ts">
 // === import ===
-import { useLoad } from "@tarojs/taro";
+import Taro, { useLoad } from "@tarojs/taro";
 import { ref } from "vue";
+import {UserInfo} from "@/types/forms/user";
+import {user} from "@/API";
 
 // === define ===
 definePageConfig({
@@ -42,12 +44,17 @@ definePageConfig({
 const acNumber = ref<number>(0)
 const commentText = ref<string>('')
 const starNumber = ref<number>(0)
+const userInfo = ref<UserInfo | null>(null)
 
 // === hooks ===
 useLoad((options) => {
   acNumber.value = Number(options.ac)
   commentText.value = options.comment
   starNumber.value = Number(options.stars)
+
+  user.GetUserInfo().then(resp => {userInfo.value = resp})
+  userInfo.value!.totalStars += starNumber.value
+  Taro.setStorage({key: "user", data: userInfo})
 })
 </script>
 

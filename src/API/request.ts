@@ -4,7 +4,7 @@ import type { ApiMap, ApiReq, ApiResp } from './types'
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
 
-const BaseURL = 'http://106.52.199.168:8080'
+export const BaseURL = 'https://eduapp.mynatapp.cc'
 
 export async function request<K extends keyof ApiMap>(
   url: K | string,

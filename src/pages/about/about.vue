@@ -22,17 +22,17 @@
           <My style="margin-right: 8px;"/>
         </template>
       </nut-cell>
-      <nut-cell is-link title="设置">
+      <nut-cell is-link title="设置" @click="toSetting">
         <template #icon>
           <Setting style="margin-right: 8px;"/>
         </template>
       </nut-cell>
-      <nut-cell is-link title="关于我们" icon="ask" >
+      <nut-cell is-link title="关于我们" @click="toAboutUs">
         <template #icon>
           <Ask style="margin-right: 8px;"/>
         </template>
       </nut-cell>
-      <nut-cell is-link title="联系客服" icon="ask" >
+      <nut-cell is-link title="联系客服" @click="toWaiter">
         <template #icon>
           <Message style="margin-right: 8px;"/>
         </template>
@@ -77,6 +77,15 @@ function toLogin() {
 }
 function toProfile() {
   Taro.navigateTo({ url: '/pages/about/profile' })
+}
+function toSetting() {
+  showToast({title: "该功能敬请期待", icon: "none"})
+}
+function toAboutUs() {
+  showToast({title: "该功能敬请期待", icon: "none"})
+}
+function toWaiter() {
+  showToast({title: "该功能敬请期待", icon: "none"})
 }
 function handleLogout() {
   Taro.removeStorageSync('user')

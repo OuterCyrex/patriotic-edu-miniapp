@@ -1,15 +1,15 @@
 <template>
-  <swiper
+  <nut-swiper
     class='test-h'
-    indicatorColor='#999'
-    indicatorActiveColor='#333'
-    current="current"
-    :autoplay="true"
-    :indicatorDots="true">
-    <swiper-item v-for="(item, idx) in props.images" :key="idx" class="swiper-image">
-      <Image :src="item" class="slide-image"/>
-    </swiper-item>
-  </swiper>
+    :init-page="1"
+    pagination-visible
+    pagination-color="#426543"
+    pagination-unselected-color="#808080"
+  >
+    <nut-swiper-item v-for="(item, idx) in props.images" :key="idx" class="swiper-image">
+      <image :src="item" class="slide-image" mode="aspectFill"/>
+    </nut-swiper-item>
+  </nut-swiper>
 </template>
 
 <script setup lang="ts">
@@ -20,8 +20,7 @@ const props = defineProps<{
 
 <style lang="scss">
 .slide-image {
-  height: 400px;
+  height: 250px;
   width: 100vw;
-  display: block;
 }
 </style>

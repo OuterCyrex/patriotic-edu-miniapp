@@ -9,7 +9,7 @@ import {
   PostListReq, WordFrequency
 } from "@/types/forms/post";
 import {UserLoginReq, UserRegisterReq, UserInfo} from "@/types/forms/user";
-import {KnowledgeItem, SubmitKnowledgeList} from "@/types/forms/question";
+import {KnowledgeItem, ScenarioItem, SubmitKnowledgeList} from "@/types/forms/question";
 
 export interface ApiMap {
   '/hero/list': {
@@ -67,6 +67,14 @@ export interface ApiMap {
   '/question/knowledgeAns': {
     req: Array<{questionId: number, answer: number}>
     resp: SubmitKnowledgeList
+  }
+  '/question/scenario': {
+    req: {},
+    resp: Array<ScenarioItem>
+  }
+  '/question/scenarioAns': {
+    req: {questionId: number, answer: number}
+    resp: {}
   }
   '/voice/like': {
     req: { targetType: number, targetId: number}

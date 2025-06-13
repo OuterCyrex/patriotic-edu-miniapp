@@ -116,8 +116,10 @@ const submitForm = () => {
 <style lang="scss">
 .red-service-container {
   padding: 20px;
-  background-color: #fff7f7;
+  background-color: #fff;
   min-height: 100vh;
+  color: #333;
+  font-family: "Microsoft Yahei", Arial, sans-serif;
 }
 
 .d-flex {
@@ -128,36 +130,67 @@ const submitForm = () => {
 
 .header {
   margin-bottom: 24px;
+  text-align: center;
 }
 
 .title {
   font-size: 38px;
-  font-weight: bold;
+  font-weight: 700;
   color: #c40000;
 }
 
 .subtitle {
-  font-size: 28px;
+  font-size: 24px;
   color: #a94442;
   margin-top: 8px;
+  font-weight: 500;
+}
+
+nut-form,
+nut-form-item {
+  color: #333;
+}
+
+nut-input {
+  color: #333;
+  font-size: 18px;
+  background-color: #fff;
+  border-radius: 4px;
+}
+.picker {
+  padding: 10px 14px;
+  border-radius: 4px;
+  color: #c40000;
+  font-size: 28px;
+  background-color: #fff;
+}
+
+nut-button {
+  margin-top: 24px;
+  font-weight: 600;
+  font-size: 20px;
+  border-radius: 6px;
 }
 
 .matched {
   margin-top: 24px;
+  background-color: #fff0f0;
+  border-radius: 6px;
+  padding: 16px 20px;
 }
 
 .matched-title {
-  font-weight: bold;
-  font-size: 24px;
-  margin-bottom: 10px;
-  color: #d0021b;
+  font-weight: 700;
+  font-size: 22px;
+  margin-bottom: 12px;
+  color: #c40000;
 }
 
 .matched-card {
   background-color: #ffe5e5;
-  padding: 10px;
-  margin-bottom: 8px;
-  border-left: 4px solid #fa2c19;
+  padding: 10px 14px;
+  margin-bottom: 10px;
+  border-left: 4px solid #c40000;
   border-radius: 4px;
   color: #900000;
 }
@@ -165,19 +198,19 @@ const submitForm = () => {
 .contact-section {
   margin-top: 32px;
   padding-top: 16px;
-  border-top: 1px solid #ffcccc;
+  border-top: 1px solid #f7c0c0;
 }
 
 .contact-title {
-  font-size: 32px;
-  font-weight: bold;
-  color: #b22222;
+  font-size: 28px;
+  font-weight: 700;
+  color: #c40000;
   margin-bottom: 8px;
 }
 
 .contact-item {
   margin: 4px 0;
-  color: #800000;
+  color: #a94442;
   font-size: 24px;
 }
 </style>

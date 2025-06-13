@@ -3,9 +3,6 @@
       <view class="form-container">
       <view class="form-header">
         <text class="form-title">我的心声</text>
-        <view class="close-button" @click="emits('close')">
-          <image class="close-button-icon" src="https://img.icons8.com/?size=100&id=tBs4jEKyshHO&format=png&color=000000"></image>
-        </view>
       </view>
 
       <nut-form-item label="主题" prop="theme" :rules="[{ required: true }]">
@@ -27,7 +24,7 @@
       </nut-form-item>
 
       <nut-form-item label="内容" prop="content"  :rules="[{ required: true }]">
-        <nut-textarea v-model="form.content" placeholder="请输入内容" rows="3" />
+        <nut-textarea v-model="form.content" placeholder="请输入内容" :rows="8" limit-show :max-length="300"/>
       </nut-form-item>
 
       <nut-button block type="primary" @click="submitPost">提交</nut-button>
@@ -37,11 +34,17 @@
 </template>
 
 <script setup lang="ts">
+// === import ===
 import {onMounted, reactive, ref} from 'vue'
 import {post, user} from "@/API";
+import {useApi} from "@/API/handler";
 
-const emits = defineEmits(['close', 'submit'])
+// === define ===
+definePageConfig({
+  navigationBarTitleText: "发布心声"
+})
 
+// === constants ===
 const form = reactive({
   content: '',
   region: '',
@@ -49,44 +52,31 @@ const form = reactive({
   authorName: '',
   theme: ''
 })
-
 const themesList = ['少年说国防','老兵回忆录','任意主题']
+const formRef = ref<HTMLFormElement | null>(null)
+const showToast = ref(false);
+const toastText = ref('')
 
+// === methods ===
 const confirmTheme = (event: any) => {
   form.theme = themesList[event.detail.value]
 }
 
-const showToast = ref(false);
-const toastText = ref('')
 const openToast = (text: string): void => {
   showToast.value = true
   toastText.value = text
 }
 
-const formRef = ref<HTMLFormElement | null>(null)
-
 async function submitPost() {
   const { valid } = await formRef.value?.validate()
-
   if (!valid) {
     openToast("请正确填写数据")
     return
   }
-
-  post.NewPost({
-    content: form.content,
-    region: form.region,
-    identity: form.identity,
-    authorName: form.authorName,
-    theme: form.theme,
-  }).then(res => {
-    if (res.code !== 200) openToast("服务器内部错误：" + res.message)
-    emits('close')
-  })
-
-  emits('submit')
+  doNewPost()
 }
 
+// === hooks ===
 onMounted(() => {
   user.GetUserInfo().then(resp => {
     if (!resp) {
@@ -97,20 +87,33 @@ onMounted(() => {
     form.authorName = resp!.nickname
   })
 })
+
+// === api ===
+const doNewPost = () => {
+  useApi({
+    api: post.NewPost({
+      content: form.content,
+      region: form.region,
+      identity: form.identity,
+      authorName: form.authorName,
+      theme: form.theme,
+    })
+  })
+}
 </script>
 
 <style lang="scss">
 .form-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   margin-bottom: 20px;
 }
 
 .form-title {
-  font-size: 32px;
   font-weight: bold;
-  color: #333;
+  color: #751f1f;
+  font-size: 42rpx;
 }
 
 .form-container {
