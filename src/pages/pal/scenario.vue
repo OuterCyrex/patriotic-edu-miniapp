@@ -29,8 +29,8 @@
                  :explanation="questionArray[questionIndex].legalBasis"
                  class="answer-box"
       ></AnswerBox>
-      <nut-button block type="success"
-                  :disabled="questionIndex === 9 && questionArray[questionIndex].done === 1"
+      <nut-button block type="primary" :loading="isLoading"
+                  v-if="!(questionIndex === 9 && questionArray[questionIndex].done === 1)"
                   @click="handleSubmitAndNext"
       >
         {{questionArray[questionIndex].done === 1? '下一题' : '提交'}}
@@ -46,7 +46,7 @@ import OptionButton from "@/components/pal/OptionButton.vue";
 import {ref} from "vue";
 import {ScenarioItem} from "@/types/forms/question";
 import {question} from "@/API";
-import {useDidShow} from "@tarojs/taro";
+import {showToast, useDidShow} from "@tarojs/taro";
 import AnswerBox from "@/components/pal/AnswerBox.vue";
 import {useApi} from "@/API/handler";
 
@@ -60,15 +60,20 @@ const questionIndex = ref<number>(0);
 const selectedArray = ref<Array<string>>(['','','','','','','','','',''])
 const questionArray = ref<Array<ScenarioItem> | null>(null)
 const code2Option = ['A','B','C']
+const isLoading = ref<boolean>(false);
 
 // === methods ===
-function handleSubmitAndNext() {
+async function handleSubmitAndNext() {
   if (questionArray.value![questionIndex.value].done !== 1) {
-    doSubmitScenario()
-    doGetScenario()
+    isLoading.value = true;
+    await doSubmitScenario()
+    await doGetScenario()
+    isLoading.value = false;
   } else {
     questionIndex.value ++
   }
+  if(questionIndex.value === 9 && questionArray.value![questionIndex.value].done === 1)
+    await showToast({title: '今日题目已完成', icon: "success"})
 }
 
 
@@ -78,15 +83,15 @@ useDidShow(() => {
 })
 
 // === api ===
-const doGetScenario = () => {
-  useApi({
+const doGetScenario = async () => {
+  await useApi({
     api: question.GetScenario(),
     onSuccess: resp => {questionArray.value = resp.data}
   })
 }
 
-const doSubmitScenario = () => {
-  useApi({
+const doSubmitScenario = async () => {
+  await useApi({
     api: question.SubmitScenario({
       questionId: questionArray.value![questionIndex.value].id,
       answer: code2Option.indexOf(selectedArray.value![questionIndex.value]) + 1,
