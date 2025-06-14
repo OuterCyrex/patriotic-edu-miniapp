@@ -8,6 +8,7 @@ node_modules/
 *.local
 .idea
 .vscode
+*.ini
 project.config.json
 project.private.config.json
 # 忽略生产配置
