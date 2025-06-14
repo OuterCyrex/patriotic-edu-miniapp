@@ -9,6 +9,7 @@ node_modules/
 .idea
 .vscode
 *.ini
+*.jar
 project.config.json
 project.private.config.json
 # 忽略生产配置
