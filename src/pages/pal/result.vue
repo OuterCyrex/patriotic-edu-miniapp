@@ -52,9 +52,13 @@ useLoad((options) => {
   commentText.value = options.comment
   starNumber.value = Number(options.stars)
 
-  user.GetUserInfo().then(resp => {userInfo.value = resp})
-  userInfo.value!.totalStars += starNumber.value
-  Taro.setStorage({key: "user", data: userInfo})
+  user.GetUserInfo().then(resp => {
+    userInfo.value = resp
+    if (!!userInfo.value) {
+      userInfo.value.totalStars += starNumber.value
+      Taro.setStorage({key: "user", data: userInfo})
+    }
+  })
 })
 </script>
 
