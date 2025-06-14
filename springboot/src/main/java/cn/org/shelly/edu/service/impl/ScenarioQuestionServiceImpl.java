@@ -139,56 +139,84 @@ public class ScenarioQuestionServiceImpl extends ServiceImpl<ScenarioQuestionMap
     }
 
     @Override
-    public ScenarioResultResp submit(List<SubmitReq> req) {
-        List<Long> qs = req.stream().map(SubmitReq::getQuestionId).toList();
-        Map<Integer, ScenarioQuestion> questionMap = this.lambdaQuery()
-                .select(ScenarioQuestion::getId, ScenarioQuestion::getSolution,
-                        ScenarioQuestion::getLegalBasis,
-                        ScenarioQuestion::getCorrectAnswer)
-                .in(ScenarioQuestion::getId, qs)
-                .list()
-                .stream()
-                .collect(Collectors.toMap(ScenarioQuestion::getId, question -> question));
-        Long userId = StpUtil.getLoginIdAsLong();
-        AtomicReference<Integer> ac = new AtomicReference<>(0);
-        List<UserRecord> userRecords = req.stream()
-                .map(r -> {
-                    UserRecord userRecord = new UserRecord()
-                            .setUserId(userId)
-                            .setQuestionId(r.getQuestionId())
-                            .setQuestionType(2)
-                            .setUserAnswer(r.getAnswer());
-                    int isCorrect = questionMap.get(r.getQuestionId().intValue()).getCorrectAnswer().equals(r.getAnswer()) ? 1 : 0;
-                    if(isCorrect == 1){
-                        ac.getAndSet(ac.get() + 1);
-                    }
-                    userRecord.setIsCorrect(isCorrect);
-                    userRecord.setUsed(1);
-                    return userRecord;
-                })
-                .toList();
-        userRecordService.saveBatch(userRecords);
-        var data = userRecords.stream()
-                .map(record -> new ScenarioSingleResultResp()
-                        .setResult(record.getIsCorrect() == 1)
-                        .setLegalBasis(questionMap.get(record.getQuestionId().intValue()).getLegalBasis())
-                        .setSolution(questionMap.get(record.getQuestionId().intValue()).getSolution())
-                        .setQuestionId(record.getQuestionId())
-                        .setRecordId(record.getId()))
-                .toList();
-        String comment = CommonUtil.getCommentByAcs(ac.get());
-        int stars = CommonUtil.calculateStars(ac.get());
-        CompletableFuture.runAsync(() -> userService.lambdaUpdate()
-                .setSql("total_stars = total_stars + " + stars)
-                .eq(User::getId, userId)
-                .update(), threadPoolTaskExecutor);
+    public ScenarioResultResp submit(Long questionId, Integer answer) {
+        ScenarioQuestion scenarioQuestion = baseMapper.selectOne(
+                new LambdaQueryWrapper<ScenarioQuestion>()
+                        .eq(ScenarioQuestion::getId, questionId)
+                        .eq(ScenarioQuestion::getStatus, 1)
+                        .eq(ScenarioQuestion::getIsDeleted, 0)
+        );
+        if(Objects.isNull(scenarioQuestion)){
+            throw new CustomException("题目不存在");
+        }
+        boolean isCorrect = answer.equals(scenarioQuestion.getCorrectAnswer());
+        UserRecord userRecord = new UserRecord()
+                .setUserId(StpUtil.getLoginIdAsLong())
+                .setQuestionId(questionId)
+                .setQuestionType(2)
+                .setUserAnswer(answer)
+                .setIsCorrect(isCorrect ? 1 : 0)
+                .setUsed(0)
+                .setGmtCreate(new Date());
+        userRecordService.save(userRecord);
         return new ScenarioResultResp()
-                .setList(data)
-                .setAc(ac.get())
-                .setWa(10 - ac.get())
-                .setComment(comment)
-                .setStars(stars);
+                .setResult(isCorrect)
+                .setRecordId(userRecord.getId())
+                .setLegalBasis(scenarioQuestion.getLegalBasis())
+                .setSolution(scenarioQuestion.getSolution());
     }
+
+//    @Override
+//    public ScenarioResultResp submitAll(List<SubmitReq> req) {
+//        List<Long> qs = req.stream().map(SubmitReq::getQuestionId).toList();
+//        Map<Integer, ScenarioQuestion> questionMap = this.lambdaQuery()
+//                .select(ScenarioQuestion::getId, ScenarioQuestion::getSolution,
+//                        ScenarioQuestion::getLegalBasis,
+//                        ScenarioQuestion::getCorrectAnswer)
+//                .in(ScenarioQuestion::getId, qs)
+//                .list()
+//                .stream()
+//                .collect(Collectors.toMap(ScenarioQuestion::getId, question -> question));
+//        Long userId = StpUtil.getLoginIdAsLong();
+//        AtomicReference<Integer> ac = new AtomicReference<>(0);
+//        List<UserRecord> userRecords = req.stream()
+//                .map(r -> {
+//                    UserRecord userRecord = new UserRecord()
+//                            .setUserId(userId)
+//                            .setQuestionId(r.getQuestionId())
+//                            .setQuestionType(2)
+//                            .setUserAnswer(r.getAnswer());
+//                    int isCorrect = questionMap.get(r.getQuestionId().intValue()).getCorrectAnswer().equals(r.getAnswer()) ? 1 : 0;
+//                    if(isCorrect == 1){
+//                        ac.getAndSet(ac.get() + 1);
+//                    }
+//                    userRecord.setIsCorrect(isCorrect);
+//                    userRecord.setUsed(1);
+//                    return userRecord;
+//                })
+//                .toList();
+//        userRecordService.saveBatch(userRecords);
+//        var data = userRecords.stream()
+//                .map(record -> new ScenarioSingleResultResp()
+//                        .setResult(record.getIsCorrect() == 1)
+//                        .setLegalBasis(questionMap.get(record.getQuestionId().intValue()).getLegalBasis())
+//                        .setSolution(questionMap.get(record.getQuestionId().intValue()).getSolution())
+//                        .setQuestionId(record.getQuestionId())
+//                        .setRecordId(record.getId()))
+//                .toList();
+//        String comment = CommonUtil.getCommentByAcs(ac.get());
+//        int stars = CommonUtil.calculateStars(ac.get());
+//        CompletableFuture.runAsync(() -> userService.lambdaUpdate()
+//                .setSql("total_stars = total_stars + " + stars)
+//                .eq(User::getId, userId)
+//                .update(), threadPoolTaskExecutor);
+//        return new ScenarioResultResp()
+//                .setList(data)
+//                .setAc(ac.get())
+//                .setWa(10 - ac.get())
+//                .setComment(comment)
+//                .setStars(stars);
+//    }
 
     private String buildKey(Long userId) {
         String date = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE); // yyyyMMdd

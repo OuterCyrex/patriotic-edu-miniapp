@@ -22,5 +22,7 @@ public interface ScenarioQuestionService extends IService<ScenarioQuestion> {
 
     void updateScenarioQuiz(ScenarioQuestionReq scenarioQuestionReq);
 
-    ScenarioResultResp submit(List<SubmitReq> req);
+    //ScenarioResultResp submitAll(List<SubmitReq> req);
+
+    ScenarioResultResp submit(Long questionId, Integer answer);
 }
