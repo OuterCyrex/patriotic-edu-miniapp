@@ -89,7 +89,7 @@ export const question = {
     withToken: true,
   }),
   SubmitScenario: (req: {questionId: number, answer: number}) => request('/question/scenarioAns', {
-    method: 'POST',
+    method: 'GET',
     data: req,
     withToken: true,
   })
