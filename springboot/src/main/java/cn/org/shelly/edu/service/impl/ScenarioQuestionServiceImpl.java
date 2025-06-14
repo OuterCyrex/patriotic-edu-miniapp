@@ -161,6 +161,8 @@ public class ScenarioQuestionServiceImpl extends ServiceImpl<ScenarioQuestionMap
         userRecordService.save(userRecord);
         return new ScenarioResultResp()
                 .setResult(isCorrect)
+                .setUserAnswer(answer)
+                .setAnswer(scenarioQuestion.getCorrectAnswer())
                 .setRecordId(userRecord.getId())
                 .setLegalBasis(scenarioQuestion.getLegalBasis())
                 .setSolution(scenarioQuestion.getSolution());

@@ -16,4 +16,8 @@ public class ScenarioResultResp {
     private Boolean result;
     @Schema(description = "记录ID")
     private Long recordId;
+    @Schema(description = "正确答案")
+    private Integer answer;
+    @Schema(description = "用户答案")
+    private Integer userAnswer;
 }
