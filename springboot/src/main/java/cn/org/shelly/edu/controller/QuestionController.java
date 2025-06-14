@@ -34,7 +34,7 @@ import java.util.Objects;
 @RequestMapping("/question")
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "问题管理")
+@Tag(name = "问题模块")
 public class QuestionController {
     private final KnowledgeQuestionService questionService;
     private final ScenarioQuestionService  scenarioQuestionService;

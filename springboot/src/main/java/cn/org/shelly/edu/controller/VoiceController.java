@@ -34,7 +34,7 @@ import java.util.concurrent.CompletableFuture;
  */
 @RestController
 @RequestMapping("/voice")
-@Tag(name = "心声管理")
+@Tag(name = "心声模块")
 @RequiredArgsConstructor
 @Slf4j
 public class VoiceController {

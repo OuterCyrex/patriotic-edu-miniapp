@@ -1,7 +1,11 @@
 package cn.org.shelly.edu.service;
 
 import cn.org.shelly.edu.model.po.SystemConfig;
+import cn.org.shelly.edu.model.req.FileUploadReq;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 /**
 * @author Shelly6
@@ -10,4 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface SystemConfigService extends IService<SystemConfig> {
 
+    String uploadTiny(MultipartFile file) throws IOException;
 }

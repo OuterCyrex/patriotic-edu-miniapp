@@ -18,7 +18,6 @@ spring:
             class: javax.net.ssl.SSLSocketFactory
           ssl:
             enable: true
-
   data:
     redis:
       host: localhost
@@ -30,7 +29,6 @@ spring:
           max-wait: 100ms
           max-idle: 3
           min-idle: 0
-
   ai:
     openai:
       base-url: https://api.deepseek.com
@@ -41,3 +39,10 @@ spring:
         options:
           model: deepseek-chat
           temperature: 0.8
+
+oss:
+  url: https://<BUCKET_NAME>.oss-cn-chengdu.aliyuncs.com/
+  endpoint: oss-cn-chengdu.aliyuncs.com
+  bucketName: <BUCKET_NAME>
+  accessKeyId: <ACCESS_KEY_ID>
+  accesskeySecret: <ACCESS_KEY_SECRET>
