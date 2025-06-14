@@ -1,10 +1,13 @@
 package cn.org.shelly.edu.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.stp.StpUtil;
 import cn.org.shelly.edu.common.PageInfo;
 import cn.org.shelly.edu.common.Result;
 import cn.org.shelly.edu.model.po.KnowledgeQuestion;
 import cn.org.shelly.edu.model.po.ScenarioQuestion;
+import cn.org.shelly.edu.model.po.User;
+import cn.org.shelly.edu.model.po.UserRecord;
 import cn.org.shelly.edu.model.req.KnowledgeQuestionReq;
 import cn.org.shelly.edu.model.req.SubmitReq;
 import cn.org.shelly.edu.model.req.ScenarioQuestionReq;
@@ -20,7 +23,9 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 问题控制器
@@ -90,18 +95,11 @@ public class QuestionController {
     public Result<List<ScenarioQuestionResp>> getScenarioQuiz() {
         return Result.success(scenarioQuestionService.getScenarioQuiz());
     }
-    @PostMapping("/scenarioAns")
+    @GetMapping("/scenarioAns")
     @Operation(summary = "提交情景性题目答案")
     @SaCheckLogin
-    public Result<ScenarioResultResp> submitScenarioQuiz(@RequestBody List<SubmitReq> req) {
-        if(req.size() != 10){
-            return Result.fail("请做完后再提交吧");
-        }
-        int size = req.stream().map(SubmitReq::getAnswer).toList().size();
-        if(size != 10){
-            return Result.fail("请做完后再提交吧");
-        }
-        return Result.success(scenarioQuestionService.submit(req));
+    public Result<ScenarioResultResp> submitScenarioQuiz(Long questionId, Integer answer) {
+        return Result.success(scenarioQuestionService.submit(questionId, answer));
     }
     @PostMapping("/scenario")
     @Operation(summary = "添加情景性题目")
@@ -129,6 +127,49 @@ public class QuestionController {
                 .page(new Page<>(pageNum, pageSize));
         return Result.page(page);
     }
+    @PostMapping("/result")
+    @Operation(summary = "提交情景题答题结果")
+    public Result<QuestionResp> getResult(@RequestBody List<Long> recordIds) {
+        if(recordIds.size() != 3){
+            return Result.fail("请至少答完3题再查看结果吧！");
+        }
+        List<UserRecord> records = userRecordService.lambdaQuery()
+                .in(UserRecord::getId, recordIds)
+                .eq(UserRecord::getUserId, StpUtil.getLoginIdAsLong())
+                .eq(UserRecord::getUsed ,0)
+                .orderByDesc(UserRecord::getGmtCreate)
+                .list();
+        if(records.size() != 3){
+            return Result.fail("请至少答完3题再查看结果吧！");
+        }
+        Integer type = records.get(0).getQuestionType();
+        for (UserRecord record : records){
+            if(!Objects.equals(record.getQuestionType(), type)){
+                return Result.fail("答题类型不统一！");
+            }
+        }
+        int ac = Math.toIntExact(records.stream()
+                .filter(record -> record.getIsCorrect() == 1)
+                .count());
+        int size = records.size();
+        Integer wa = size - ac;
+        Date end = records.get(0).getGmtCreate();
+        Date begin = records.get(size-1).getGmtCreate();
+        long diffMillis = end.getTime() - begin.getTime();
+        long diffSeconds = diffMillis / 1000;
+        int stars = QuestionResp.calculateStars(ac);
+        userService.lambdaUpdate()
+                .setSql("total_stars = total_stars + " + stars)
+                .eq(User::getId, StpUtil.getLoginIdAsLong())
+                .update();
+        return Result.success(QuestionResp.builder()
+                .ac(ac)
+                .wa(wa)
+                .comment(QuestionResp.getCommentByStars(stars))
+                .stars(stars)
+                .time(diffSeconds)
+                .build());
+    }
     //---- --------------------------------通用---------------------------------------------------------------------------------
     @DeleteMapping("/{id}/{type}")
     @Operation(summary = "删除题目",  description = "type=1:删除知识题目，type=2:删除情景题目")
@@ -144,4 +185,5 @@ public class QuestionController {
          }
         return Result.success();
     }
+
 }
