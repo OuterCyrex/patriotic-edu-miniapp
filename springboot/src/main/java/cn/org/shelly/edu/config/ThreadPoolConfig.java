@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -18,7 +20,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Configuration
 @RequiredArgsConstructor
 @EnableAsync
-public class ThreadPoolConfig {
+public class ThreadPoolConfig implements WebMvcConfigurer {
 
     private final ThreadPoolProperties threadPoolProperties;
 
@@ -40,5 +42,10 @@ public class ThreadPoolConfig {
         // 线程池对拒绝任务(无线程可用)的处理策略
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         return executor;
+    }
+    @Override
+    public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
+        configurer.setTaskExecutor(threadPoolTaskExecutor());
+        configurer.setDefaultTimeout(30_000); // 设置默认超时时间，单位：毫秒
     }
 }

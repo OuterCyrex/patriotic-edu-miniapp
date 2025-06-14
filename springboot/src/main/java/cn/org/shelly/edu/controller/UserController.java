@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/user")
-@Tag( name = "用户管理")
+@Tag( name = "用户模块")
 @RequiredArgsConstructor
 public class UserController {
    private final UserService userService;

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RequestMapping("/hero")
 @RestController
-@Tag(name = "英雄管理")
+@Tag(name = "英雄模块")
 @RequiredArgsConstructor
 public class HeroController {
 

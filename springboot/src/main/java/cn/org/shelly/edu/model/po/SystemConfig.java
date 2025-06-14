@@ -1,5 +1,6 @@
 package cn.org.shelly.edu.model.po;
 
+import cn.org.shelly.edu.model.resp.SystemConfigResp;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -28,4 +29,13 @@ public class SystemConfig implements Serializable {
   private String avatar;
   @Serial
   private static final long serialVersionUID = 1L;
+  public static SystemConfigResp toResp(SystemConfig systemConfig){
+    return new SystemConfigResp()
+        .setId(systemConfig.getId())
+        .setDailyQuizCount(systemConfig.getDailyQuizCount())
+        .setStarsPerCorrect(systemConfig.getStarsPerCorrect())
+        .setHotlinePhone(systemConfig.getHotlinePhone())
+        .setVoiceMaxLength(systemConfig.getVoiceMaxLength())
+        .setAvatar(systemConfig.getAvatar());
+  }
 }
