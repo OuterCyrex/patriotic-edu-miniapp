@@ -10,3 +10,6 @@ node_modules/
 .vscode
 project.config.json
 project.private.config.json
+# 忽略生产配置
+springboot/src/main/resources/application-prod.yml
+

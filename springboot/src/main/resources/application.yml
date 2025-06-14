@@ -1,8 +1,11 @@
 server:
   port: 8080
+
 spring:
   application:
     name: edu-app
+  profiles:
+    active: dev
   servlet:
     multipart:
       max-file-size: 50MB
@@ -10,85 +13,26 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-    # 前端参数String格式化日期
     format:
       date: yyyy-MM-dd HH:mm:ss
-  datasource:
-    url: jdbc:mysql://localhost:3306/edu?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8
-    username: <username>
-    password: <password>
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  ai:
-    openai:
-      base-url: https://api.deepseek.com
-      api-key: <api-key>
-      embedding:
-        enabled: false
-      chat:
-        options:
-          model: deepseek-chat
-          temperature: 0.8
-  data:
-    redis:
-      host: <redis-host>
-      port: 6379
-      # 链接超时时间
-      timeout: 10s
-      lettuce:
-        pool:
-          # 连接池最大连接数
-          max-active: 100
-          # 连接池最大阻塞等待时间
-          max-wait: 100ms
-          # 连接池中最大空闲链接数
-          max-idle: 3
-          # 连接池中最小空闲链接数
-          min-idle: 0
   jackson:
-    # 返回格式化日期
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
-  mail:
-    # 下面这个是QQ邮箱host ， 企业邮箱 : smtp.exmail.qq.com
-    host: smtp.qq.com
-    # tencent mail port  这个是固定的
-    port: 465
-    username: 40505282@qq.com
-    password: razoobdfnhtqcaeg
-    test-connection: true
-    properties:
-      mail:
-        smtp:
-          socketFactory:
-            port: 465
-            class: javax.net.ssl.SSLSocketFactory
-          ssl:
-            enable: true
 
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-# sa-token配置
+
 sa-token:
-  # token名称 (同时也是cookie名称)
   token-name: authorization
-  # token有效期，单位s 默认7天, -1代表永不过期
   timeout: 604800
-  # token临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
-  # 这里方便测试设置为-1，实际生产时不允许
   active-timeout: -1
-  # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
   is-concurrent: true
-  # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
   is-share: false
-  # token风格（uuid，去除横线）
   token-style: simple-uuid
-  #  读取请求头中的token
   isReadHeader: true
-  #  取消cookie
   isReadCookie: false
 
-# springdoc-openapi
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
@@ -100,15 +44,16 @@ springdoc:
     - group: '基于springboot的红星国防平台'
       paths-to-match: '/**'
       packages-to-scan: cn.org.shelly.edu.controller
-# knife4j
+
 knife4j:
   enable: true
   setting:
     language: zh_cn
+
 logging:
   level:
     com.swpu: debug
-# 线程池配置
+
 thread:
   pool:
     core-pool-size: 5
