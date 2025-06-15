@@ -94,3 +94,17 @@ export const question = {
     withToken: true,
   })
 }
+
+export const system = {
+  GetSystemConfig: () => request('/system', {
+    method: 'GET',
+  }),
+  GetAnnouncementList: (req: {pageNum: number, pageSize: number}) => request('/system/list', {
+    method: 'GET',
+    data: req
+  }),
+  GetAnnouncementDetail: (req: {id: number}) => request('/system/:id', {
+    method: 'GET',
+    pathParams: {id: req.id}
+  })
+}

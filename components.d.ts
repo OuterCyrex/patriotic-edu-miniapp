@@ -29,6 +29,7 @@ declare module 'vue' {
     NutPagination: typeof import('@nutui/nutui-taro')['Pagination']
     NutRow: typeof import('@nutui/nutui-taro')['Row']
     NutSearchbar: typeof import('@nutui/nutui-taro')['Searchbar']
+    NutSkeleton: typeof import('@nutui/nutui-taro')['Skeleton']
     NutSpace: typeof import('@nutui/nutui-taro')['Space']
     NutSwiper: typeof import('@nutui/nutui-taro')['Swiper']
     NutSwiperItem: typeof import('@nutui/nutui-taro')['SwiperItem']
