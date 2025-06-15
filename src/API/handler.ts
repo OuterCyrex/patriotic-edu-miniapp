@@ -10,8 +10,10 @@ export async function useApi<K extends keyof ApiMap> (
 ): Promise<void> {
   const resp = await option.api
   if (resp.code !== 200) {
-    option.onFail !== undefined ? option.onFail() : () => {
-      showToast({title: "服务器错误", icon: "error"})
+    if (option.onFail !== undefined) {
+      option.onFail()
+    } else {
+      await showToast({ title: "服务器错误", icon: "error" })
       console.error(resp.message)
     }
   } else {

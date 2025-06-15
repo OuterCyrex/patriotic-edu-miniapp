@@ -26,7 +26,8 @@
       <AnswerBox v-if="questionArray[questionIndex].done === 1"
                  :correct="questionArray[questionIndex].answer === questionArray[questionIndex].choice"
                  :answer="code2Option[questionArray[questionIndex].answer - 1]"
-                 :explanation="questionArray[questionIndex].legalBasis"
+                 :solution="questionArray[questionIndex].solution"
+                 :legal-basis="questionArray[questionIndex].legalBasis"
                  class="answer-box"
       ></AnswerBox>
       <nut-button block type="primary" :loading="isLoading"
@@ -67,7 +68,6 @@ async function handleSubmitAndNext() {
   if (questionArray.value![questionIndex.value].done !== 1) {
     isLoading.value = true;
     await doSubmitScenario()
-    await doGetScenario()
     isLoading.value = false;
   } else {
     questionIndex.value ++
@@ -95,7 +95,15 @@ const doSubmitScenario = async () => {
     api: question.SubmitScenario({
       questionId: questionArray.value![questionIndex.value].id,
       answer: code2Option.indexOf(selectedArray.value![questionIndex.value]) + 1,
-    })
+    }),
+    onSuccess: resp => {
+      questionArray.value![questionIndex.value].done = 1
+      questionArray.value![questionIndex.value].answer = resp.data.answer
+      questionArray.value![questionIndex.value].legalBasis = resp.data.legalBasis
+      questionArray.value![questionIndex.value].solution = resp.data.solution
+      questionArray.value![questionIndex.value].choice = resp.data.userAnswer
+      questionArray.value![questionIndex.value].correct = resp.data.result
+    }
   })
 }
 </script>

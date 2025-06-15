@@ -74,7 +74,7 @@ export interface ApiMap {
   }
   '/question/scenarioAns': {
     req: {questionId: number, answer: number}
-    resp: { legalBasis: string, solution: string, result: boolean, recordId: number }
+    resp: { legalBasis: string, solution: string, result: boolean, recordId: number, answer: number, userAnswer: number }
   }
   '/voice/like': {
     req: { targetType: number, targetId: number}

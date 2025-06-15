@@ -23,7 +23,7 @@
                  class="answer-box"
       ></AnswerBox>
     </view>
-    <ProgressBar @previous="questionIndex --" @next="questionIndex ++" @submit="handleAnswerSubmit"/>
+    <ProgressBar :loading="isLoading" @previous="questionIndex --" @next="questionIndex ++" @submit="handleAnswerSubmit"/>
   </view>
   <nut-empty v-if="!questionArray" description="什么都没有哦" />
 </template>
@@ -49,15 +49,20 @@ const questionIndex = ref<number>(0);
 const selectedArray = ref<Array<string>>(['','','','','','','','','',''])
 const questionArray = ref<Array<KnowledgeItem> | null>(null)
 const code2Option = ['A','B','C','D']
+const isLoading = ref<boolean>(false)
 
 // === methods ===
 const handleAnswerSubmit = async () => {
+  isLoading.value = true;
+  setTimeout(() => {
+    isLoading.value = false
+  }, 5000)
   if (!questionArray.value) return
   if (questionArray.value[0].done === 1) {
     await showToast({title: '今日已提交', icon: 'error'})
     return
   }
-  doSubmitKnowledge()
+  await doSubmitKnowledge()
 }
 
 // === hooks ===
@@ -66,8 +71,8 @@ useDidShow(() => {
 })
 
 // === api ===
-const doSubmitKnowledge = () => {
-  useApi({
+const doSubmitKnowledge = async () => {
+  await useApi({
     api: question.SubmitKnowledge(questionArray.value!.map((value, index) => ({
         questionId: value.id, answer: code2Option.indexOf(selectedArray.value[index]) + 1
       }),
