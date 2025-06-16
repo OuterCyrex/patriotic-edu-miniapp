@@ -61,7 +61,7 @@ public enum CodeEnum {
     /**
      * 数据不存在
      */
-    DATA_NOT_EXIST(404,"当前查询的数据不存在,请稍后再试"),
+    DATA_NOT_EXIST(404,"当前查询的数据不存在"),
 
     /**
      * 未登录
