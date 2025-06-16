@@ -15,6 +15,7 @@ declare module 'vue' {
     Comment: typeof import('./src/components/post/Comment.vue')['default']
     CommentInput: typeof import('./src/components/CommentInput.vue')['default']
     FixedButton: typeof import('./src/components/FixedButton.vue')['default']
+    LoadingRing: typeof import('./src/components/LoadingRing.vue')['default']
     NutAvatar: typeof import('@nutui/nutui-taro')['Avatar']
     NutButton: typeof import('@nutui/nutui-taro')['Button']
     NutCell: typeof import('@nutui/nutui-taro')['Cell']

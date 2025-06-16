@@ -20,7 +20,8 @@
                     :total-items="heroList.total"
                     :items-per-page="10"
                     mode="simple" @change="handleChange" />
-    <nut-empty v-if="!heroList || heroList.list.length === 0" description="什么都没有哦"></nut-empty>
+    <LoadingRing v-if="!heroList" description="加载中"/>
+    <nut-empty v-if="!!heroList && heroList.list.length === 0" description="什么都没有哦"></nut-empty>
   </view>
 </template>
 
@@ -34,6 +35,7 @@ import {hero} from "@/API";
 import ArticleCard from "@/components/ArticleCard.vue";
 import {HeroList} from "@/types/forms/hero";
 import {useApi} from "@/API/handler";
+import LoadingRing from "@/components/LoadingRing.vue";
 
 // === define ===
 definePageConfig({

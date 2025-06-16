@@ -26,8 +26,8 @@
       mode="simple"
       @change="handleChange"
     />
-
-    <nut-empty v-if="!articleList || articleList.length === 0" description="暂无公告" />
+    <LoadingRing v-if="!articleList" description="加载中"/>
+    <nut-empty v-if="!!articleList && articleList.length === 0" description="暂无公告" />
   </view>
 </template>
 
@@ -39,6 +39,7 @@ import ArticleCard from '@/components/ArticleCard.vue'
 import {system} from '@/API'
 import { useApi } from '@/API/handler'
 import {AnnouncementItem} from "@/types/forms/system";
+import LoadingRing from "@/components/LoadingRing.vue";
 
 // === define ===
 definePageConfig({

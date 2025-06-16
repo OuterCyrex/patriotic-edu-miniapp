@@ -38,7 +38,7 @@
       </nut-button>
     </view>
   </view>
-  <nut-empty v-if="!questionArray" description="什么都没有哦" />
+  <LoadingRing v-if="!questionArray" description="加载中"/>
 </template>
 
 <script setup lang="ts">
@@ -50,6 +50,7 @@ import {question} from "@/API";
 import {showToast, useDidShow} from "@tarojs/taro";
 import AnswerBox from "@/components/pal/AnswerBox.vue";
 import {useApi} from "@/API/handler";
+import LoadingRing from "@/components/LoadingRing.vue";
 
 // === define ===
 definePageConfig({
