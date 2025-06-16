@@ -1,6 +1,7 @@
 // utils/request.ts
 import Taro, {showToast} from '@tarojs/taro'
 import type { ApiMap, ApiReq, ApiResp } from './types'
+import {UserInfo} from "@/types/forms/user";
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
 
@@ -30,15 +31,12 @@ export async function request<K extends keyof ApiMap>(
   }
 
   if (options.withToken) {
-    const token = await Taro.getStorage({ key: 'user' })
-      .then(res => res.data.token)
-      .catch(() => {
-        showToast({title: "请先登录", icon: "error"})
-        setTimeout(() => Taro.navigateBack(), 1000)
-      })
-    if (token) {
-      headers['Authorization'] = token
+    const user = await Taro.getStorage({ key: 'user' }).catch(() => null) as UserInfo | null
+    if (!user || !user.token) {
+      await showToast({title: "请先登录", icon: "error"})
+      setTimeout(() => Taro.navigateBack(), 1000)
     }
+    else headers['Authorization'] = user.token
   }
 
   const res = await Taro.request<ApiResp<K>>({

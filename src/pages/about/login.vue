@@ -88,6 +88,9 @@ const doLogin = () => {
       setTimeout(() => {
         Taro.navigateBack()
       }, 2000)
+    },
+    onFail: () => {
+      showToast({title: '邮箱或密码错误', icon: 'error'})
     }
   })
 }
