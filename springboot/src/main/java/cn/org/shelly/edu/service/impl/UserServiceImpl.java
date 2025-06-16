@@ -38,10 +38,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
           .eq(User::getUsername, param.getUsername())
           .one();
         if (user == null) {
-          throw  new CustomException("用户不存在");
+          throw new CustomException("用户不存在");
         }
         if (!PasswordUtils.match( param.getPassword(), user.getPassword())) {
-          throw  new CustomException("密码错误");
+          throw new CustomException("密码错误");
         }
         StpUtil.login(user.getId());
         return new UserInfoResp()
