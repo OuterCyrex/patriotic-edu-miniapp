@@ -45,7 +45,7 @@ import {useApi} from "@/API/handler";
 
 // === define ===
 definePageConfig({
-  navigationBarTitleText: '登陆页'
+  navigationBarTitleText: '登录页'
 })
 
 // === constants ===
