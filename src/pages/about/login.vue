@@ -45,7 +45,7 @@ import {useApi} from "@/API/handler";
 
 // === define ===
 definePageConfig({
-  navigationBarTitleText: '登陆页'
+  navigationBarTitleText: '登录页'
 })
 
 // === constants ===
@@ -88,6 +88,9 @@ const doLogin = () => {
       setTimeout(() => {
         Taro.navigateBack()
       }, 2000)
+    },
+    onFail: () => {
+      showToast({title: '邮箱或密码错误', icon: 'error'})
     }
   })
 }

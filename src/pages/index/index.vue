@@ -6,22 +6,36 @@
           <view class="buttonsCards-title">—— 导航 ——</view>
           <nut-row v-for="(subList, i) of buttonCards" :key="i" >
             <nut-col :span="12" v-for="(item, subIndex) of subList" :key="subIndex" style="margin: 10px auto">
-              <ButtonCard :type="1" :title="item.title" :subtitle="item.subtitle" :icon="item.icon" @click="item.onClick" class="button-card"/>
+              <ButtonCard :type="1" :title="item.title" :subtitle="item.subtitle" :icon="item.cover" @click="item.onClick" class="button-card"/>
             </nut-col>
           </nut-row>
         </view>
         <view class="article-cards">
-          <view class="article-title">
+          <view class="article-title" @click="Taro.navigateTo({url: '/pages/index/list'})">
             <text style="font-weight: bold">最新动态</text>
             <text style="font-size: 14px">查看更多 ></text>
           </view>
-          <view v-for="(item, index) of articleCards" :key="index">
-            <ArticleCard
-              :title="item.title"
-              :summary="item.summary"
-              :cover="item.cover"
-              @click="item.onclick"
-            />
+          <view v-if="!articleList">
+            <nut-skeleton v-for="i of [1, 2, 3]"
+                          style="margin: 20px"
+                          :key="i"
+                          height="15px"
+                          width="300px"
+                          animated avatar
+                          avatar-size="60px"
+                          row="3" />
+          </view>
+          <view class="articles" v-if="!!articleList">
+              <ArticleCard
+                v-for="(item, index) of articleList"
+                :key="index"
+                :title="item.title"
+                :summary="item.summary"
+                :cover="item.coverUrl"
+                @click="Taro.navigateTo({
+              url: '/pages/index/detail?id=' + item.id
+              })"
+              />
           </view>
         </view>
   </view>
@@ -33,10 +47,11 @@ import SwiperImage from "@/components/index/SwiperImage.vue";
 import ButtonCard from "@/components/index/ButtonCard.vue";
 
 import {ref} from "vue";
-import {ButtonCardData, ButtonCardProps} from "@/types/buttonCard";
 import ArticleCard from "@/components/ArticleCard.vue";
-import {ArticleCardData, ArticleCardProps} from "@/types/articleCard";
-import Taro from "@tarojs/taro";
+import Taro, {useDidShow} from "@tarojs/taro";
+import {AnnouncementItem} from "@/types/forms/system";
+import {system} from "@/API";
+import {useApi} from "@/API/handler";
 
 // === define ===
 definePageConfig({
@@ -45,35 +60,55 @@ definePageConfig({
 
 // === constants ===
 const urls = ref<Array<string>>([
-  'https://i.ibb.co/rRDkdT3h/974e14c00fd1c9ce653ec65adf41eff6.png',
+  'https://i.ibb.co/spLtjP43/QQ20250616-102943.png',
   'https://i.ibb.co/rRDkdT3h/974e14c00fd1c9ce653ec65adf41eff6.png',
 ])
 const noticeBarContent = ref<string>('⭐ 红星耀国防平台通过数字化手段传承红色精神，普及国防知识，强化全民国防意识。平台以党史为脉络，融合互动体验、知识学习、情感交流和服务对接功能，打造具有时代特色的国防教育新模式。')
-const buttonCards = ref<Array<Array<ButtonCardProps>>>([
-  [
-    new ButtonCardData("红星英雄谱", "国防英雄典范",
-      "https://img.icons8.com/?size=100&id=8ggStxqyboK5&format=png&color=000000",
-      () => {Taro.navigateTo({url: '/pages/hero/hero',})}
-    ),
-    new ButtonCardData("红星青年派", "虚拟伙伴助学",
-      "https://img.icons8.com/?size=100&id=37000&format=png&color=000000",
-      () => {Taro.navigateTo({url: '/pages/pal/pal',})}
-    ),
-  ],
-  [
-    new ButtonCardData("红星心声汇", "全民交流空间",
-      "https://img.icons8.com/?size=100&id=122811&format=png&color=000000",
-      () => {Taro.navigateTo({url: '/pages/post/post'})}
-    ),
-    new ButtonCardData("红星服务站", "国防教育资源",
-      "https://img.icons8.com/?size=100&id=WV326xpsBMyb&format=png&color=000000",
-      () => {Taro.navigateTo({url: '/pages/service/service'})}
-    )]
+const buttonCards = ref([
+  [{
+      title: "红星英雄谱",
+      subtitle: "国防英雄典范",
+      cover: "https://img.icons8.com/?size=100&id=8ggStxqyboK5&format=png&color=000000",
+      onClick: () => {Taro.navigateTo({url: '/pages/hero/hero'})}
+    },
+    {
+      title: "红星青年派",
+      subtitle: "虚拟伙伴助学",
+      cover: "https://img.icons8.com/?size=100&id=37000&format=png&color=000000",
+      onClick: () => {Taro.navigateTo({url: '/pages/pal/pal'})}
+    }],
+  [{
+      title: "红星心声汇",
+      subtitle: "全民交流空间",
+      cover: "https://img.icons8.com/?size=100&id=122811&format=png&color=000000",
+      onClick: () => {Taro.navigateTo({url: '/pages/post/post'})}
+    },
+    {
+      title: "红星服务站",
+      subtitle: "国防教育资源",
+      cover: "https://img.icons8.com/?size=100&id=WV326xpsBMyb&format=png&color=000000",
+      onClick: () => {Taro.navigateTo({url: '/pages/service/service'})}
+    }]
 ])
-const articleCards = ref<Array<ArticleCardProps>>([
-  new ArticleCardData("https://i.ibb.co/rRDkdT3h/974e14c00fd1c9ce653ec65adf41eff6.png", "新民主主义革命先驱恽代英生平事迹", "恽代英，原籍江苏武进，出生于湖北武昌。恽代英是中国无产阶级革命家，中国共产党早期青年运动领导人之一"),
-  new ArticleCardData("https://i.ibb.co/rRDkdT3h/974e14c00fd1c9ce653ec65adf41eff6.png", "建设年代守护者黄继光", "黄继光，男，汉族，原名黄积广，四川省中江县人，中国共产党党员"),
-])
+const articleList = ref<Array<AnnouncementItem> | null>(null)
+
+// === hooks ===
+useDidShow(() => {
+  doGetAnnouncementList()
+})
+
+// === api ===
+const doGetAnnouncementList = () => {
+  useApi({
+    api: system.GetAnnouncementList({
+      pageNum: 0,
+      pageSize: 5,
+    }),
+    onSuccess: resp => {
+      articleList.value = resp.data.list
+    }
+  })
+}
 </script>
 
 <style lang="scss">

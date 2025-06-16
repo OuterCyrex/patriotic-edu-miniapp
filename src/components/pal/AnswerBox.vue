@@ -6,8 +6,17 @@
         {{answer}}</text>
     </view>
     <view class="explanation-content">
-      <text style="font-weight: bold">解析：</text>
-      {{explanation}}</view>
+      <text style="font-weight: bold" v-if="!!explanation">解析：</text>
+      {{explanation}}
+    </view>
+
+    <view class="explanation-content">
+      <text style="font-weight: bold; color: #151515" v-if="!!solution">处理方案：</text>
+      {{solution}}</view>
+
+    <view class="explanation-content">
+    <text style="font-weight: bold; color: #151515" v-if="!!legalBasis">法律依据：</text>
+    {{legalBasis}}</view>
   </view>
 </template>
 
@@ -15,7 +24,9 @@
 defineProps<{
   correct: boolean
   answer: string
-  explanation: string
+  explanation?: string
+  legalBasis?: string
+  solution?: string
 }>()
 </script>
 
@@ -48,6 +59,10 @@ defineProps<{
 
 .answer-content .red {
   color: #e74c3c;
+}
+
+.explanation-content {
+  margin-bottom: 15px;
 }
 
 .explanation-content text:first-child {

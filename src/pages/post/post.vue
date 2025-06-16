@@ -22,7 +22,8 @@
                 @click="Taro.navigateTo({url: `/pages/post/detail?id=${item.id}`})"
       />
     </view>
-    <nut-empty v-if="!postList || postList.list.length === 0" description="什么都没有哦"></nut-empty>
+    <LoadingRing v-if="!postList" description="加载中"/>
+    <nut-empty v-if="!!postList && postList.list.length === 0" description="什么都没有哦"></nut-empty>
     <nut-pagination v-if="!!postList && postList.list.length !== 0"
                     class="d-flex"
                     v-model="page"
@@ -43,6 +44,7 @@ import {PostList, WordFrequency} from "@/types/forms/post";
 import WordCloud from "@/components/post/WordCloud.vue";
 import {post} from "@/API";
 import {useApi} from "@/API/handler";
+import LoadingRing from "@/components/LoadingRing.vue";
 
 // === define ===
 definePageConfig({

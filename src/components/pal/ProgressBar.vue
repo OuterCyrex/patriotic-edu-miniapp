@@ -2,19 +2,31 @@
   <view class="progress-bar-container">
     <view @click="toPrevious" :class="i === 1 ? 'disabled-pro-button' : ''">{{ '< 上一题' }}</view>
     <view class="progress-percent">{{ i }} / 10</view>
-    <view @click="() => {
-      if (i !== 10) toNext()
-      else emits('submit')
-    }">{{ i !== 10 ? '下一题 >' : '提交' }}</view>
+    <view @click="handleSubmitClick">{{ i !== 10 ? '下一题 >' : '提交' }}</view>
   </view>
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue";
+import {ref, toRefs} from "vue";
+import {showToast} from "@tarojs/taro";
+
+const props = defineProps<{ loading?: boolean }>()
+const { loading } = toRefs(props)
 
 const emits = defineEmits(['previous', 'next', 'submit'])
 
 const i = ref<number>(1)
+
+const handleSubmitClick = () => {
+  if (loading.value) {
+    showToast({title: '正在提交', icon: "none"})
+    return
+  }
+  if (!loading.value) {
+    if (i.value !== 10) toNext()
+    else emits('submit')
+  }
+}
 
 const toPrevious = () => {
   if (i.value === 1) return

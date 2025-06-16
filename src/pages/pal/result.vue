@@ -56,7 +56,7 @@ useLoad((options) => {
     userInfo.value = resp
     if (!!userInfo.value) {
       userInfo.value.totalStars += starNumber.value
-      Taro.setStorage({key: "user", data: userInfo})
+      Taro.setStorage({key: "user", data: userInfo.value})
     }
   })
 })

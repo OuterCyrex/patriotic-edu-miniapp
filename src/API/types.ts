@@ -10,6 +10,7 @@ import {
 } from "@/types/forms/post";
 import {UserLoginReq, UserRegisterReq, UserInfo} from "@/types/forms/user";
 import {KnowledgeItem, ScenarioItem, SubmitKnowledgeList} from "@/types/forms/question";
+import {AnnouncementItem, AnnouncementList} from "@/types/forms/system";
 
 export interface ApiMap {
   '/hero/list': {
@@ -74,7 +75,7 @@ export interface ApiMap {
   }
   '/question/scenarioAns': {
     req: {questionId: number, answer: number}
-    resp: { legalBasis: string, solution: string, result: boolean, recordId: number }
+    resp: { legalBasis: string, solution: string, result: boolean, recordId: number, answer: number, userAnswer: number }
   }
   '/voice/like': {
     req: { targetType: number, targetId: number}
@@ -83,6 +84,18 @@ export interface ApiMap {
   '/voice/likes': {
     req: {voiceId: number}
     resp: Array<number>
+  }
+  '/system': {
+    req: {}
+    resp: {hotlinePhone: number}
+  }
+  '/system/list': {
+    req: {pageNum: number, pageSize: number}
+    resp: AnnouncementList
+  }
+  '/system/:id': {
+    req: {id: number}
+    resp: AnnouncementItem
   }
 }
 

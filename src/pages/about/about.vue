@@ -12,7 +12,7 @@
     </view>
 
     <nut-cell-group class="button-group">
-      <nut-cell v-if="userInfo.token === ''" is-link title="登陆" @click="toLogin" >
+      <nut-cell v-if="userInfo.token === ''" is-link title="登录" @click="toLogin" >
         <template #icon>
           <My style="margin-right: 8px;"/>
         </template>
@@ -94,7 +94,7 @@ function handleLogout() {
   userInfo.nickname = ''
   userInfo.token = ''
 
-  showToast(({title: '退出登陆成功', icon: 'success'}))
+  showToast(({title: '退出登录成功', icon: 'success'}))
 }
 
 // === hooks ===

@@ -25,7 +25,6 @@ const emit = defineEmits(['click'])
 <style lang="scss">
 .article-card {
   display: flex;
-  width: 100%;
   background-color: #fff;
   padding: 20rpx;
   border-radius: 16rpx;
