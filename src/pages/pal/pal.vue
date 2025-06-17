@@ -2,7 +2,7 @@
   <view class="page">
     <!-- 顶部欢迎区 -->
     <view class="hero-header">
-      <image class="avatar" src="https://i.ibb.co/NgPDVbry/e6bd4ccfdbc4b17d3af6b739a0c17a34-removebg-preview.png" mode="aspectFit" />
+      <image class="avatar" src="https://cdn.outercyrex.top/logo.png" mode="aspectFit" />
       <view class="title">欢迎来到红小星国防学习</view>
       <view class="subtitle">趣味互动学知识，红小星陪你一起成长！</view>
       <nut-space />

@@ -26,7 +26,7 @@
     <nut-empty v-if="!!postList && postList.list.length === 0" description="什么都没有哦"></nut-empty>
     <nut-pagination v-if="!!postList && postList.list.length !== 0"
                     class="d-flex"
-                    v-model="page"
+                    v-model="pageNum"
                     :total-items="postList.total"
                     :items-per-page="10"
                     mode="simple" @change="handleChange" />
@@ -53,11 +53,10 @@ definePageConfig({
 
 // === constants ===
 const searchKeywords = ref<string> ('')
-const pageNum = ref<number>(0)
+const pageNum = ref<number>(1)
 const keyword = ref<string> ("")
 const postList = ref<PostList | null>(null)
 const wordCloudData = ref<Array<WordFrequency> | null>(null)
-const page = ref<number>(1)
 
 // === methods ===
 function handleSearch(text: string): void{
@@ -66,7 +65,7 @@ function handleSearch(text: string): void{
 }
 
 function handleChange(value: number) {
-  page.value = value
+  pageNum.value = value
   doGetPostList()
 }
 
@@ -88,7 +87,9 @@ const doGetPostList = () => {
       pageSize: 10,
       ...(keyword.value !== "" ? {key: keyword.value} : {}),
     }),
-    onSuccess: res => {postList.value = res.data}
+    onSuccess: res => {
+      postList.value = res.data
+    }
   })
 }
 

@@ -61,9 +61,9 @@
 
 <script setup lang="ts">
 // === import ===
-import { ref } from 'vue'
+import {onMounted, ref} from 'vue'
 import Taro, { showToast } from '@tarojs/taro'
-import {user} from "@/API";
+import {system, user} from "@/API";
 import {useApi} from "@/API/handler";
 
 // === define ===
@@ -81,6 +81,7 @@ const form = ref({
 })
 const countdown = ref(0)
 let timer: ReturnType<typeof setInterval> | null = null
+const defaultAvatar = ref<string>('https://cdn.outercyrex.top/logo.png')
 
 // === methods ===
 const handleSendCode = async  () => {
@@ -111,6 +112,11 @@ const handleRegister = () => {
   doRegister()
 }
 
+// === hooks ===
+onMounted(() => {
+  doGetDefaultAvatar()
+})
+
 
 // === api ===
 const doRegister = () => {
@@ -119,7 +125,7 @@ const doRegister = () => {
       username: form.value.username,
       password: form.value.password,
       nickname: form.value.username,
-      avatarUrl: 'https://img.icons8.com/?size=100&id=4IZ8RiC9K8go&format=png&color=000000',
+      avatarUrl: defaultAvatar.value,
       region: '成都',
       code: form.value.code,
     }),
@@ -149,6 +155,18 @@ const doSendEmail = () => {
           timer = null
         }
       }, 1000)
+    }
+  })
+}
+
+const doGetDefaultAvatar = () => {
+  useApi({
+    api: system.GetMisc({
+      key: "default-avatar"
+    }),
+    onSuccess: resp => {
+      const data = JSON.parse(resp.data) as {avatar: string}
+      defaultAvatar.value = data.avatar
     }
   })
 }

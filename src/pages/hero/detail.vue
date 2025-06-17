@@ -9,7 +9,7 @@
       <view class="period">
         <text style="font-weight: bold">所属时期：</text>{{ heroDetail.periodYears }}</view>
       <view class="sacrifice" v-if="heroDetail.sacrificeYear">
-        <text style="font-weight: bold">牺牲年份：</text>{{ heroDetail.sacrificeYear }}</view>
+        <text style="font-weight: bold">牺牲年份：</text>{{ heroDetail.sacrificeYear.substring(0, 4) }}</view>
       <view class="quote" v-if="heroDetail.famousQuote && heroDetail.famousQuote !== ''">“{{ heroDetail.famousQuote }}”</view>
       <view class="summary">{{ heroDetail.story }}</view>
     </view>

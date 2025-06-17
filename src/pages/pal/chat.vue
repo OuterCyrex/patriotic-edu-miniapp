@@ -5,7 +5,7 @@
         <image
           v-if="msg.role === 'ai'"
           class="avatar"
-          src="https://i.ibb.co/NgPDVbry/e6bd4ccfdbc4b17d3af6b739a0c17a34-removebg-preview.png"
+          src="https://cdn.outercyrex.top/logo.png"
           mode="aspectFill"
         />
         <view class="bubble" :class="msg.role">

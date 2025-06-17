@@ -114,7 +114,6 @@ const submitForm = () => {
     return
   }
   showToast({ title: '预约成功', icon: 'success' })
-  console.log('提交成功：', form.value, selectedService.value)
 }
 
 // === hooks ===
