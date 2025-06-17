@@ -1,319 +1,61 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>红星耀国防平台 - 邮箱验证</title>
+    <meta charset="UTF-8" />
+    <title>红星耀国防 - 验证码</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: "Microsoft YaHei", "微软雅黑", sans-serif;
-            background: linear-gradient(135deg, #de2910 0%, #cc1f0a 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            line-height: 1.6;
-        }
-
-        .email-container {
-            max-width: 600px;
-            background: #ffffff;
-            border-radius: 15px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-            overflow: hidden;
-            margin: 20px;
-            border: 3px solid #de2910;
-        }
-
-        .header-background {
-            background-image: url('/templates/statics/1.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            height: 250px;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .header-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(222, 41, 16, 0.8) 0%, rgba(204, 31, 10, 0.9) 100%);
-        }
-
-        .platform-title {
-            font-size: 36px;
-            font-weight: bold;
-            color: white;
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
-            position: relative;
-            z-index: 2;
-            margin-bottom: 10px;
-        }
-
-        .platform-subtitle {
-            font-size: 18px;
-            color: rgba(255, 255, 255, 0.95);
-            font-weight: 300;
-            position: relative;
-            z-index: 2;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .email-body {
-            padding: 45px 35px;
-            text-align: center;
-            background: linear-gradient(180deg, #ffffff 0%, #fef7f7 100%);
-        }
-
-        .greeting {
-            font-size: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 24px;
             color: #333;
-            margin-bottom: 25px;
-            font-weight: 500;
         }
-
-        .patriotic-intro {
-            background: linear-gradient(135deg, rgba(222, 41, 16, 0.05) 0%, rgba(255, 222, 0, 0.05) 100%);
-            border: 2px solid #de2910;
-            border-radius: 12px;
-            padding: 20px;
-            margin: 25px 0;
-            color: #555;
-            font-size: 16px;
-        }
-
-        .verification-section {
-            background: #ffffff;
-            border: 3px solid #de2910;
-            border-radius: 15px;
-            padding: 35px;
-            margin: 30px 0;
-            box-shadow: 0 10px 25px rgba(222, 41, 16, 0.1);
-            position: relative;
-        }
-
-        .verification-section::before {
-            content: '';
-            position: absolute;
-            top: -3px;
-            left: -3px;
-            right: -3px;
-            bottom: -3px;
-            background: linear-gradient(45deg, #de2910, #ffde00, #de2910);
-            border-radius: 15px;
-            z-index: -1;
-            animation: borderGlow 3s linear infinite;
-        }
-
-        @keyframes borderGlow {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 200% 50%; }
-        }
-
-        .verification-title {
-            font-size: 22px;
-            color: #de2910;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-
-        .verification-code {
-            font-size: 38px;
-            font-weight: bold;
-            color: #de2910;
-            background: linear-gradient(135deg, #ffffff 0%, #fff5f5 100%);
-            padding: 20px 30px;
-            border-radius: 12px;
-            border: 3px dashed #de2910;
-            display: inline-block;
-            letter-spacing: 6px;
-            margin: 20px 0;
-            font-family: "Courier New", monospace;
-            box-shadow: inset 0 2px 10px rgba(222, 41, 16, 0.1);
-        }
-
-        .verification-note {
-            font-size: 16px;
-            color: #666;
-            margin-top: 20px;
-            background: #fff9f9;
-            padding: 15px;
+        .container {
+            max-width: 480px;
+            margin: auto;
+            background-color: #ffffff;
             border-radius: 8px;
-            border-left: 4px solid #de2910;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
-
-        .patriotic-message {
-            background: linear-gradient(135deg, #de2910 0%, #cc1f0a 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 12px;
-            margin: 30px 0;
-            font-size: 18px;
-            font-weight: 600;
+        .header {
             text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .patriotic-message::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            animation: shine 3s infinite;
-        }
-
-        @keyframes shine {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-        }
-
-        .china-message {
-            position: relative;
-            z-index: 1;
-        }
-
-        .email-footer {
-            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-            padding: 30px;
-            text-align: center;
-            border-top: 3px solid #de2910;
-        }
-
-        .footer-text {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
-
-        .platform-info {
-            color: #de2910;
-            font-weight: bold;
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-
-        .warning-text {
-            background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%);
-            border: 2px solid #de2910;
-            color: #de2910;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 25px 0;
-            font-size: 15px;
-            position: relative;
-        }
-
-        .warning-text::before {
-            content: '⚠️';
-            position: absolute;
-            top: -12px;
-            left: 20px;
-            background: white;
-            padding: 0 10px;
+            color: #d32f2f;
             font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 12px;
         }
-
-        .copyright {
+        .divider {
+            height: 3px;
+            width: 60px;
+            background-color: #d32f2f;
+            margin: 8px auto 24px auto;
+            border-radius: 2px;
+        }
+        .code {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: #d32f2f;
+            letter-spacing: 4px;
+            margin: 24px 0;
+        }
+        .footer {
             font-size: 12px;
             color: #888;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #eee;
-        }
-
-        @media (max-width: 640px) {
-            .email-container {
-                margin: 10px;
-            }
-
-            .header-background {
-                height: 200px;
-            }
-
-            .platform-title {
-                font-size: 28px;
-            }
-
-            .email-body {
-                padding: 30px 20px;
-            }
-
-            .verification-code {
-                font-size: 32px;
-                padding: 15px 20px;
-                letter-spacing: 4px;
-            }
+            margin-top: 30px;
+            text-align: center;
         }
     </style>
 </head>
 <body>
-<div class="email-container">
-    <!-- 使用您提供的背景图片 -->
-    <div class="header-background">
-        <div class="header-overlay"></div>
-        <div class="platform-title">红星耀国防平台</div>
-        <div class="platform-subtitle">强国有我，国防兴邦</div>
-    </div>
-
-    <!-- 邮件正文 -->
-    <div class="email-body">
-        <div class="greeting">
-            亲爱的爱国同胞，您好！
-        </div>
-
-        <div class="patriotic-intro">
-            欢迎加入红星耀国防平台大家庭！<br>
-            让我们携手共筑中华民族伟大复兴的中国梦！
-        </div>
-
-        <!-- 验证码区域 -->
-        <div class="verification-section">
-            <div class="verification-title">
-                邮箱验证码
-            </div>
-            <div class="verification-code" th:text="${verificationCode}">123456</div>
-            <div class="verification-note">
-                <strong>验证码有效期：10 分钟</strong><br>
-                请及时完成验证，守护账户安全
-            </div>
-        </div>
-
-        <!-- 安全提醒 -->
-        <div class="warning-text">
-            <strong>安全提醒：</strong>
-            验证码仅用于本次邮箱验证，请勿泄露给他人。红星耀国防平台工作人员不会主动索要您的验证码。如非本人操作，请忽略此邮件并及时联系客服。
-        </div>
-    </div>
-
-    <!-- 邮件底部 -->
-    <div class="email-footer">
-        <div class="footer-text">
-            此邮件由红星耀国防平台系统自动发送，请勿直接回复
-        </div>
-        <div class="platform-info">
-            红星耀国防平台 · 技术支持中心
-        </div>
-        <div class="copyright">
-            © 2025 红星耀国防平台 版权所有 | 为中华崛起而奋斗
-        </div>
-    </div>
+<div class="container">
+    <div class="header">红星耀国防平台</div>
+    <div class="divider"></div>
+    <p>您好，您的验证码如下：</p>
+    <div class="code" th:text="${code}">123456</div>
+    <p>请在 <strong>5 分钟</strong> 内完成验证。验证码仅用于身份验证，请勿泄露给他人。</p>
+    <div class="footer">此邮件由系统自动发送，请勿回复。</div>
 </div>
 </body>
 </html>

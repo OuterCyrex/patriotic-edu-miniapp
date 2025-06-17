@@ -56,11 +56,8 @@ public class EmailUtils {
 
             // 准备Thymeleaf模板变量
             Context context = new Context();
-            context.setVariable("verificationCode", code);
-            context.setVariable("userName", "用户");
-            context.setVariable("currentTime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            context.setVariable("code", code);
 
-            // 处理HTML模板
             String htmlContent = templateEngine.process("register.html", context);
 
             // 设置邮件内容
