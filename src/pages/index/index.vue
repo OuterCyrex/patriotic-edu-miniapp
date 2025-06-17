@@ -59,10 +59,7 @@ definePageConfig({
 })
 
 // === constants ===
-const urls = ref<Array<string>>([
-  'https://i.ibb.co/spLtjP43/QQ20250616-102943.png',
-  'https://i.ibb.co/rRDkdT3h/974e14c00fd1c9ce653ec65adf41eff6.png',
-])
+const urls = ref<Array<{url: string}>>([{url: ""}])
 const noticeBarContent = ref<string>('⭐ 红星耀国防平台通过数字化手段传承红色精神，普及国防知识，强化全民国防意识。平台以党史为脉络，融合互动体验、知识学习、情感交流和服务对接功能，打造具有时代特色的国防教育新模式。')
 const buttonCards = ref([
   [{
@@ -94,6 +91,7 @@ const articleList = ref<Array<AnnouncementItem> | null>(null)
 
 // === hooks ===
 useDidShow(() => {
+  doGetSwiper()
   doGetAnnouncementList()
 })
 
@@ -106,6 +104,17 @@ const doGetAnnouncementList = () => {
     }),
     onSuccess: resp => {
       articleList.value = resp.data.list
+    }
+  })
+}
+
+const doGetSwiper = () => {
+  useApi({
+    api: system.GetMisc({
+      key: "swiper",
+    }),
+    onSuccess: resp => {
+      urls.value = JSON.parse(resp.data) as Array<{url: string}>
     }
   })
 }

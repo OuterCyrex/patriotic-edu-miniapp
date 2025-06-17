@@ -4,10 +4,13 @@
 
     <view class="info">
       <view class="name">{{ heroDetail.name }}</view>
-      <view class="title">称号：{{ heroDetail.title }}</view>
-      <view class="period">所属时期：{{ heroDetail.periodYears }}</view>
-      <view class="sacrifice">牺牲年份：{{ heroDetail.sacrificeYear }}</view>
-      <view class="quote">“{{ heroDetail.famousQuote }}”</view>
+      <view class="title">
+        <text style="font-weight: bold">称号：</text>{{ heroDetail.title }}</view>
+      <view class="period">
+        <text style="font-weight: bold">所属时期：</text>{{ heroDetail.periodYears }}</view>
+      <view class="sacrifice" v-if="heroDetail.sacrificeYear">
+        <text style="font-weight: bold">牺牲年份：</text>{{ heroDetail.sacrificeYear }}</view>
+      <view class="quote" v-if="heroDetail.famousQuote && heroDetail.famousQuote !== ''">“{{ heroDetail.famousQuote }}”</view>
       <view class="summary">{{ heroDetail.story }}</view>
     </view>
   </view>

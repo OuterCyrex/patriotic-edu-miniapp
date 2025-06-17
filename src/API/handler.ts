@@ -13,8 +13,7 @@ export async function useApi<K extends keyof ApiMap> (
     if (option.onFail !== undefined) {
       option.onFail()
     } else {
-      await showToast({ title: "服务器错误", icon: "error" })
-      console.error(resp.message)
+      await showToast({ title: resp.message, icon: "error" })
     }
   } else {
     option.onSuccess?.(resp)

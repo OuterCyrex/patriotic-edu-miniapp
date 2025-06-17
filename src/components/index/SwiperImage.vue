@@ -7,14 +7,14 @@
     pagination-unselected-color="#808080"
   >
     <nut-swiper-item v-for="(item, idx) in props.images" :key="idx" class="swiper-image">
-      <image :src="item" class="slide-image" mode="aspectFill"/>
+      <image :src="item.url" class="slide-image" mode="aspectFill"/>
     </nut-swiper-item>
   </nut-swiper>
 </template>
 
 <script setup lang="ts">
 const props = defineProps<{
-  images: string[];
+  images: Array<{url: string}>;
 }>()
 </script>
 

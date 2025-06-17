@@ -5,7 +5,7 @@
     <nut-row type="flex" justify="start" align="center" class="user-info">
       <nut-col :span="4">
         <nut-avatar>
-          <image :src="avatar" />
+          <image :src="avatar" class="avatar-image"/>
         </nut-avatar>
       </nut-col>
       <nut-col :span="20">
@@ -108,6 +108,14 @@ withDefaults(defineProps<{
   font-size: 22px;
   border-radius: 999px;
   z-index: 1;
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
 }
 </style>
 

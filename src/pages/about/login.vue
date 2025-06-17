@@ -67,6 +67,7 @@ function handleLogin(): void {
 
   if (password.value.length < 6 || password.value.length > 20) {
     showToast({ title: '密码长度应在 6-20', icon: "none" })
+    return
   }
 
   doLogin()
@@ -88,9 +89,6 @@ const doLogin = () => {
       setTimeout(() => {
         Taro.navigateBack()
       }, 2000)
-    },
-    onFail: () => {
-      showToast({title: '邮箱或密码错误', icon: 'error'})
     }
   })
 }
