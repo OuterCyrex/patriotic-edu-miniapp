@@ -97,6 +97,10 @@ export interface ApiMap {
     req: {id: number}
     resp: AnnouncementItem
   }
+  '/system/misc': {
+    req: {key: string}
+    resp: string
+  }
 }
 
 export type ApiReq<K extends keyof ApiMap> = ApiMap[K]['req']

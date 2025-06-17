@@ -106,5 +106,9 @@ export const system = {
   GetAnnouncementDetail: (req: {id: number}) => request('/system/:id', {
     method: 'GET',
     pathParams: {id: req.id}
+  }),
+  GetMisc: (req: {key: string}) => request('/system/misc', {
+    method: 'GET',
+    data: req
   })
 }

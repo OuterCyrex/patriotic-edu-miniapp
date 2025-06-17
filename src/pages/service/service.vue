@@ -57,8 +57,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+// === import ===
+import {onMounted, ref} from 'vue'
 import {showToast} from '@tarojs/taro'
+import {useApi} from "@/API/handler";
+import {system} from "@/API";
+
+// === define ===
+definePageConfig({
+  navigationBarTitleText: "红星服务站"
+})
 
 interface FormData {
   name: string
@@ -67,6 +75,7 @@ interface FormData {
   dateRange: string
 }
 
+// === constants ===
 const form = ref<FormData>({
   name: '',
   contact: '',
@@ -79,6 +88,7 @@ const serviceOptions = ['英雄事迹宣讲', '装备模型展览', '军事体�
 const selectedService = ref('')
 const matched = ref<string[]>([])
 
+// === methods ===
 const onServiceChange = (e: any) => {
   const index = e.detail.value
   selectedService.value = serviceOptions[index]
@@ -105,6 +115,24 @@ const submitForm = () => {
   }
   showToast({ title: '预约成功', icon: 'success' })
   console.log('提交成功：', form.value, selectedService.value)
+}
+
+// === hooks ===
+onMounted(() => {
+  doGetHotline()
+})
+
+// === api ===
+const doGetHotline = () => {
+  useApi({
+    api: system.GetMisc({
+      key: "hotline",
+    }),
+    onSuccess: resp => {
+      const data = JSON.parse(resp.data) as {hotline: string}
+      hotline.value = data.hotline
+    }
+  })
 }
 </script>
 

@@ -3,7 +3,7 @@
     <view class="post-card">
       <view class="post-header">
         <nut-avatar class="user-avatar">
-          <image :src="postDetail.avatar" />
+          <image :src="postDetail.avatar" class="avatar-image"/>
         </nut-avatar>
         <view class="author-info">
           <view class="author">{{ postDetail.authorName }}</view>
@@ -191,4 +191,11 @@ const doGetUserInfo = () => {
   justify-content: space-around;
 }
 
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
 </style>
