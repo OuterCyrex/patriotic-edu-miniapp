@@ -5,6 +5,7 @@ export default defineAppConfig({
     'pages/index/detail',
     'pages/hero/hero',
     'pages/hero/detail',
+    'pages/hero/list',
     'pages/post/post',
     'pages/post/detail',
     'pages/post/new',

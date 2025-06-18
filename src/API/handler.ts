@@ -14,6 +14,7 @@ export async function useApi<K extends keyof ApiMap> (
       option.onFail()
     } else {
       await showToast({ title: resp.message, icon: "error" })
+      console.error(resp.message)
     }
   } else {
     option.onSuccess?.(resp)

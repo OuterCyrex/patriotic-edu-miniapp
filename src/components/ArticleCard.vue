@@ -3,7 +3,7 @@
     <image :src="cover" class="cover-image" mode="aspectFill" />
 
     <view class="content">
-      <view class="title">{{ props.title }}</view>
+      <view class="title" :style="titleStyle">{{ props.title }}</view>
       <view class="summary">{{ props.summary }}</view>
       <view class="meta">
         <text class="views" v-if="views">👁 {{ props.views }}</text>
@@ -13,13 +13,22 @@
 </template>
 
 <script setup lang="ts">
+import {onMounted, ref} from "vue";
+
 const props = defineProps<{
   cover: string
   title: string
   summary: string
   views?: number | string
+  titleWrap?: boolean
 }>()
+const titleStyle = ref<string>('white-space: nowrap;')
 const emit = defineEmits(['click'])
+onMounted(() => {
+  if (props.titleWrap) {
+    titleStyle.value = ''
+  }
+})
 </script>
 
 <style lang="scss">
@@ -59,7 +68,6 @@ const emit = defineEmits(['click'])
   line-height: 40rpx;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .summary {
