@@ -102,13 +102,16 @@ export default defineConfig<'webpack5'>(async (merge, _) => {
       },
       webpackChain(chain) {
         chain.resolve.plugin('tsconfig-paths').use(TsconfigPathsPlugin)
-      }
+        chain.plugin('unplugin-vue-components').use(ComponentsPlugin({
+          resolvers: [NutUIResolver({taro: true})]
+        }))
+      },
     },
     rn: {
       appName: 'taroDemo',
       postcss: {
         cssModules: {
-          enable: false, // 默认为 false，如需使用 css modules 功能，则设为 true
+          enable: false,
         }
       }
     }

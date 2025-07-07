@@ -7,8 +7,7 @@
           <text style="font-weight: bold;">情景：</text>
           {{questionArray[questionIndex].scenario}}
         </view>
-        <nut-space />
-        <view>
+        <view style="margin-top: 20px">
           <text style="font-weight: bold;">问题：</text>
           {{questionArray[questionIndex].question}}
         </view>
@@ -109,8 +108,9 @@ const doSubmitScenario = async () => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .question-page-container {
+  font-size: 36px;
   margin: 30px 20px;
 }
 .question-title {

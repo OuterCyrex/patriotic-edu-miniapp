@@ -115,7 +115,7 @@ const doGetUserInfo = () => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .my-page-container {
   background-color: #f4f4f4;
   min-height: 100vh;
@@ -139,6 +139,7 @@ const doGetUserInfo = () => {
     border-radius: 50%;
     margin-bottom: 20rpx;
     background-color: #fff;
+    object-fit: fill;
   }
 
   .nickname {

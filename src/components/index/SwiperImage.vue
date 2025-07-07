@@ -18,7 +18,7 @@ const props = defineProps<{
 }>()
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .slide-image {
   height: 250px;
   width: 100vw;

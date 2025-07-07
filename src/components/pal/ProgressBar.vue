@@ -1,8 +1,8 @@
 <template>
   <view class="progress-bar-container">
-    <view @click="toPrevious" :class="i === 1 ? 'disabled-pro-button' : ''">{{ '< 上一题' }}</view>
-    <view class="progress-percent">{{ i }} / 10</view>
-    <view @click="handleSubmitClick">{{ i !== 10 ? '下一题 >' : '提交' }}</view>
+    <view @click="toPrevious" :class="i === 1 ? 'nor-text disabled-pro-button' : 'nor-text'">{{ '< 上一题' }}</view>
+    <view class="nor-text progress-percent">{{ i }} / 10</view>
+    <view class="nor-text" @click="handleSubmitClick">{{ i !== 10 ? '下一题 >' : '提交' }}</view>
   </view>
 </template>
 
@@ -42,7 +42,7 @@ const toNext = () => {
 </script>
 
 
-<style lang="scss">
+<style lang="scss" scoped>
 .progress-bar-container {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
@@ -55,5 +55,8 @@ const toNext = () => {
 }
 .progress-percent {
   color: #8f2c2c;
+}
+.nor-text {
+  font-size: 32px;
 }
 </style>

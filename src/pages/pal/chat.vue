@@ -76,7 +76,7 @@ const GetStreamResponse = (text: string) => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .chat-page {
   display: flex;
   flex-direction: column;
@@ -105,6 +105,7 @@ const GetStreamResponse = (text: string) => {
 }
 
 .avatar {
+  object-fit: fill;
   width: 60rpx;
   height: 60rpx;
   border-radius: 50%;

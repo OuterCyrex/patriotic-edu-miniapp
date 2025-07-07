@@ -91,7 +91,7 @@ onMounted(() => {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .word-cloud-container {
   margin-top: 8px;
   position: relative;

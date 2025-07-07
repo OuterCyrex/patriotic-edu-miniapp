@@ -11,7 +11,7 @@ defineProps<{
 }>()
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .loading-page {
   height: 90vh;
   display: flex;

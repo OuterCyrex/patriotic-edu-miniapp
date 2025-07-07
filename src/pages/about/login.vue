@@ -94,7 +94,7 @@ const doLogin = () => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .login-page {
   padding: 0 40rpx;
 }
@@ -109,6 +109,7 @@ const doLogin = () => {
 
 .register-button {
   color: #71bcff;
+  font-size: 28rpx ;
   margin: 30px;
   width: 80vw;
 }

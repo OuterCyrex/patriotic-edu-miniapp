@@ -27,7 +27,7 @@ function onSubmit() {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .comment-input-wrapper {
   position: fixed;
   bottom: 0;

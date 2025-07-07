@@ -2,7 +2,7 @@
   <view class="page">
     <!-- 顶部欢迎区 -->
     <view class="hero-header">
-      <image class="avatar" src="https://cdn.outercyrex.top/logo.png" mode="aspectFit" />
+      <image class="avatar" src="https://cdn.outercyrex.top/logo.png" />
       <view class="title">欢迎来到红小星国防学习</view>
       <view class="subtitle">趣味互动学知识，红小星陪你一起成长！</view>
       <nut-space />
@@ -69,7 +69,7 @@ useDidShow(() => {
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .page {
   background-color: #ffffff;
   padding: 32rpx;
@@ -78,6 +78,7 @@ useDidShow(() => {
 }
 
 .totalStarts {
+  font-size: 28px;
   color: #3a3a3a;
 }
 
@@ -88,6 +89,7 @@ useDidShow(() => {
     width: 220rpx;
     height: 220rpx;
     margin: 0 auto 20rpx;
+    object-fit: fill;
   }
   .title {
     font-size: 40rpx;

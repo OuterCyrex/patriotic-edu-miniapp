@@ -42,7 +42,7 @@ const doGetAnnouncementDetail = (id: number) => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .detail-container {
   padding: 32px 24px;
   background-color: #fff;

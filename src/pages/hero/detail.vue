@@ -46,7 +46,7 @@ const doGetHeroList = (options: Record<string, any>) => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .container {
   display: flex;
   flex-direction: column;

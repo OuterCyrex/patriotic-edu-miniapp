@@ -91,7 +91,7 @@ function doGetArticleList() {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .d-flex {
   display: flex;
   justify-content: center;

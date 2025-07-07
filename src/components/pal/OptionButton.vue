@@ -20,7 +20,7 @@ defineProps<{
 const emits = defineEmits(['selected'])
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .option-button {
   display: flex;
   align-items: center;

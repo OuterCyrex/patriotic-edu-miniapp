@@ -56,7 +56,7 @@ const doGetCoverList = () => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .timeline {
   padding: 24rpx;
   .card-list {

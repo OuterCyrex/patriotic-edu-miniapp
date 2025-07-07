@@ -16,7 +16,7 @@ defineProps<{
 }>()
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .comment-container {
   background-color: #fff5f5;
   border-left: solid 4px #8f2c2c;

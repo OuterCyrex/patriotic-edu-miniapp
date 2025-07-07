@@ -95,7 +95,7 @@ const doGetKnowledge = () => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .question-page-container {
   margin: 30px 20px;
 }

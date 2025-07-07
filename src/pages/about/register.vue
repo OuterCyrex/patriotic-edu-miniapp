@@ -172,7 +172,7 @@ const doGetDefaultAvatar = () => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .register-page {
   padding: 0 40rpx;
 }

@@ -126,7 +126,7 @@ const cities = [
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .profile-page {
   padding: 0 40rpx;
 }

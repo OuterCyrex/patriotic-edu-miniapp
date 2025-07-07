@@ -49,7 +49,7 @@ const userInfo = ref<UserInfo | null>(null)
 // === hooks ===
 useLoad((options) => {
   acNumber.value = Number(options.ac)
-  commentText.value = options.comment
+  commentText.value = decodeURIComponent(options.comment)
   starNumber.value = Number(options.stars)
 
   user.GetUserInfo().then(resp => {
@@ -62,7 +62,7 @@ useLoad((options) => {
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .result-container {
   padding: 40rpx 30rpx;
   display: flex;
@@ -128,6 +128,10 @@ useLoad((options) => {
 .no-star {
   font-size: 28rpx;
   color: #aaa;
+}
+
+.nor-text {
+  font-size: 32px;
 }
 </style>
 

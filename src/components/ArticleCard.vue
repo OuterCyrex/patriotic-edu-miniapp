@@ -31,7 +31,7 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .article-card {
   display: flex;
   background-color: #fff;

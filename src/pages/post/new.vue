@@ -102,7 +102,7 @@ const doNewPost = () => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .form-header {
   display: flex;
   justify-content: center;

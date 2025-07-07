@@ -20,7 +20,7 @@ const props = defineProps<{
 const emit = defineEmits(['click'])
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .card {
   display: flex;
   justify-content: space-between;

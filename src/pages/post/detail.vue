@@ -127,8 +127,9 @@ const doGetUserInfo = () => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .comments {
+  font-size: 32px;
   margin: 30px 0;
   padding: 0 30rpx 80px 30rpx;
 }
@@ -159,11 +160,12 @@ const doGetUserInfo = () => {
   height: 88rpx;
   border-radius: 50%;
   margin-right: 20rpx;
+  object-fit: fill;
 }
 
 .author-info .author {
   font-weight: bold;
-  font-size: 30rpx;
+  font-size: 30px;
 }
 
 .post-content .text {
@@ -189,6 +191,10 @@ const doGetUserInfo = () => {
   color: #666;
   margin-top: 24rpx;
   justify-content: space-around;
+}
+
+.meta {
+  font-size: 26px;
 }
 
 .avatar-image {

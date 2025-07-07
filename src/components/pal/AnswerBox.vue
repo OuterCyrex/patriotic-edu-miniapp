@@ -1,5 +1,5 @@
 <template>
-  <view class="answer-block">
+  <view class="answer-block" >
     <view class="answer-content">
       <text style="font-weight: bold">答案：</text>
       <text style="font-weight: bold" :class="correct ? 'green': 'red'">
@@ -30,9 +30,10 @@ defineProps<{
 }>()
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 .answer-block {
+  font-size: 30px;
   background-color: #f3dddd;
   border-left: 6px solid #e13939;
   border-radius: 12px;

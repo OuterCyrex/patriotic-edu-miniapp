@@ -45,7 +45,7 @@ withDefaults(defineProps<{
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .user-info {
   margin-bottom: 12px;
 }

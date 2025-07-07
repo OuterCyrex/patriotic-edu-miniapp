@@ -45,6 +45,7 @@ import WordCloud from "@/components/post/WordCloud.vue";
 import {post} from "@/API";
 import {useApi} from "@/API/handler";
 import LoadingRing from "@/components/LoadingRing.vue";
+import NavigationBar from "@/components/NavigationBar.vue";
 
 // === define ===
 definePageConfig({
@@ -101,7 +102,7 @@ const doGetWordFrequency = () => {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .post-view-container {
   height: 100vh;
   background: #f4f4f4;
