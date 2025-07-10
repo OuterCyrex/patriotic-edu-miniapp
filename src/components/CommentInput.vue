@@ -37,7 +37,6 @@ function onSubmit() {
   padding: 10px;
   background-color: #ffffff;
   border-top: 1px solid #eee;
-  z-index: 999;
 }
 </style>
 

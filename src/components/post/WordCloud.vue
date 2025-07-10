@@ -1,117 +1,164 @@
 <template>
-  <view class="word-cloud-container">
-    <view class="title">词云展示</view>
-    <canvas
-      canvas-id="wordCloudCanvas"
-      id="wordCloudCanvas"
-      class="charts"
-    />
-  </view>
+  <div class="word-cloud-container">
+    <div class="title">词云展示</div>
+    <div ref="chartRef" class="echarts"></div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import Taro from '@tarojs/taro'
-import uCharts from '@qiun/ucharts'
+import { ref, watch, onMounted, onBeforeUnmount, computed } from 'vue'
+import * as echarts from 'echarts'
+import 'echarts-wordcloud'
 
-const cWidth = ref(400)
-const cHeight = ref(300)
-let uChartsInstance: Record<string, any> = {}
-
-const props = defineProps<{
-  data: Array<{content: string, frequency: number}>,
-}>()
-
-const drawCharts = (id: string, data: any) => {
-  const ctx = Taro.createCanvasContext(id)
-  uChartsInstance[id] = new uCharts({
-    type: 'word',
-    context: ctx,
-    width: cWidth.value,
-    height: cHeight.value,
-    series: data.series,
-    animation: true,
-    background: '#FFFFFF',
-    color: [
-      '#1890FF',
-      '#91CB74',
-      '#FAC858',
-      '#EE6666',
-      '#73C0DE',
-      '#3CA272',
-      '#FC8452',
-      '#9A60B4',
-      '#ea7ccc'
-    ],
-    padding: undefined,
-    enableScroll: false,
-    extra: {
-      word: {
-        type: 'normal',
-        autoColors: false
-      }
-    }
-  })
+interface WordData {
+  content: string
+  frequency: number
 }
 
-function Frequency2TextSize(data: Array<{content: string, frequency: number}>) {
-  const minFreq = Math.min(...data.map(item => item.frequency))
-  const maxFreq = Math.max(...data.map(item => item.frequency))
-  const minSize = 12
-  const maxSize = 28
+const props = defineProps<{ data?: WordData[] }>()
 
-  return data.map(item => {
+const chartRef = ref<HTMLDivElement | null>(null)
+let chartInstance: echarts.ECharts | null = null
+
+const defaultData: WordData[] = [
+  { content: '国防', frequency: 120 },
+  { content: '教育', frequency: 100 },
+  { content: '科技', frequency: 90 },
+]
+
+const effectiveData = computed(() => {
+  return props.data && props.data.length > 0 ? props.data : defaultData
+})
+
+const colors = [
+  '#1890FF',
+  '#91CB74',
+  '#FAC858',
+  '#EE6666',
+  '#3CA272',
+  '#FC8452',
+  '#9A60B4',
+  '#ea7ccc',
+]
+
+function formatData(data: WordData[]) {
+  if (!data || data.length === 0) return []
+
+  const filtered = data.filter(
+    (item) =>
+      item.content &&
+      item.content.trim() !== '' &&
+      typeof item.frequency === 'number' &&
+      !isNaN(item.frequency) &&
+      item.frequency > 0,
+  )
+
+  if (filtered.length === 0) return []
+
+  const min = Math.min(...filtered.map((i) => i.frequency))
+  const max = Math.max(...filtered.map((i) => i.frequency))
+  const minSize = 14
+  const maxSize = 42
+
+  return filtered.map((item) => {
     let size = minSize
-    if (maxFreq !== minFreq) {
-      size = minSize + ((item.frequency - minFreq) / (maxFreq - minFreq)) * (maxSize - minSize)
+    if (max !== min) {
+      size = minSize + ((item.frequency - min) / (max - min)) * (maxSize - minSize)
     }
+    size = Math.round(size)
+    if (size < 14) size = 14
+
     return {
       name: item.content,
-      textSize: Math.round(size),
+      value: item.frequency,
+      textStyle: {
+        fontSize: size,
+        fontFamily: 'Microsoft YaHei, Arial, sans-serif',
+        color: colors[Math.floor(Math.random() * colors.length)],
+      },
     }
   })
 }
 
+function initChart() {
+  if (!chartRef.value) return
 
-const getServerData = () => {
+  if (chartInstance) {
+    chartInstance.dispose()
+    chartInstance = null
+  }
+
+  chartInstance = echarts.init(chartRef.value)
+
+  chartInstance.setOption({
+    tooltip: {
+      show: true,
+      formatter: (params) => `${params.name}: ${params.value}`,
+    },
+    series: [
+      {
+        type: 'wordCloud',
+        gridSize: 8,
+        sizeRange: [14, 42],
+        rotationRange: [-45, 45],
+        rotationStep: 45,
+        shape: 'circle',
+        drawOutOfBound: false,
+        data: formatData(effectiveData.value),
+      },
+    ],
+  })
+}
+
+function refreshChart() {
   setTimeout(() => {
-    const res = {
-      series: Frequency2TextSize(props.data)
-    }
-    drawCharts('wordCloudCanvas', res)
-  }, 300)
+    initChart()
+  }, 50)
 }
 
 onMounted(() => {
-  const systemInfo = Taro.getSystemInfoSync()
-  cWidth.value = systemInfo.windowWidth
-  cHeight.value = systemInfo.windowWidth * 0.5
-  getServerData()
+  refreshChart()
+  window.addEventListener('resize', () => {
+    if (chartInstance) chartInstance.resize()
+  })
 })
 
+watch(effectiveData, () => {
+  refreshChart()
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', () => {
+    if (chartInstance) chartInstance.resize()
+  })
+  if (chartInstance) {
+    chartInstance.dispose()
+    chartInstance = null
+  }
+})
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .word-cloud-container {
-  margin-top: 8px;
   position: relative;
-  width: 100vw;
-  height: 50vw;
+  width: 100%;
+  height: 320px;
+  border: 1px solid #eee;
+  background: #fff;
 }
 
 .title {
   position: absolute;
-  top: 10rpx;
-  left: 10rpx;
-  font-size: 26rpx;
+  top: 10px;
+  left: 10px;
   font-weight: 600;
+  font-size: 18px;
   color: #333;
   z-index: 10;
 }
 
-.charts {
-  width: 100vw;
+.echarts {
+  width: 100%;
   height: 100%;
 }
 </style>
-

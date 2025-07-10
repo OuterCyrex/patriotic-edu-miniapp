@@ -15,8 +15,8 @@
     </view>
 
     <view class="chat-input">
-      <input v-model="inputValue" class="input" placeholder="请输入内容" @submit.prevent="handleSubmit"/>
-      <button class="send-button" @click="handleSubmit">发送</button>
+      <input v-model="inputValue" class="input" placeholder="请输入内容" @submit.prevent="sendMessage"/>
+      <button class="send-button" @click="sendMessage">发送</button>
     </view>
   </view>
 </template>
@@ -24,9 +24,7 @@
 <script setup lang="ts">
 // === import ===
 import { ref } from 'vue'
-import Taro from '@tarojs/taro'
 import {BaseURL} from "@/API/request";
-import {ArrayBuffer2Utf8} from "@/utils/decoder";
 
 // === define ===
 definePageConfig({
@@ -39,40 +37,26 @@ const messages = ref([
   { role: 'ai', content: '你好，我是智能红小星，有什么可以帮您？' }
 ])
 
-// === methods ===
-function handleSubmit() {
-  const text = inputValue.value.trim()
-  if (!text) return
-  messages.value.push({ role: 'user', content: text })
+function sendMessage() {
+  const userMessage = inputValue.value.trim()
+  messages.value.push({ role: 'user', content: userMessage })
   inputValue.value = ''
 
-  messages.value.push({ role: 'ai', content: '' })
-  const currentAIMessageIndex = messages.value.length - 1
+  const aiMessage = { role: 'ai' as const, content: '' }
+  messages.value.push(aiMessage)
 
-  const requestTask = GetStreamResponse(text)
-  requestTask.onChunkReceived(res => {
-    const chunkStr = ArrayBuffer2Utf8(res.data)
-    messages.value[currentAIMessageIndex].content += chunkStr
+  const params = new URLSearchParams({
+    message: userMessage
   })
-  requestTask.then(() => {
-    console.log('流式请求结束')
-  }).catch(err => {
-    console.error('流式请求错误:', err)
-  })
-}
+  const es = new EventSource(BaseURL + '/chat/stream?' + params.toString())
 
-// === api ===
-const GetStreamResponse = (text: string) => {
-  return Taro.request({
-    url: BaseURL + '/chat/stream',
-    enableChunked: true,
-    method: 'GET',
-    data: {
-      message: text,
-    },
-    header: {
-      'content-type': 'application/json'
-    }})
+  es.onmessage = (event) => {
+    messages.value[messages.value.length - 1].content += event.data
+  }
+
+  es.onerror = () => {
+    es.close()
+  }
 }
 </script>
 
@@ -141,7 +125,7 @@ const GetStreamResponse = (text: string) => {
   background-color: #ffffff;
 
   .input {
-    flex: 1;
+    flex: 6;
     padding: 10rpx 20rpx;
     font-size: 28rpx;
     border: 1px solid #ccc;
@@ -150,6 +134,7 @@ const GetStreamResponse = (text: string) => {
   }
 
   .send-button {
+    flex: 1;
     margin-left: 20rpx;
     padding: 0 30rpx;
     background-color: #d20000;

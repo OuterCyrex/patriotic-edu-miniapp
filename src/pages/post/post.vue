@@ -5,7 +5,9 @@
         <nut-button @click="handleSearch(searchKeywords ? searchKeywords : '')">搜索</nut-button>
       </template>
     </nut-searchbar>
-    <WordCloud class="word-cloud" v-if="!!wordCloudData" :data="wordCloudData.map(item => ({content: item.content, frequency: item.frequency}))"/>
+    <WordCloud class="word-cloud"
+               v-if="!!wordCloudData"
+               :data="wordCloudData.map(item => ({content: item.content, frequency: item.frequency}))"/>
 
     <view class="post-cards" v-if="!!postList">
       <PostCard v-for="item of postList.list"
@@ -41,11 +43,10 @@ import Taro, {useDidShow} from '@tarojs/taro'
 import {ref} from "vue";
 import FixedButton from "@/components/FixedButton.vue";
 import {PostList, WordFrequency} from "@/types/forms/post";
-import WordCloud from "@/components/post/WordCloud.vue";
 import {post} from "@/API";
 import {useApi} from "@/API/handler";
 import LoadingRing from "@/components/LoadingRing.vue";
-import NavigationBar from "@/components/NavigationBar.vue";
+import WordCloud from "@/components/post/WordCloud.vue";
 
 // === define ===
 definePageConfig({

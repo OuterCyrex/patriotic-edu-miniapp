@@ -59,6 +59,7 @@
     "@tarojs/runtime": "4.1.1",
     "@tarojs/shared": "4.1.1",
     "@tarojs/taro": "4.1.1",
+    "echarts-wordcloud": "^2.1.0",
     "vue": "^3.0.0"
   },
   "devDependencies": {
@@ -75,6 +76,7 @@
     "@vue/compiler-sfc": "^3.0.0",
     "babel-preset-taro": "4.1.1",
     "css-loader": "^7.1.1",
+    "echarts": "^5.6.0",
     "eslint": "^8.57.0",
     "eslint-config-taro": "4.1.1",
     "eslint-plugin-vue": "^9.17.0",
