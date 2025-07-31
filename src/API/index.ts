@@ -110,5 +110,9 @@ export const system = {
   GetMisc: (req: {key: string}) => request('/system/misc', {
     method: 'GET',
     data: req
-  })
+  }),
+  UpdateMisc: (req: {miscKey: string, value: string}) => request('/system/misc', {
+    method: 'PUT',
+    data: req
+  }),
 }

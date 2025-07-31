@@ -98,8 +98,8 @@ export interface ApiMap {
     resp: AnnouncementItem
   }
   '/system/misc': {
-    req: {key: string}
-    resp: string
+    req: {key: string} | {miscKey: string, value: string}
+    resp: string | null
   }
 }
 

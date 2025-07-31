@@ -150,9 +150,9 @@ onBeforeUnmount(() => {
 .title {
   position: absolute;
   top: 10px;
-  left: 10px;
+  left: 20px;
   font-weight: 600;
-  font-size: 18px;
+  font-size: 26px;
   color: #333;
   z-index: 10;
 }

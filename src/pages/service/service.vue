@@ -128,7 +128,7 @@ const doGetHotline = () => {
       key: "hotline",
     }),
     onSuccess: resp => {
-      const data = JSON.parse(resp.data) as {hotline: string}
+      const data = JSON.parse(resp.data as string) as {hotline: string}
       hotline.value = data.hotline
     }
   })

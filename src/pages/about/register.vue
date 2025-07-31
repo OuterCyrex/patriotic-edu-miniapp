@@ -165,7 +165,7 @@ const doGetDefaultAvatar = () => {
       key: "default-avatar"
     }),
     onSuccess: resp => {
-      const data = JSON.parse(resp.data) as {avatar: string}
+      const data = JSON.parse(resp.data as string) as {avatar: string}
       defaultAvatar.value = data.avatar
     }
   })

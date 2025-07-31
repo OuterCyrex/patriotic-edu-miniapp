@@ -10,6 +10,7 @@
             </nut-col>
           </nut-row>
         </view>
+    <ReviewCount class="my-4"/>
         <view class="article-cards">
           <view class="article-title" @click="Taro.navigateTo({url: '/pages/index/list'})">
             <text style="font-weight: bold">最新动态</text>
@@ -45,6 +46,7 @@
 // === import ===
 import SwiperImage from "@/components/index/SwiperImage.vue";
 import ButtonCard from "@/components/index/ButtonCard.vue";
+import ReviewCount from '@/components/index/ReviewCount.vue'
 
 import {ref} from "vue";
 import ArticleCard from "@/components/ArticleCard.vue";
@@ -114,7 +116,7 @@ const doGetSwiper = () => {
       key: "swiper",
     }),
     onSuccess: resp => {
-      urls.value = JSON.parse(resp.data) as Array<{url: string}>
+      urls.value = JSON.parse(resp.data as string) as Array<{url: string}>
     }
   })
 }

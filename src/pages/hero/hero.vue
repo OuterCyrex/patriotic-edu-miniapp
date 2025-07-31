@@ -50,7 +50,7 @@ const doGetCoverList = () => {
   useApi({
     api: system.GetMisc({ key: "period-covers" }),
     onSuccess: resp => {
-      coverList.value = JSON.parse(resp.data) as Array<{ url: string }>
+      coverList.value = JSON.parse(resp.data as string) as Array<{ url: string }>
     }
   })
 }
