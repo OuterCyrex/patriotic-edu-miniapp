@@ -15,19 +15,19 @@
     <!-- 功能按钮区域 -->
     <view class="feature-section">
       <view class="feature-card" @click="toQuestion">
-        <image class="feature-icon" src="https://img.icons8.com/?size=100&id=VJCVutzKX9zq&format=png" />
+        <image class="feature-icon" src="https://outer-pictures.oss-cn-beijing.aliyuncs.com/icons/question.png" />
         <view class="feature-title">知识闯关</view>
         <view class="feature-desc">每日10道国防题，答对解锁勋章</view>
       </view>
 
       <view class="feature-card" @click="goToSceneQA">
-        <image class="feature-icon" src="https://img.icons8.com/?size=100&id=2juNVZZCBjKu&format=png" />
+        <image class="feature-icon" src="https://outer-pictures.oss-cn-beijing.aliyuncs.com/icons/scenario.png" />
         <view class="feature-title">情景问答</view>
         <view class="feature-desc">模拟国防场景，学习正确应对方法</view>
       </view>
 
       <view class="feature-card" @click="goToChat">
-        <image class="feature-icon" src="https://img.icons8.com/?size=100&id=80457&format=png&color=000000" />
+        <image class="feature-icon" src="https://outer-pictures.oss-cn-beijing.aliyuncs.com/icons/chat.png" />
         <view class="feature-title">红小星对话</view>
         <view class="feature-desc">和红小星实时互动交流</view>
       </view>

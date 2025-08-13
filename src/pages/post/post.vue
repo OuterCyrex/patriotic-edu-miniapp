@@ -32,7 +32,7 @@
                     :total-items="postList.total"
                     :items-per-page="10"
                     mode="simple" @change="handleChange" />
-    <FixedButton icon="https://img.icons8.com/?size=100&id=Z0BQsNX1Xhfb&format=png&color=000000" @click="toNewPost"/>
+    <FixedButton icon="https://outer-pictures.oss-cn-beijing.aliyuncs.com/icons/edit.png" @click="toNewPost"/>
   </view>
 </template>
 
@@ -43,7 +43,7 @@ import Taro, {useDidShow} from '@tarojs/taro'
 import {ref} from "vue";
 import FixedButton from "@/components/FixedButton.vue";
 import {PostList, WordFrequency} from "@/types/forms/post";
-import {post} from "@/API";
+import {post, system} from "@/API";
 import {useApi} from "@/API/handler";
 import LoadingRing from "@/components/LoadingRing.vue";
 import WordCloud from "@/components/post/WordCloud.vue";
@@ -59,6 +59,7 @@ const pageNum = ref<number>(1)
 const keyword = ref<string> ("")
 const postList = ref<PostList | null>(null)
 const wordCloudData = ref<Array<WordFrequency> | null>(null)
+const topWord = ref<number>(10)
 
 // === methods ===
 function handleSearch(text: string): void{
@@ -78,7 +79,7 @@ function toNewPost(): void {
 // === hooks ===
 useDidShow(() => {
   doGetPostList()
-  doGetWordFrequency()
+  doGetTopWord()
 })
 
 // === api ===
@@ -95,9 +96,21 @@ const doGetPostList = () => {
   })
 }
 
+const doGetTopWord = () => {
+  useApi({
+    api: system.GetMisc({
+      key: "top-word",
+    }),
+    onSuccess: resp => {
+      topWord.value = JSON.parse(resp.data as string).value as number
+      doGetWordFrequency()
+    }
+  })
+}
+
 const doGetWordFrequency = () => {
   useApi({
-    api: post.GetWordFrequency({x: 10}),
+    api: post.GetWordFrequency({x: topWord.value}),
     onSuccess: res => {wordCloudData.value = res.data}
   })
 }

@@ -18,7 +18,6 @@ declare module 'vue' {
     LoadingRing: typeof import('./src/components/LoadingRing.vue')['default']
     NutAvatar: typeof import('@nutui/nutui-taro')['Avatar']
     NutButton: typeof import('@nutui/nutui-taro')['Button']
-    NutCard: typeof import('@nutui/nutui-taro')['Card']
     NutCell: typeof import('@nutui/nutui-taro')['Cell']
     NutCellGroup: typeof import('@nutui/nutui-taro')['CellGroup']
     NutCol: typeof import('@nutui/nutui-taro')['Col']

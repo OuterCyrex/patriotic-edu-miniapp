@@ -18,7 +18,7 @@
       </view>
       <view class="post-footer">
         <view class="like-button" @click="handlePostLike">
-          <image class="like-icon" :src="liked ? 'https://img.icons8.com/?size=100&id=83166&format=png&color=000000': 'https://img.icons8.com/?size=100&id=82788&format=png&color=000000'"/>
+          <image class="like-icon" :src="liked ? 'https://outer-pictures.oss-cn-beijing.aliyuncs.com/icons/liked.png': 'https://outer-pictures.oss-cn-beijing.aliyuncs.com/icons/like-icon.png'"/>
           <text>{{ postDetail.likesCount }}</text>
         </view>
         <text style="margin-left: 32rpx">💬 {{ postDetail.commentsCount }}</text>

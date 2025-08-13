@@ -67,25 +67,25 @@ const buttonCards = ref([
   [{
       title: "红星英雄谱",
       subtitle: "国防英雄典范",
-      cover: "https://img.icons8.com/?size=100&id=8ggStxqyboK5&format=png&color=000000",
+      cover: "https://outer-pictures.oss-cn-beijing.aliyuncs.com/icons/hero.png",
       onClick: () => {Taro.navigateTo({url: '/pages/hero/hero'})}
     },
     {
       title: "红星青年派",
       subtitle: "虚拟伙伴助学",
-      cover: "https://img.icons8.com/?size=100&id=37000&format=png&color=000000",
+      cover: "https://outer-pictures.oss-cn-beijing.aliyuncs.com/icons/pal.png",
       onClick: () => {Taro.navigateTo({url: '/pages/pal/pal'})}
     }],
   [{
       title: "红星心声汇",
       subtitle: "全民交流空间",
-      cover: "https://img.icons8.com/?size=100&id=122811&format=png&color=000000",
+      cover: "https://outer-pictures.oss-cn-beijing.aliyuncs.com/icons/post.png",
       onClick: () => {Taro.navigateTo({url: '/pages/post/post'})}
     },
     {
       title: "红星服务站",
       subtitle: "国防教育资源",
-      cover: "https://img.icons8.com/?size=100&id=WV326xpsBMyb&format=png&color=000000",
+      cover: "https://outer-pictures.oss-cn-beijing.aliyuncs.com/icons/service.png",
       onClick: () => {Taro.navigateTo({url: '/pages/service/service'})}
     }]
 ])
